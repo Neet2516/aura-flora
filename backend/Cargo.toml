@@ -1,0 +1,57 @@
+﻿[package]
+name = "aura-flora-backend"
+version = "0.1.0"
+edition = "2021"
+authors = ["AuraFlora Team <hello@aura-flora.dev>"]
+description = "BioAcoustic Grounding Companion — Rust Backend"
+license = "MIT"
+
+[[bin]]
+name = "aura-flora-backend"
+path = "src/main.rs"
+
+[dependencies]
+# HTTP Framework
+axum = { version = "0.7", features = ["macros", "multipart"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace", "fs"] }
+
+# Async Runtime
+tokio = { version = "1", features = ["full"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# FFT Signal Processing
+rustfft = "6"
+
+# HTTP Client for external APIs
+reqwest = { version = "0.12", features = ["json", "stream", "rustls-tls"], default-features = false }
+
+# Base64 encoding/decoding
+base64 = "0.22"
+
+# Environment & Config
+dotenvy = "0.15"
+
+# Error handling
+anyhow = "1"
+thiserror = "1"
+
+# Logging / Tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+
+# UUID for temp audio files
+uuid = { version = "1", features = ["v4"] }
+
+# Async file I/O
+tokio-util = { version = "0.7", features = ["io"] }
+bytes = "1"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
