@@ -21,7 +21,8 @@ The repository history is strictly tracked using Conventional Commits. Below is 
 | `48931a2`   | AuraFlora Dev | `feat(mobile): scaffold Flutter app with services and state machine` |
 | `f0d9185`   | AuraFlora Dev | `feat(mobile/ui): implement AMOLED HomeScreen, BlackoutScreen, and widgets` |
 | `e3aba2a`   | AuraFlora Dev | `test(mobile): add widget tests for HomeScreen and BlackoutScreen` |
-| `HEAD`      | AuraFlora Dev | `fix(backend): resolve cargo run startup errors, harden Dockerfile, lock Cargo.lock and scaffold platform trees` |
+| `44ad9fd`   | AuraFlora Dev | `fix(backend): resolve cargo run startup errors, harden Dockerfile, lock Cargo.lock, and scaffold platform trees` |
+| `c126384`   | AuraFlora Dev | `chore: ignore all gradle cache directories` |
 
 ---
 
