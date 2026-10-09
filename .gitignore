@@ -16,7 +16,8 @@
 /mobile/.flutter-plugins-dependencies
 /mobile/.packages
 /mobile/build/
-/mobile/android/.gradle/
+.gradle/
+**/.gradle/
 /mobile/android/local.properties
 /mobile/android/app/debug.keystore
 /mobile/ios/.symlinks/
