@@ -1,4 +1,4 @@
-﻿//! ElevenLabs TTS synthesis service.
+//! ElevenLabs TTS synthesis service.
 //!
 //! Converts a grounding prompt into a calm, whisper-style MP3 audio file
 //! via ElevenLabs streaming TTS API. Stores the audio as a temporary file
@@ -7,6 +7,7 @@
 use std::path::PathBuf;
 use std::time::Duration;
 
+use serde_json::json;
 use tracing::{info, warn};
 use uuid::Uuid;
 
@@ -67,8 +68,6 @@ async fn call_elevenlabs_api(
     config: &AppConfig,
     output_path: &PathBuf,
 ) -> Result<(), anyhow::Error> {
-    use serde_json::json;
-
     let url = format!(
         "https://api.elevenlabs.io/v1/text-to-speech/{}",
         config.elevenlabs_voice_id

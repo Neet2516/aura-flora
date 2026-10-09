@@ -1,4 +1,4 @@
-﻿//! Application configuration loaded from environment variables.
+//! Application configuration loaded from environment variables.
 //!
 //! All secrets are consumed exclusively here — no other module may call `std::env::var` directly.
 
@@ -57,10 +57,10 @@ impl AppConfig {
                 .parse::<u16>()
                 .unwrap_or(8080),
 
-            gemma_api_key: require_var("GEMMA_API_KEY")?,
+            gemma_api_key: env::var("GEMMA_API_KEY").unwrap_or_default(),
             gemma_model: env::var("GEMMA_MODEL").unwrap_or_else(|_| "gemma-2b-it".to_string()),
 
-            elevenlabs_api_key: require_var("ELEVENLABS_API_KEY")?,
+            elevenlabs_api_key: env::var("ELEVENLABS_API_KEY").unwrap_or_default(),
             elevenlabs_voice_id: env::var("ELEVENLABS_VOICE_ID")
                 .unwrap_or_else(|_| "EXAVITQu4vr4xnSDxMaL".to_string()),
 
@@ -68,8 +68,12 @@ impl AppConfig {
             tabpfn_endpoint: env::var("TABPFN_ENDPOINT")
                 .unwrap_or_else(|_| "https://api.priorlabs.ai/v1/tabpfn".to_string()),
 
-            audio_temp_dir: env::var("AUDIO_TEMP_DIR")
-                .unwrap_or_else(|_| "/tmp/aura-flora-audio".to_string()),
+            audio_temp_dir: env::var("AUDIO_TEMP_DIR").unwrap_or_else(|_| {
+                std::env::temp_dir()
+                    .join("aura-flora-audio")
+                    .to_string_lossy()
+                    .to_string()
+            }),
         })
     }
 
@@ -83,6 +87,7 @@ impl AppConfig {
 }
 
 /// Helper: require an env var or return a `ConfigError`.
+#[allow(dead_code)]
 fn require_var(key: &'static str) -> Result<String, ConfigError> {
     env::var(key).map_err(|_| ConfigError::MissingVar(key.to_string()))
 }

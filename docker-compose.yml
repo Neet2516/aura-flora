@@ -1,0 +1,22 @@
+services:
+  aura-flora-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      extra_hosts:
+        - "index.crates.io:151.101.66.137"
+        - "static.crates.io:151.101.66.137"
+    container_name: aura-flora-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - RUST_LOG=info
+      - AUDIO_TEMP_DIR=/tmp/aura-flora-audio
+      - GEMMA_API_KEY=${GEMMA_API_KEY:-}
+      - GEMMA_MODEL=${GEMMA_MODEL:-gemma-2b-it}
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY:-}
+      - ELEVENLABS_VOICE_ID=${ELEVENLABS_VOICE_ID:-EXAVITQu4vr4xnSDxMaL}
+      - TABPFN_API_KEY=${TABPFN_API_KEY:-}
+      - TABPFN_ENDPOINT=${TABPFN_ENDPOINT:-https://api.priorlabs.ai/v1/tabpfn}
+    restart: unless-stopped

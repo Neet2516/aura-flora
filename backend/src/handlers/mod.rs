@@ -1,4 +1,4 @@
-﻿//! HTTP request handlers and shared error types.
+//! HTTP request handlers and shared error types.
 
 pub mod ground;
 
@@ -19,6 +19,7 @@ pub enum AppError {
     #[error("Internal error: {0}")]
     Internal(String),
 
+    #[allow(dead_code)]
     #[error("Service unavailable: {0}")]
     ServiceUnavailable(String),
 }

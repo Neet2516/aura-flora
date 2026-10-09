@@ -1,4 +1,4 @@
-﻿//! TabPFN acoustic classification service.
+//! TabPFN acoustic classification service.
 //!
 //! Classifies acoustic features into environment categories using
 //! a TabPFN-backed tabular classification endpoint. Falls back to
@@ -143,8 +143,6 @@ fn heuristic_classify(features: &AcousticFeatures) -> ClassificationResult {
         "busy_street"
     } else if features.spectral_centroid < 1000.0 && features.rms_db < -35.0 {
         "indoor"
-    } else if features.biophony_ratio > 0.30 {
-        "urban_park"
     } else {
         "urban_park"
     };

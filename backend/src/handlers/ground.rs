@@ -1,4 +1,4 @@
-﻿//! POST /api/v1/ground — core grounding pipeline handler.
+//! POST /api/v1/ground — core grounding pipeline handler.
 //!
 //! Accepts a base64-encoded 16-bit PCM WAV audio blob,
 //! runs the full DSP → classify → prompt → TTS pipeline,
@@ -14,7 +14,11 @@ use tracing::info;
 use crate::config::AppConfig;
 use crate::dsp::{self, AcousticFeatures};
 use crate::handlers::AppError;
-use crate::services::{gemma_service, tabpfn_service, tabpfn_service::ClassificationResult, tts_service};
+use crate::services::{
+    gemma_service,
+    tabpfn_service::{self, ClassificationResult},
+    tts_service,
+};
 
 /// Shared application state passed to all handlers.
 pub type AppState = Arc<AppConfig>;
