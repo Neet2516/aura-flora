@@ -1,0 +1,11 @@
+﻿# AuraFlora — Docker build context exclusions
+target/
+*.md
+.git/
+.gitignore
+mobile/
+.tasks/
+.agent/
+.env
+*.env
+node_modules/
