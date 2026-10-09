@@ -1,0 +1,187 @@
+﻿//! Gemma prompt generation service.
+//!
+//! Sends acoustic context to the Gemma 2B-IT model via Google AI Studio
+//! and returns a single-sentence physical, tactile outdoor grounding action.
+
+use serde::{Deserialize, Serialize};
+use tracing::{info, warn};
+
+use crate::config::AppConfig;
+use crate::dsp::AcousticFeatures;
+use crate::handlers::AppError;
+use crate::services::tabpfn_service::ClassificationResult;
+
+/// Request body for Google AI Studio generative API.
+#[derive(Debug, Serialize)]
+struct GemmaRequest {
+    contents: Vec<Content>,
+    #[serde(rename = "generationConfig")]
+    generation_config: GenerationConfig,
+}
+
+#[derive(Debug, Serialize)]
+struct Content {
+    role: String,
+    parts: Vec<Part>,
+}
+
+#[derive(Debug, Serialize)]
+struct Part {
+    text: String,
+}
+
+#[derive(Debug, Serialize)]
+struct GenerationConfig {
+    temperature: f32,
+    #[serde(rename = "maxOutputTokens")]
+    max_output_tokens: u32,
+    #[serde(rename = "topP")]
+    top_p: f32,
+}
+
+/// Response body from Google AI Studio.
+#[derive(Debug, Deserialize)]
+struct GemmaResponse {
+    candidates: Vec<Candidate>,
+}
+
+#[derive(Debug, Deserialize)]
+struct Candidate {
+    content: CandidateContent,
+}
+
+#[derive(Debug, Deserialize)]
+struct CandidateContent {
+    parts: Vec<CandidatePart>,
+}
+
+#[derive(Debug, Deserialize)]
+struct CandidatePart {
+    text: String,
+}
+
+/// Curated fallback prompts by environment tag for mock/offline mode.
+fn fallback_prompt(env_tag: &str) -> &'static str {
+    match env_tag {
+        "forest" => "Place your bare hand on the nearest tree bark and trace its texture for thirty seconds.",
+        "meadow" => "Kneel and press your fingertips gently into the soil to feel the temperature gradient between surface and depth.",
+        "coastal" => "Face the wind directly, close your eyes, and identify three distinct layers of sound in the air.",
+        "urban_park" => "Find a patch of grass, remove your shoes, and stand still until you feel the ground temperature through your soles.",
+        "busy_street" => "Step into any doorway, press your back flat against the wall, and take five slow nasal breaths.",
+        "indoor" => "Walk immediately to the nearest window or door, open it, and hold your wrist in the outside air for fifteen seconds.",
+        _ => "Stop moving, close your eyes, and identify the single most distant natural sound you can hear right now.",
+    }
+}
+
+/// Generate a grounding prompt using Gemma or a curated fallback.
+pub async fn generate_prompt(
+    features: &AcousticFeatures,
+    classification: &ClassificationResult,
+    config: &AppConfig,
+) -> Result<String, AppError> {
+    if config.gemma_api_key.is_empty() {
+        info!("Gemma API key not set — using curated fallback prompt");
+        return Ok(fallback_prompt(&classification.environment_tag).to_string());
+    }
+
+    match call_gemma_api(features, classification, config).await {
+        Ok(prompt) => {
+            info!(prompt = %prompt, "Gemma prompt generated");
+            Ok(prompt)
+        }
+        Err(e) => {
+            warn!("Gemma API failed ({}), using fallback prompt", e);
+            Ok(fallback_prompt(&classification.environment_tag).to_string())
+        }
+    }
+}
+
+/// Call Google AI Studio Gemma endpoint.
+async fn call_gemma_api(
+    features: &AcousticFeatures,
+    classification: &ClassificationResult,
+    config: &AppConfig,
+) -> Result<String, anyhow::Error> {
+    let system_text = format!(
+        "You are AuraFlora, an anti-screen bioacoustic grounding companion. \
+         Generate exactly ONE sentence — a specific, physical, sensory outdoor action. \
+         Environment: {}. Biophony level: {:.0}%. RMS level: {:.1} dBFS. \
+         The action must be immediately executable, require zero screen interaction, \
+         and engage at least one of: touch, smell, temperature, or proprioception. \
+         Respond with ONLY the sentence. No quotes. No explanation.",
+        classification.environment_tag,
+        classification.biophony_score * 100.0,
+        features.rms_db
+    );
+
+    let url = format!(
+        "https://generativelanguage.googleapis.com/v1beta/models/{}:generateContent?key={}",
+        config.gemma_model, config.gemma_api_key
+    );
+
+    let client = reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(10))
+        .build()?;
+
+    let request = GemmaRequest {
+        contents: vec![Content {
+            role: "user".to_string(),
+            parts: vec![Part { text: system_text }],
+        }],
+        generation_config: GenerationConfig {
+            temperature: 0.7,
+            max_output_tokens: 80,
+            top_p: 0.9,
+        },
+    };
+
+    let response = client
+        .post(&url)
+        .json(&request)
+        .send()
+        .await?
+        .error_for_status()?
+        .json::<GemmaResponse>()
+        .await?;
+
+    let raw = response
+        .candidates
+        .first()
+        .and_then(|c| c.content.parts.first())
+        .map(|p| p.text.trim().to_string())
+        .unwrap_or_else(|| fallback_prompt("unknown").to_string());
+
+    // Strip surrounding quotes if the model added them
+    let cleaned = raw.trim_matches('"').trim_matches('\'').trim().to_string();
+
+    Ok(cleaned)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_fallback_prompts_are_non_empty() {
+        let tags = ["forest", "meadow", "coastal", "urban_park", "busy_street", "indoor", "unknown"];
+        for tag in &tags {
+            let prompt = fallback_prompt(tag);
+            assert!(!prompt.is_empty(), "Fallback for '{}' is empty", tag);
+        }
+    }
+
+    #[test]
+    fn test_fallback_prompts_are_sentences() {
+        // Each prompt should be at least 10 words
+        let tags = ["forest", "meadow", "coastal", "urban_park"];
+        for tag in &tags {
+            let prompt = fallback_prompt(tag);
+            let word_count = prompt.split_whitespace().count();
+            assert!(
+                word_count >= 10,
+                "Prompt for '{}' is too short ({} words): {}",
+                tag, word_count, prompt
+            );
+        }
+    }
+}
