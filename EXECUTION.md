@@ -58,6 +58,37 @@ docker run -d --name aura-flora-app -p 8080:8080 aura-flora-backend:latest
 docker logs -f aura-flora-app
 ```
 
+### Option C: Mobile App Docker Build & APK Extraction
+
+To test, analyze, and build the Flutter mobile app without installing Flutter, Dart, or Android SDK locally:
+
+```bash
+# 1. Build and run APK distribution server (serves APK on http://localhost:8081)
+docker build -t aura-flora-mobile:latest ./mobile
+docker run -d --name aura-flora-mobile-app -p 8081:80 aura-flora-mobile:latest
+
+# 2. Extract APK directly to local ./dist folder using BuildKit
+docker build --target export --output type=local,dest=./dist ./mobile
+
+# 3. Run Flutter tests and static analysis inside Docker
+docker build --target builder ./mobile
+```
+
+### Option D: React Native Frontend Docker Run (Zero-Local-Install)
+
+To build and run the React Native frontend without installing Node, npm, or Expo on your local machine:
+
+```bash
+# 1. Build and run React Native web app in Docker container (serves on http://localhost:3000)
+docker build -t aura-flora-frontend:latest ./frontend
+docker run -d --name aura-flora-web -p 3000:80 aura-flora-frontend:latest
+
+# 2. Or bring up backend + React Native frontend together via Docker Compose:
+docker compose up aura-flora-backend aura-flora-frontend -d --build
+```
+
+Access the React Native frontend in your browser at `http://localhost:3000`.
+
 ---
 
 ## 3. Verifying the Execution Process
