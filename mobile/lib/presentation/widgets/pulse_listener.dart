@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_constants.dart';
 
@@ -123,8 +123,8 @@ class _PulseListenerState extends State<PulseListener>
                     ? null
                     : [
                         BoxShadow(
-                          color: AppColors.herbal.withValues(
-                            alpha: _glowAnimation.value,
+                          color: AppColors.herbal.withOpacity(
+                            _glowAnimation.value,
                           ),
                           blurRadius: widget.isRecording ? 40 : 24,
                           spreadRadius: widget.isRecording ? 8 : 4,

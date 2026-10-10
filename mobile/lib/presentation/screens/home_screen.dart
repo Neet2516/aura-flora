@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
@@ -186,7 +186,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: CircularProgressIndicator(
             strokeWidth: 1.5,
             valueColor: AlwaysStoppedAnimation<Color>(
-              AppColors.herbalLight.withValues(alpha: 0.6),
+              AppColors.herbalLight.withOpacity(0.6),
             ),
           ),
         ),
@@ -218,7 +218,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         label,
         style: AppTypography.textTheme.bodySmall?.copyWith(
           letterSpacing: 2.0,
-          color: AppColors.herbalLight.withValues(alpha: 0.7),
+          color: AppColors.herbalLight.withOpacity(0.7),
         ),
       ),
     );
@@ -235,7 +235,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           color: AppColors.mossMuted,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: AppColors.errorMuted.withValues(alpha: 0.4),
+            color: AppColors.errorMuted.withOpacity(0.4),
             width: 1,
           ),
         ),
@@ -243,7 +243,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           message,
           textAlign: TextAlign.center,
           style: AppTypography.textTheme.bodySmall?.copyWith(
-            color: AppColors.sand.withValues(alpha: 0.8),
+            color: AppColors.sand.withOpacity(0.8),
           ),
         ),
       ),

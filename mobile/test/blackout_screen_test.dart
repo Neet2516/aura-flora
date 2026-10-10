@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aura_flora/presentation/screens/blackout_screen.dart';
 import 'package:aura_flora/core/theme/app_colors.dart';
@@ -7,7 +7,7 @@ import 'package:aura_flora/services/api_client.dart';
 void main() {
   group('BlackoutScreen Widget Tests', () {
     // Minimal mock GroundResponse for testing
-    final mockResponse = GroundResponse(
+    const mockResponse = GroundResponse(
       prompt: 'Place your bare hand on the nearest tree bark.',
       audioUrl: '/audio/test-silence.mp3',
       features: const AcousticFeatures(

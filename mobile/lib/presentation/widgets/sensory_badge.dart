@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 
@@ -82,7 +82,7 @@ class _SensoryBadgeState extends State<SensoryBadge>
           color: AppColors.mossMuted,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: AppColors.herbal.withValues(alpha: 0.4),
+            color: AppColors.herbal.withOpacity(0.4),
             width: 1,
           ),
         ),
