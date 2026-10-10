@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   Animated,
 } from 'react-native';
-import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
+import { activateKeepAwake, deactivateKeepAwake } from '../utils/wakelock';
 import { Colors } from '../theme/colors';
 import { Config } from '../constants/config';
 import { GroundResponse } from '../types';
@@ -27,7 +27,7 @@ export const BlackoutScreen: React.FC<BlackoutScreenProps> = ({
 
   useEffect(() => {
     // Enable wakelock so screen stays on without timing out
-    activateKeepAwakeAsync().catch(() => {});
+    activateKeepAwake().catch(() => {});
 
     // Fade in faint hints after 1.5s
     const fadeTimer = setTimeout(() => {
