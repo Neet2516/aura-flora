@@ -127,15 +127,17 @@ const styles: Record<string, React.CSSProperties> = {
   },
   brandTitle: {
     fontFamily: 'var(--font-display)',
-    fontWeight: 700,
+    fontWeight: 600,
     fontSize: '16px',
-    letterSpacing: '0.04em',
-    color: '#F1F2EC',
+    letterSpacing: '-0.025em',
+    color: 'var(--color-soft-offwhite)',
   },
   brandTagline: {
-    fontSize: '13px',
+    fontFamily: 'var(--font-body)',
+    fontSize: '0.875rem',
     color: 'var(--color-text-secondary)',
-    lineHeight: 1.6,
+    lineHeight: 1.65,
+    letterSpacing: 'var(--tracking-body)',
   },
   linksGrid: {
     display: 'flex',

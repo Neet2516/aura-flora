@@ -56,7 +56,7 @@ export const ScrollRevealText: React.FC<ScrollRevealTextProps> = ({
       style={{
         display: 'inline-flex',
         flexWrap: 'wrap',
-        gap: '0.28em',
+        gap: '0.24em',
         ...style,
       }}
     >

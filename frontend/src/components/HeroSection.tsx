@@ -50,20 +50,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="crosshair-corner crosshair-tr" />
         <div className="crosshair-corner crosshair-bl" />
         <div className="crosshair-corner crosshair-br" />
-
-        {/* Top Eyebrow with Staggered Entrance */}
-        <FadeInWhenVisible delay={0.1} yOffset={16}>
-          <div style={styles.eyebrowRow}>
-            <div className="tech-eyebrow">
-              <span className="status-dot-amber" />
-              <span>AURAFLORA / FIELD EXPERIMENT 001</span>
-            </div>
-            <span className="meta-label desktop-only" style={{ color: 'var(--color-muted-olive)' }}>
-              HACKTOBERFEST 2026 · "TOUCH GRASS" CHALLENGE
-            </span>
-          </div>
-        </FadeInWhenVisible>
-
         {/* Dominant Editorial Headline with Framer Motion Word-by-Word Reveal */}
         <div style={styles.headlineBlock}>
           <ScrollRevealText
@@ -77,7 +63,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <ScrollRevealText
             text="Leave the screen."
             tag="h1"
-            style={{ ...styles.headline, color: 'var(--color-muted-olive)', fontWeight: 500 }}
+            style={{ ...styles.headline, color: 'var(--color-muted-olive)', fontWeight: 500, letterSpacing: '-0.048em' }}
             delay={0.4}
             stagger={0.05}
           />
@@ -206,28 +192,25 @@ const styles: Record<string, React.CSSProperties> = {
     paddingTop: '32px',
     paddingBottom: '32px',
   },
-  eyebrowRow: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    gap: '12px',
-  },
   headlineBlock: {
-    maxWidth: '1040px',
+    maxWidth: '1080px',
   },
   headline: {
-    fontSize: 'clamp(2.75rem, 6.2vw, 5.6rem)',
-    lineHeight: 1.02,
-    letterSpacing: '-0.035em',
-    color: '#F1F2EC',
-    fontWeight: 700,
+    fontFamily: 'var(--font-display)',
+    fontSize: 'clamp(3.5rem, 7vw, 6.5rem)',
+    lineHeight: 1.0,
+    letterSpacing: '-0.048em',
+    color: 'var(--color-soft-offwhite)',
+    fontWeight: 600,
   },
   supportingCopy: {
     maxWidth: '680px',
-    fontSize: 'clamp(1.05rem, 1.4vw, 1.25rem)',
-    lineHeight: 1.6,
+    fontFamily: 'var(--font-body)',
+    fontSize: 'clamp(1rem, 1.25vw, 1.125rem)',
+    lineHeight: 1.65,
+    letterSpacing: 'var(--tracking-body)',
     color: 'var(--color-text-secondary)',
+    fontWeight: 400,
   },
   actionGroup: {
     display: 'flex',
@@ -250,9 +233,9 @@ const styles: Record<string, React.CSSProperties> = {
   },
   specVal: {
     fontFamily: 'var(--font-mono)',
-    fontSize: '13px',
-    fontWeight: 600,
-    letterSpacing: '0.04em',
+    fontSize: '12px',
+    fontWeight: 500,
+    letterSpacing: '0.06em',
     color: 'var(--color-text-primary)',
   },
 };

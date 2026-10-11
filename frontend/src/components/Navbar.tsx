@@ -171,9 +171,9 @@ const styles: Record<string, React.CSSProperties> = {
   },
   brandTitle: {
     fontFamily: 'var(--font-display)',
-    fontWeight: 700,
+    fontWeight: 600,
     fontSize: '15px',
-    letterSpacing: '0.04em',
+    letterSpacing: '-0.025em',
     color: 'var(--color-text-primary)',
   },
   brandBadge: {
@@ -195,8 +195,10 @@ const styles: Record<string, React.CSSProperties> = {
     background: 'none',
     border: 'none',
     padding: '8px 12px',
+    fontFamily: 'var(--font-mono)',
     color: 'var(--color-text-secondary)',
     fontSize: '11px',
+    fontWeight: 500,
     letterSpacing: '0.06em',
     cursor: 'pointer',
     transition: 'color var(--duration-micro) ease',

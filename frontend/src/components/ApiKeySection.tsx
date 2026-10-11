@@ -399,9 +399,10 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '6px',
   },
   headerTitle: {
+    fontFamily: 'var(--font-display)',
     fontSize: '20px',
     fontWeight: 600,
-    letterSpacing: '-0.02em',
+    letterSpacing: '-0.025em',
     color: 'var(--color-text-primary)',
   },
   headerRight: {
@@ -437,8 +438,10 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: '1px solid var(--color-grid-line)',
   },
   modeDescription: {
-    fontSize: '14px',
+    fontFamily: 'var(--font-body)',
+    fontSize: '0.875rem',
     lineHeight: 1.6,
+    letterSpacing: 'var(--tracking-body)',
     color: 'var(--color-text-secondary)',
   },
   modeButtons: {
@@ -473,9 +476,11 @@ const styles: Record<string, React.CSSProperties> = {
     color: '#ECECE8',
   },
   modeSubText: {
-    fontSize: '12px',
+    fontFamily: 'var(--font-body)',
+    fontSize: '0.8125rem',
     color: 'var(--color-text-secondary)',
-    lineHeight: 1.4,
+    lineHeight: 1.45,
+    letterSpacing: 'var(--tracking-body)',
   },
   generateBox: {
     display: 'flex',
