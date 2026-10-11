@@ -1,149 +1,135 @@
-import React, { useState } from 'react';
-import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
-import { GroundingLab } from './components/GroundingLab';
-import { DspExplainer } from './components/DspExplainer';
-import { ArchitecturePipeline } from './components/ArchitecturePipeline';
-import { SoundscapeLibrary } from './components/SoundscapeLibrary';
-import { PhilosophySection } from './components/PhilosophySection';
-import { MobileSimulator } from './components/MobileSimulator';
+import React, { useState, useEffect } from 'react';
+import { Header } from './components/Header';
+import { HeroGrid } from './components/HeroGrid';
+import { ProjectCanvas } from './components/ProjectCanvas';
 import { Footer } from './components/Footer';
-import { X, Smartphone } from 'lucide-react';
-import { soundEngine } from './services/soundEngine';
+import { CaseStudyModal } from './components/CaseStudyModal';
+import { ContactModal } from './components/ContactModal';
+import { InteractiveLabModal } from './components/InteractiveLabModal';
+import { ApiKeySection } from './components/ApiKeySection';
+import type { ProjectItem } from './constants/projects';
 
 export function App() {
-  const [showSimulator, setShowSimulator] = useState(false);
+  const [activeProjectIndex, setActiveProjectIndex] = useState<string>('01/05');
+  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
+  const [isLabOpen, setIsLabOpen] = useState<boolean>(false);
 
-  const scrollToGroundingLab = () => {
-    soundEngine.playHaptic();
-    const el = document.getElementById('grounding-lab');
+  const scrollToSection = (sectionId: string) => {
+    if (sectionId === 'top') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const el = document.getElementById(sectionId);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const toggleSimulator = () => {
-    soundEngine.playHaptic();
-    setShowSimulator((prev) => !prev);
-  };
+  // Keyboard navigation shortcuts ([G] Work, [A] About, [L] Lab, [T] Top, [C] Contact)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if typing in an input or textarea
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
+        return;
+      }
+
+      const key = e.key.toLowerCase();
+      if (key === 'g' || key === 'w') {
+        scrollToSection('work');
+      } else if (key === 'a') {
+        scrollToSection('about');
+      } else if (key === 'l') {
+        setIsLabOpen((prev) => !prev);
+      } else if (key === 'k') {
+        scrollToSection('keys');
+      } else if (key === 't') {
+        scrollToSection('top');
+      } else if (key === 'c') {
+        setIsContactOpen(true);
+      } else if (e.key === 'Escape') {
+        setSelectedProject(null);
+        setIsContactOpen(false);
+        setIsLabOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
-    <div style={styles.appRoot}>
-      {/* Navigation */}
-      <Navbar
-        onStartGrounding={scrollToGroundingLab}
-        onToggleSimulator={toggleSimulator}
-        showSimulator={showSimulator}
+    <div style={styles.appContainer} id="top">
+      {/* Persistent SVG Noise Filter Overlay */}
+      <div className="noise-overlay" />
+
+      {/* Top Architectural Navigation Bar */}
+      <Header
+        onNavigate={scrollToSection}
+        onOpenContact={() => setIsContactOpen(true)}
+        onOpenLab={() => setIsLabOpen(true)}
       />
 
-      {/* Hero Section */}
-      <Hero onStartGrounding={scrollToGroundingLab} />
+      <main style={styles.mainContent}>
+        {/* Hero Section Grid (2-Column Asymmetric) */}
+        <HeroGrid
+          activeProjectIndex={activeProjectIndex}
+          onExploreWork={() => scrollToSection('work')}
+          onLaunchLab={() => setIsLabOpen(true)}
+          onContact={() => setIsContactOpen(true)}
+        />
 
-      {/* Core Interactive BioAcoustic Lab */}
-      <GroundingLab />
+        {/* Project Canvas / Carousel Stage */}
+        <ProjectCanvas
+          onSelectProject={(project) => setSelectedProject(project)}
+          onActiveIndexChange={(idx) => setActiveProjectIndex(idx)}
+          onOpenLab={() => setIsLabOpen(true)}
+        />
 
-      {/* DSP Mathematics & Science */}
-      <DspExplainer />
+        {/* API Credentials & Inference Access Section */}
+        <ApiKeySection />
+      </main>
 
-      {/* End-to-End Pipeline */}
-      <ArchitecturePipeline />
+      {/* Systematic Architectural Footer */}
+      <Footer
+        onNavigate={scrollToSection}
+        onOpenLab={() => setIsLabOpen(true)}
+        onOpenContact={() => setIsContactOpen(true)}
+      />
 
-      {/* Soundscape Biome Library */}
-      <SoundscapeLibrary />
+      {/* Modals & Drawers */}
+      <CaseStudyModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+        onOpenLab={() => setIsLabOpen(true)}
+      />
 
-      {/* Touch Grass Manifesto */}
-      <PhilosophySection />
+      <ContactModal
+        isOpen={isContactOpen}
+        onClose={() => setIsContactOpen(false)}
+      />
 
-      {/* Footer */}
-      <Footer />
-
-      {/* Mobile Simulator Modal / Drawer */}
-      {showSimulator && (
-        <div style={styles.simModalOverlay} onClick={toggleSimulator}>
-          <div
-            style={styles.simModalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={styles.simModalHeader}>
-              <div style={styles.simModalTitle}>
-                <Smartphone size={16} color="#81C784" />
-                <span>AuraFlora AMOLED Mobile Experience</span>
-              </div>
-              <button
-                onClick={toggleSimulator}
-                style={styles.simCloseBtn}
-                title="Close Phone Simulator"
-              >
-                <X size={18} color="#9E9590" />
-              </button>
-            </div>
-
-            <MobileSimulator />
-          </div>
-        </div>
-      )}
+      <InteractiveLabModal
+        isOpen={isLabOpen}
+        onClose={() => setIsLabOpen(false)}
+      />
     </div>
   );
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  appRoot: {
+  appContainer: {
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#0A0F0D',
+    backgroundColor: 'var(--color-bg-primary)',
+    color: 'var(--color-text-primary)',
+    position: 'relative',
   },
-  simModalOverlay: {
-    position: 'fixed',
-    inset: 0,
-    zIndex: 999,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-    backdropFilter: 'blur(10px)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  simModalContent: {
-    backgroundColor: '#121A15',
-    border: '1px solid rgba(129, 199, 132, 0.3)',
-    borderRadius: 24,
-    padding: '24px 28px 32px',
-    boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8)',
+  mainContent: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    gap: 18,
-    maxHeight: '94vh',
-    overflowY: 'auto',
-  },
-  simModalHeader: {
     width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingBottom: 12,
-    borderBottom: '1px solid rgba(129, 199, 132, 0.15)',
-  },
-  simModalTitle: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    fontSize: '0.85rem',
-    fontWeight: 700,
-    color: '#E8DFD8',
-    letterSpacing: '0.04em',
-  },
-  simCloseBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    border: 'none',
   },
 };
 

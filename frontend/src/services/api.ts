@@ -1,5 +1,6 @@
 import type { GroundResponse, SoundscapePreset } from '../types';
 import { SOUNDSCAPE_PRESETS } from '../constants/presets';
+import { ApiKeyManager } from './apiKeys';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 
@@ -30,13 +31,23 @@ export class ApiService {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 8000);
 
+    const keyConfig = ApiKeyManager.getConfig();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+
+    if (keyConfig.useCustomKeys) {
+      if (keyConfig.gemmaApiKey) headers['X-Gemma-Api-Key'] = keyConfig.gemmaApiKey;
+      if (keyConfig.elevenlabsApiKey) headers['X-ElevenLabs-Api-Key'] = keyConfig.elevenlabsApiKey;
+      if (keyConfig.elevenlabsVoiceId) headers['X-ElevenLabs-Voice-Id'] = keyConfig.elevenlabsVoiceId;
+      if (keyConfig.tabpfnApiKey) headers['X-TabPFN-Api-Key'] = keyConfig.tabpfnApiKey;
+    }
+
     try {
       const response = await fetch(`${BACKEND_URL}/api/v1/ground`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
+        headers,
         body: JSON.stringify({
           audio_b64: audioB64 || 'offline_audio_stream',
           sample_rate: 16000,
@@ -51,7 +62,7 @@ export class ApiService {
         return data;
       }
       throw new Error(`Status ${response.status}`);
-    } catch (err) {
+    } catch {
       clearTimeout(timeoutId);
       console.info('Backend unavailable or mock mode active — engaging local bioacoustic simulation.');
 
