@@ -19,7 +19,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenLab }) => {
         <div style={styles.topRow}>
           <div style={styles.brandBlock}>
             <div style={styles.brandHead}>
-              <div className="status-dot-active" />
+              <div className="status-dot-amber" />
               <span style={styles.brandTitle}>AURAFLORA</span>
             </div>
             <p style={styles.brandTagline}>
@@ -70,7 +70,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenLab }) => {
               <button onClick={onOpenLab} style={styles.footerLink} className="font-mono">
                 LIVE DSP LAB
               </button>
-              <span style={{ ...styles.footerLink, color: 'var(--color-botanical)' }} className="font-mono">
+              <span style={{ ...styles.footerLink, color: 'var(--color-golden-amber)' }} className="font-mono">
                 MIT LICENSE · 2026
               </span>
             </div>
@@ -99,7 +99,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenLab }) => {
 
 const styles: Record<string, React.CSSProperties> = {
   footer: {
-    backgroundColor: '#050706',
+    backgroundColor: '#12110F',
     borderTop: '1px solid var(--color-border-subtle)',
     padding: '60px 0 36px',
   },

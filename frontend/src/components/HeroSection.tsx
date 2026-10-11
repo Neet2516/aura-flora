@@ -55,10 +55,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <FadeInWhenVisible delay={0.1} yOffset={16}>
           <div style={styles.eyebrowRow}>
             <div className="tech-eyebrow">
-              <span className="status-dot-active" />
+              <span className="status-dot-amber" />
               <span>AURAFLORA / FIELD EXPERIMENT 001</span>
             </div>
-            <span className="meta-label desktop-only">HACKTOBERFEST 2026 · "TOUCH GRASS" CHALLENGE</span>
+            <span className="meta-label desktop-only" style={{ color: 'var(--color-muted-olive)' }}>
+              HACKTOBERFEST 2026 · "TOUCH GRASS" CHALLENGE
+            </span>
           </div>
         </FadeInWhenVisible>
 
@@ -75,7 +77,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <ScrollRevealText
             text="Leave the screen."
             tag="h1"
-            style={{ ...styles.headline, color: 'var(--color-text-secondary)', fontWeight: 500 }}
+            style={{ ...styles.headline, color: 'var(--color-muted-olive)', fontWeight: 500 }}
             delay={0.4}
             stagger={0.05}
           />
@@ -95,7 +97,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={onExploreProtocol}
-              className="btn-botanical-primary"
+              className="btn-amber-primary"
               title="Explore 5-Stage Bioacoustic Protocol"
             >
               <span>EXPLORE THE PROTOCOL</span>
@@ -106,10 +108,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={onLaunchLab}
-              className="btn-botanical-secondary"
+              className="btn-olive-secondary"
               title="Open Interactive Bioacoustic DSP Lab"
             >
-              <Activity size={14} color="#B5E48C" />
+              <Activity size={14} color="#F2C46A" />
               <span>LAUNCH LIVE LAB</span>
             </motion.button>
 
@@ -118,7 +120,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onTriggerInstall}
-                className="btn-botanical-secondary"
+                className="btn-olive-secondary"
                 title="Install AuraFlora PWA to device"
               >
                 <Download size={14} />
@@ -137,7 +139,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
             <div style={styles.specItem}>
               <span className="meta-label">MAX SCREEN TIME</span>
-              <span style={styles.specVal}>≤ 15 SECONDS</span>
+              <span style={{ ...styles.specVal, color: 'var(--color-golden-amber)' }}>≤ 15 SECONDS</span>
             </div>
             <div style={styles.specItem}>
               <span className="meta-label">BIOACOUSTIC ENGINE</span>
@@ -163,7 +165,7 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: 'center',
     padding: '60px 0 40px',
     overflow: 'hidden',
-    backgroundColor: '#080A09',
+    backgroundColor: '#171614',
   },
   videoWrapper: {
     position: 'absolute',
@@ -191,7 +193,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: 'absolute',
     inset: 0,
     background:
-      'radial-gradient(circle at 50% 40%, rgba(8, 10, 9, 0.45) 0%, rgba(8, 10, 9, 0.88) 75%, #080A09 100%)',
+      'radial-gradient(circle at 50% 40%, rgba(23, 22, 20, 0.45) 0%, rgba(23, 22, 20, 0.88) 75%, #171614 100%)',
     mixBlendMode: 'multiply',
   },
   contentContainer: {

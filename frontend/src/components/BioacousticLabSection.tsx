@@ -86,14 +86,14 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
         for (let i = 0; i < bufferLength / 2; i++) {
           const barHeight = (dataArray[i] / 255) * (height * 0.85);
 
-          ctx.fillStyle = i % 4 === 0 ? '#B5E48C' : 'rgba(181, 228, 140, 0.45)';
+          ctx.fillStyle = i % 4 === 0 ? '#F2C46A' : 'rgba(174, 172, 120, 0.55)';
           ctx.fillRect(x, height - barHeight, barWidth - 1, barHeight);
 
           x += barWidth;
         }
       } else {
         // Subtle resting sine wave pattern when idle
-        ctx.strokeStyle = 'rgba(220, 235, 220, 0.12)';
+        ctx.strokeStyle = 'rgba(174, 172, 120, 0.2)';
         ctx.lineWidth = 1;
         ctx.beginPath();
         const t = Date.now() / 1000;
@@ -134,7 +134,7 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onOpenFullLab}
-            className="btn-botanical-primary"
+            className="btn-amber-primary"
             title="Launch Full Lab Modal"
           >
             <span>OPEN FULL LAB</span>
@@ -148,7 +148,7 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
           {/* Console Header */}
           <div style={styles.consoleBar}>
             <div style={styles.consoleBarLeft}>
-              <div className="status-dot-active" />
+              <div className="status-dot-amber" />
               <span className="font-mono" style={styles.consoleTitle}>
                 LIVE FFT SPECTRAL ANALYZER [{activeBiome.toUpperCase()}]
               </span>
@@ -176,9 +176,9 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
                 onClick={() => handleToggleAudio(b.id)}
                 style={{
                   ...styles.biomeBtn,
-                  borderColor: activeBiome === b.id && isPlaying ? 'var(--color-botanical)' : 'var(--color-border-subtle)',
-                  backgroundColor: activeBiome === b.id && isPlaying ? 'rgba(181, 228, 140, 0.15)' : 'rgba(8, 10, 9, 0.6)',
-                  color: activeBiome === b.id && isPlaying ? 'var(--color-botanical)' : 'var(--color-text-secondary)',
+                  borderColor: activeBiome === b.id && isPlaying ? 'var(--color-golden-amber)' : 'var(--color-border-subtle)',
+                  backgroundColor: activeBiome === b.id && isPlaying ? 'rgba(242, 196, 106, 0.15)' : 'rgba(23, 22, 20, 0.7)',
+                  color: activeBiome === b.id && isPlaying ? 'var(--color-golden-amber)' : 'var(--color-text-secondary)',
                 }}
                 className="font-mono"
               >
@@ -198,11 +198,11 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.45, delay: 0.1 }}
-            whileHover={{ y: -4, borderColor: '#B5E48C', transition: { duration: 0.2 } }}
+            whileHover={{ y: -4, borderColor: 'var(--color-muted-olive)', transition: { duration: 0.2 } }}
             style={styles.moduleCard}
           >
             <div style={styles.moduleTop}>
-              <Cpu size={16} color="#B5E48C" />
+              <Cpu size={16} color="var(--color-muted-olive)" />
               <span className="meta-label">MODULE 01 · DSP EXTRACTION</span>
             </div>
             <h3 style={styles.moduleTitle}>Spectral Centroid & RMS</h3>
@@ -220,11 +220,11 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.45, delay: 0.2 }}
-            whileHover={{ y: -4, borderColor: '#B5E48C', transition: { duration: 0.2 } }}
+            whileHover={{ y: -4, borderColor: 'var(--color-muted-olive)', transition: { duration: 0.2 } }}
             style={styles.moduleCard}
           >
             <div style={styles.moduleTop}>
-              <Radio size={16} color="#B5E48C" />
+              <Radio size={16} color="var(--color-muted-olive)" />
               <span className="meta-label">MODULE 02 · CLASSIFICATION</span>
             </div>
             <h3 style={styles.moduleTitle}>Biophony vs. Anthrophony</h3>
@@ -242,11 +242,11 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.45, delay: 0.3 }}
-            whileHover={{ y: -4, borderColor: '#B5E48C', transition: { duration: 0.2 } }}
+            whileHover={{ y: -4, borderColor: 'var(--color-muted-olive)', transition: { duration: 0.2 } }}
             style={styles.moduleCard}
           >
             <div style={styles.moduleTop}>
-              <Shield size={16} color="#B5E48C" />
+              <Shield size={16} color="var(--color-muted-olive)" />
               <span className="meta-label">MODULE 03 · GROUNDING LLM</span>
             </div>
             <h3 style={styles.moduleTitle}>Gemma Instruction Synthesis</h3>
@@ -264,11 +264,11 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.45, delay: 0.4 }}
-            whileHover={{ y: -4, borderColor: '#B5E48C', transition: { duration: 0.2 } }}
+            whileHover={{ y: -4, borderColor: 'var(--color-muted-olive)', transition: { duration: 0.2 } }}
             style={styles.moduleCard}
           >
             <div style={styles.moduleTop}>
-              <Activity size={16} color="#B5E48C" />
+              <Activity size={16} color="var(--color-muted-olive)" />
               <span className="meta-label">MODULE 04 · TTS & BLACKOUT</span>
             </div>
             <h3 style={styles.moduleTitle}>ElevenLabs & AMOLED Lock</h3>
@@ -288,7 +288,7 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
 const styles: Record<string, React.CSSProperties> = {
   section: {
     padding: '90px 0',
-    backgroundColor: 'var(--color-bg-secondary)',
+    backgroundColor: 'var(--color-dark-canvas)',
     borderTop: '1px solid var(--color-border-subtle)',
     borderBottom: '1px solid var(--color-border-subtle)',
   },
@@ -307,12 +307,12 @@ const styles: Record<string, React.CSSProperties> = {
   title: {
     fontSize: 'clamp(2.2rem, 4vw, 3.8rem)',
     letterSpacing: '-0.03em',
-    color: '#F1F2EC',
+    color: 'var(--color-soft-offwhite)',
     lineHeight: 1.1,
     marginTop: '8px',
   },
   consoleBox: {
-    backgroundColor: '#080A09',
+    backgroundColor: '#1E1D1A',
     border: '1px solid var(--color-border-subtle)',
     display: 'flex',
     flexDirection: 'column',
@@ -324,7 +324,7 @@ const styles: Record<string, React.CSSProperties> = {
     flexWrap: 'wrap',
     padding: '12px 20px',
     borderBottom: '1px solid var(--color-grid-line)',
-    backgroundColor: 'rgba(16, 20, 17, 0.8)',
+    backgroundColor: 'rgba(32, 30, 26, 0.95)',
     gap: '12px',
   },
   consoleBarLeft: {
@@ -335,7 +335,7 @@ const styles: Record<string, React.CSSProperties> = {
   consoleTitle: {
     fontSize: '12px',
     letterSpacing: '0.06em',
-    color: '#F1F2EC',
+    color: 'var(--color-soft-offwhite)',
   },
   consoleMetrics: {
     display: 'flex',
@@ -345,7 +345,7 @@ const styles: Record<string, React.CSSProperties> = {
   canvasContainer: {
     width: '100%',
     height: '160px',
-    backgroundColor: '#080A09',
+    backgroundColor: '#12110F',
     padding: '12px 20px',
   },
   canvas: {
@@ -360,7 +360,7 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '8px',
     padding: '12px 20px',
     borderTop: '1px solid var(--color-grid-line)',
-    backgroundColor: 'rgba(16, 20, 17, 0.4)',
+    backgroundColor: 'rgba(26, 25, 22, 0.85)',
   },
   biomeBtn: {
     display: 'inline-flex',
@@ -379,7 +379,7 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '16px',
   },
   moduleCard: {
-    backgroundColor: 'var(--color-bg-elevated)',
+    backgroundColor: '#1E1D1A',
     border: '1px solid var(--color-border-subtle)',
     padding: '24px',
     display: 'flex',
@@ -394,7 +394,7 @@ const styles: Record<string, React.CSSProperties> = {
   moduleTitle: {
     fontSize: '17px',
     fontWeight: 600,
-    color: '#F1F2EC',
+    color: 'var(--color-soft-offwhite)',
   },
   moduleDesc: {
     fontSize: '13px',
@@ -405,8 +405,8 @@ const styles: Record<string, React.CSSProperties> = {
   formulaBox: {
     fontSize: '11px',
     padding: '8px 12px',
-    backgroundColor: '#080A09',
+    backgroundColor: '#12110F',
     border: '1px solid var(--color-grid-line)',
-    color: 'var(--color-botanical)',
+    color: 'var(--color-muted-olive)',
   },
 };

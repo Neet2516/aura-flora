@@ -115,7 +115,7 @@ export const CinematicScrollSection: React.FC = () => {
       {/* Top Scrub Progress HUD */}
       <div style={styles.hudBar}>
         <div style={styles.hudLeft}>
-          <div className="status-dot-active" />
+          <div className="status-dot-amber" />
           <span className="font-mono" style={styles.hudTitle}>
             HORIZONTAL CINEMATIC SCRUB · [SCROLL DOWN TO ADVANCE]
           </span>
@@ -146,10 +146,10 @@ export const CinematicScrollSection: React.FC = () => {
                   <div className="tech-eyebrow">
                     <span>PHASE {panel.num}</span>
                   </div>
-                  <span className="meta-label">{panel.tag}</span>
+                  <span className="meta-label" style={{ color: 'var(--color-muted-olive)' }}>{panel.tag}</span>
                 </div>
                 <div style={styles.iconWrap}>
-                  <Icon size={20} color="#B5E48C" />
+                  <Icon size={20} color="#F2C46A" />
                 </div>
               </div>
 
@@ -201,7 +201,7 @@ export const CinematicScrollSection: React.FC = () => {
             Continue scrolling downward to examine the 5-stage bioacoustic pipeline from initial audio recording to complete blackout.
           </p>
 
-          <a href="#protocol" className="btn-botanical-primary" style={{ textDecoration: 'none' }}>
+          <a href="#protocol" className="btn-amber-primary" style={{ textDecoration: 'none' }}>
             <span>EXPLORE 5-STAGE PROTOCOL</span>
             <ArrowRight size={14} />
           </a>
@@ -216,7 +216,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: 'relative',
     height: '100vh',
     width: '100vw',
-    backgroundColor: '#080A09',
+    backgroundColor: '#171614',
     overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
@@ -237,7 +237,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: 'absolute',
     inset: 0,
     background:
-      'radial-gradient(circle at 50% 50%, rgba(8, 10, 9, 0.7) 0%, rgba(8, 10, 9, 0.94) 80%, #080A09 100%)',
+      'radial-gradient(circle at 50% 50%, rgba(23, 22, 20, 0.7) 0%, rgba(23, 22, 20, 0.94) 80%, #171614 100%)',
   },
   hudBar: {
     position: 'absolute',
@@ -249,7 +249,7 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '12px 20px',
-    backgroundColor: 'rgba(16, 20, 17, 0.85)',
+    backgroundColor: 'rgba(30, 29, 26, 0.88)',
     border: '1px solid var(--color-border-subtle)',
     backdropFilter: 'blur(12px)',
     flexWrap: 'wrap',
@@ -262,7 +262,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   hudTitle: {
     fontSize: '11px',
-    color: '#F1F2EC',
+    color: '#F7F5EF',
     letterSpacing: '0.08em',
   },
   hudRight: {
@@ -280,7 +280,7 @@ const styles: Record<string, React.CSSProperties> = {
   progressBar: {
     width: '0%',
     height: '100%',
-    backgroundColor: 'var(--color-botanical)',
+    backgroundColor: 'var(--color-golden-amber)',
     transition: 'width 0.1s linear',
   },
   horizontalTrack: {
@@ -298,7 +298,7 @@ const styles: Record<string, React.CSSProperties> = {
   panelCard: {
     width: 'clamp(340px, 48vw, 680px)',
     minHeight: '460px',
-    backgroundColor: 'rgba(16, 20, 17, 0.92)',
+    backgroundColor: 'rgba(30, 29, 26, 0.94)',
     border: '1px solid var(--color-border-subtle)',
     padding: '44px 36px',
     display: 'flex',
@@ -326,8 +326,8 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(181, 228, 140, 0.1)',
-    border: '1px solid rgba(181, 228, 140, 0.25)',
+    backgroundColor: 'rgba(242, 196, 106, 0.12)',
+    border: '1px solid rgba(242, 196, 106, 0.3)',
   },
   headlineWrap: {
     maxWidth: '560px',
@@ -336,7 +336,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 'clamp(1.8rem, 3vw, 2.75rem)',
     lineHeight: 1.15,
     letterSpacing: '-0.03em',
-    color: '#F1F2EC',
+    color: '#F7F5EF',
     fontWeight: 700,
   },
   panelDesc: {
@@ -361,7 +361,7 @@ const styles: Record<string, React.CSSProperties> = {
   metricValue: {
     fontSize: '13px',
     fontWeight: 600,
-    color: 'var(--color-botanical)',
+    color: 'var(--color-golden-amber)',
     letterSpacing: '0.04em',
   },
   accentBadge: {
@@ -371,8 +371,8 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '4px 8px',
   },
   finalCtaCard: {
-    backgroundColor: 'rgba(23, 28, 24, 0.95)',
-    border: '1px solid var(--color-botanical)',
+    backgroundColor: 'rgba(38, 36, 32, 0.96)',
+    border: '1px solid var(--color-golden-amber)',
     justifyContent: 'center',
     alignItems: 'flex-start',
     gap: '24px',

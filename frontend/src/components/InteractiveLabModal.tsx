@@ -25,7 +25,7 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
         <div style={styles.header}>
           <div style={styles.headerLeft}>
             <div style={styles.badgeLive}>
-              <Radio size={12} color="#4ADE80" />
+              <Radio size={12} color="var(--color-golden-amber)" />
               <span>LIVE LAB</span>
             </div>
             <span style={styles.headerTitle}>AURAFLORA · COMPUTATIONAL BIOACOUSTIC ENGINE</span>
@@ -44,8 +44,8 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
           <button
             style={{
               ...styles.tabBtn,
-              borderBottomColor: activeTab === 'grounding' ? '#FFFFFF' : 'transparent',
-              color: activeTab === 'grounding' ? '#FFFFFF' : 'var(--color-text-secondary)',
+              borderBottomColor: activeTab === 'grounding' ? 'var(--color-golden-amber)' : 'transparent',
+              color: activeTab === 'grounding' ? 'var(--color-golden-amber)' : 'var(--color-text-secondary)',
             }}
             onClick={() => setActiveTab('grounding')}
           >
@@ -56,8 +56,8 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
           <button
             style={{
               ...styles.tabBtn,
-              borderBottomColor: activeTab === 'dsp' ? '#FFFFFF' : 'transparent',
-              color: activeTab === 'dsp' ? '#FFFFFF' : 'var(--color-text-secondary)',
+              borderBottomColor: activeTab === 'dsp' ? 'var(--color-golden-amber)' : 'transparent',
+              color: activeTab === 'dsp' ? 'var(--color-golden-amber)' : 'var(--color-text-secondary)',
             }}
             onClick={() => setActiveTab('dsp')}
           >
@@ -68,8 +68,8 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
           <button
             style={{
               ...styles.tabBtn,
-              borderBottomColor: activeTab === 'pipeline' ? '#FFFFFF' : 'transparent',
-              color: activeTab === 'pipeline' ? '#FFFFFF' : 'var(--color-text-secondary)',
+              borderBottomColor: activeTab === 'pipeline' ? 'var(--color-golden-amber)' : 'transparent',
+              color: activeTab === 'pipeline' ? 'var(--color-golden-amber)' : 'var(--color-text-secondary)',
             }}
             onClick={() => setActiveTab('pipeline')}
           >
@@ -80,8 +80,8 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
           <button
             style={{
               ...styles.tabBtn,
-              borderBottomColor: activeTab === 'library' ? '#FFFFFF' : 'transparent',
-              color: activeTab === 'library' ? '#FFFFFF' : 'var(--color-text-secondary)',
+              borderBottomColor: activeTab === 'library' ? 'var(--color-golden-amber)' : 'transparent',
+              color: activeTab === 'library' ? 'var(--color-golden-amber)' : 'var(--color-text-secondary)',
             }}
             onClick={() => setActiveTab('library')}
           >
@@ -92,8 +92,8 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
           <button
             style={{
               ...styles.tabBtn,
-              borderBottomColor: activeTab === 'mobile' ? '#FFFFFF' : 'transparent',
-              color: activeTab === 'mobile' ? '#FFFFFF' : 'var(--color-text-secondary)',
+              borderBottomColor: activeTab === 'mobile' ? 'var(--color-golden-amber)' : 'transparent',
+              color: activeTab === 'mobile' ? 'var(--color-golden-amber)' : 'var(--color-text-secondary)',
             }}
             onClick={() => setActiveTab('mobile')}
           >
@@ -135,8 +135,8 @@ const styles: Record<string, React.CSSProperties> = {
     width: '100%',
     maxWidth: '1240px',
     height: '92vh',
-    backgroundColor: 'var(--color-bg-primary)',
-    border: '1px solid var(--color-grid-active)',
+    backgroundColor: 'var(--color-dark-canvas)',
+    border: '1px solid var(--color-border-subtle)',
     boxShadow: '0 30px 90px rgba(0, 0, 0, 0.9)',
     display: 'flex',
     flexDirection: 'column',
@@ -147,7 +147,7 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '14px 24px',
-    backgroundColor: 'var(--color-bg-secondary)',
+    backgroundColor: '#1E1D1A',
     borderBottom: '1px solid var(--color-grid-line)',
   },
   headerLeft: {
@@ -160,9 +160,9 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     gap: '6px',
     padding: '3px 8px',
-    backgroundColor: 'rgba(74, 222, 128, 0.1)',
-    border: '1px solid rgba(74, 222, 128, 0.3)',
-    color: '#4ADE80',
+    backgroundColor: 'rgba(242, 196, 106, 0.12)',
+    border: '1px solid rgba(242, 196, 106, 0.3)',
+    color: 'var(--color-golden-amber)',
     fontFamily: 'var(--font-mono)',
     fontSize: '10px',
     fontWeight: 600,
@@ -172,7 +172,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: 'var(--font-mono)',
     fontSize: '12px',
     letterSpacing: '0.06em',
-    color: '#ECECE8',
+    color: 'var(--color-soft-offwhite)',
     fontWeight: 600,
   },
   headerRight: {
@@ -194,7 +194,7 @@ const styles: Record<string, React.CSSProperties> = {
   tabBar: {
     display: 'flex',
     overflowX: 'auto',
-    backgroundColor: 'var(--color-bg-secondary)',
+    backgroundColor: '#1E1D1A',
     borderBottom: '1px solid var(--color-grid-line)',
     padding: '0 24px',
     gap: '12px',
@@ -218,7 +218,7 @@ const styles: Record<string, React.CSSProperties> = {
     flex: 1,
     overflowY: 'auto',
     padding: '24px',
-    backgroundColor: 'var(--color-bg-primary)',
+    backgroundColor: 'var(--color-dark-canvas)',
   },
   mobileSimulatorContainer: {
     display: 'flex',

@@ -70,8 +70,8 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({ onOpenSimulato
         {/* Section Header */}
         <div style={styles.header}>
           <div>
-            <div className="tech-eyebrow">
-              <span>HOW IT WORKS / 003</span>
+            <div className="tech-eyebrow" style={{ color: '#4C4541' }}>
+              <span style={{ color: '#6A6844', fontWeight: 600 }}>HOW IT WORKS / 003</span>
             </div>
             <ScrollRevealText
               text="The 15-Second Protocol"
@@ -103,8 +103,9 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({ onOpenSimulato
                 onClick={() => setActiveStep(i)}
                 style={{
                   ...styles.stepCard,
-                  borderColor: isSelected ? 'var(--color-botanical)' : 'var(--color-border-subtle)',
-                  backgroundColor: isSelected ? 'rgba(23, 28, 24, 0.95)' : 'rgba(16, 20, 17, 0.7)',
+                  borderColor: isSelected ? 'var(--color-golden-amber)' : 'rgba(76, 69, 65, 0.2)',
+                  backgroundColor: isSelected ? '#FFFFFF' : '#F5E6CC',
+                  boxShadow: isSelected ? '0 12px 28px rgba(76, 69, 65, 0.12)' : 'none',
                 }}
                 role="button"
                 tabIndex={0}
@@ -124,8 +125,9 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({ onOpenSimulato
                   <div
                     style={{
                       ...styles.iconWrap,
-                      backgroundColor: isSelected ? 'rgba(181, 228, 140, 0.15)' : 'rgba(255, 255, 255, 0.04)',
-                      color: isSelected ? 'var(--color-botanical)' : 'var(--color-text-secondary)',
+                      backgroundColor: isSelected ? 'rgba(242, 196, 106, 0.25)' : 'rgba(174, 172, 120, 0.2)',
+                      color: isSelected ? '#2A2624' : '#4C4541',
+                      borderColor: isSelected ? 'var(--color-golden-amber)' : 'rgba(76, 69, 65, 0.2)',
                     }}
                   >
                     <Icon size={18} />
@@ -138,7 +140,7 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({ onOpenSimulato
 
                 {/* Visual Technical Cue */}
                 <div style={styles.cueBox}>
-                  <span className="meta-label">SIGNAL CUE</span>
+                  <span className="meta-label" style={{ color: '#6A6844' }}>SIGNAL CUE</span>
                   <span style={styles.cueText} className="font-mono">
                     {st.cue}
                   </span>
@@ -152,7 +154,7 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({ onOpenSimulato
         <FadeInWhenVisible delay={0.35}>
           <div style={styles.protocolFooter}>
             <div style={styles.footerInfo}>
-              <span className="tech-eyebrow">TOTAL SCREEN BUDGET</span>
+              <span className="tech-eyebrow" style={{ color: '#6A6844' }}>TOTAL SCREEN BUDGET</span>
               <span style={styles.budgetValue} className="font-mono">
                 MAXIMUM 15 SECONDS · GUARANTEED BLACKOUT
               </span>
@@ -162,7 +164,7 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({ onOpenSimulato
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={onOpenSimulator}
-              className="btn-botanical-primary"
+              className="btn-charcoal-cream"
               title="Launch Phone Simulator to test protocol"
             >
               <span>TEST PROTOCOL IN PHONE SIMULATOR</span>
@@ -178,7 +180,7 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({ onOpenSimulato
 const styles: Record<string, React.CSSProperties> = {
   section: {
     padding: '90px 0',
-    backgroundColor: '#080A09',
+    backgroundColor: 'var(--color-warm-cream)',
     position: 'relative',
   },
   container: {
@@ -195,13 +197,13 @@ const styles: Record<string, React.CSSProperties> = {
   title: {
     fontSize: 'clamp(2.2rem, 4vw, 3.8rem)',
     letterSpacing: '-0.03em',
-    color: '#F1F2EC',
+    color: '#2A2624',
     lineHeight: 1.1,
     marginTop: '8px',
   },
   subtitle: {
     fontSize: '1.1rem',
-    color: 'var(--color-text-secondary)',
+    color: '#4C4541',
     lineHeight: 1.6,
   },
   stepsGrid: {
@@ -218,6 +220,7 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
     position: 'relative',
     willChange: 'transform',
+    borderRadius: '2px',
   },
   stepTop: {
     display: 'flex',
@@ -227,12 +230,12 @@ const styles: Record<string, React.CSSProperties> = {
   stepNum: {
     fontSize: '15px',
     fontWeight: 700,
-    color: 'var(--color-botanical)',
+    color: '#6A6844',
   },
   stepDuration: {
     fontSize: '11px',
-    color: 'var(--color-text-muted)',
-    border: '1px solid var(--color-grid-line)',
+    color: '#4C4541',
+    border: '1px solid rgba(76, 69, 65, 0.25)',
     padding: '2px 6px',
   },
   stepIdentity: {
@@ -246,24 +249,24 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    border: '1px solid var(--color-border-subtle)',
+    border: '1px solid',
     borderRadius: '2px',
   },
   stepTitle: {
     fontSize: '18px',
     fontWeight: 600,
     letterSpacing: '0.04em',
-    color: '#F1F2EC',
+    color: '#2A2624',
   },
   stepSummary: {
     fontSize: '13px',
-    fontWeight: 500,
-    color: '#F1F2EC',
+    fontWeight: 600,
+    color: '#2A2624',
     lineHeight: 1.45,
   },
   stepDetail: {
     fontSize: '12px',
-    color: 'var(--color-text-secondary)',
+    color: '#4C4541',
     lineHeight: 1.55,
     flex: 1,
   },
@@ -272,12 +275,13 @@ const styles: Record<string, React.CSSProperties> = {
     flexDirection: 'column',
     gap: '4px',
     paddingTop: '12px',
-    borderTop: '1px solid var(--color-grid-line)',
+    borderTop: '1px solid rgba(76, 69, 65, 0.16)',
   },
   cueText: {
     fontSize: '11px',
-    color: 'var(--color-botanical)',
+    color: '#2A2624',
     lineHeight: 1.4,
+    fontWeight: 500,
   },
   protocolFooter: {
     display: 'flex',
@@ -286,8 +290,8 @@ const styles: Record<string, React.CSSProperties> = {
     flexWrap: 'wrap',
     gap: '20px',
     padding: '28px',
-    backgroundColor: 'var(--color-bg-secondary)',
-    border: '1px solid var(--color-border-subtle)',
+    backgroundColor: '#F3E4C9',
+    border: '1px solid rgba(76, 69, 65, 0.22)',
   },
   footerInfo: {
     display: 'flex',
@@ -297,7 +301,7 @@ const styles: Record<string, React.CSSProperties> = {
   budgetValue: {
     fontSize: '13px',
     fontWeight: 600,
-    color: '#F1F2EC',
+    color: '#2A2624',
     letterSpacing: '0.05em',
   },
 };

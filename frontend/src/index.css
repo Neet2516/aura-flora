@@ -1,22 +1,43 @@
 /* =============================================================================
-   AURAFLORA — EXPERIMENTAL BIOACOUSTIC LAB DESIGN SYSTEM
-   Master Design Tokens & Global Stylesheet
+   AURAFLORA — EXPERIMENTAL BIOACOUSTIC LAB & EDITORIAL FIELD JOURNAL
+   Warm Botanical Palette Design Tokens
    ============================================================================= */
 
 :root {
-  /* Brand Color Palette */
-  --color-bg-primary: #080A09;
-  --color-bg-secondary: #101411;
-  --color-bg-elevated: #171C18;
-  --color-text-primary: #F1F2EC;
-  --color-text-secondary: #A3AAA0;
-  --color-text-muted: #707A70;
-  --color-botanical: #B5E48C;
-  --color-botanical-dark: #203D2A;
-  --color-border-subtle: rgba(220, 235, 220, 0.14);
-  --color-border-active: rgba(181, 228, 140, 0.4);
-  --color-grid-line: rgba(220, 235, 220, 0.08);
-  --color-grid-active: rgba(181, 228, 140, 0.25);
+  /* Core Palette Tokens */
+  --color-warm-cream: #FCF0DA;
+  --color-muted-olive: #AEAC78;
+  --color-golden-amber: #F2C46A;
+  --color-earthy-charcoal: #4C4541;
+  --color-deep-charcoal: #2A2624;
+  --color-dark-canvas: #171614;
+  --color-dark-surface: #1E1D1A;
+  --color-dark-elevated: #262420;
+  --color-soft-offwhite: #F7F5EF;
+
+  /* Semantic Roles - Dark Scenes (Hero, Scroll Story, Scientific Lab, Final CTA) */
+  --color-bg-primary: #171614;
+  --color-bg-secondary: #1E1D1A;
+  --color-bg-elevated: #262420;
+  --color-text-primary: #F7F5EF;
+  --color-text-secondary: #C4C0B3;
+  --color-text-muted: #8E8A7D;
+  --color-accent-amber: #F2C46A;
+  --color-accent-olive: #AEAC78;
+  --color-border-subtle: rgba(174, 172, 120, 0.18);
+  --color-border-active: rgba(242, 196, 106, 0.45);
+  --color-grid-line: rgba(174, 172, 120, 0.1);
+  --color-grid-active: rgba(242, 196, 106, 0.3);
+
+  /* Semantic Roles - Editorial Cream Scenes (Protocol, Philosophy) */
+  --color-cream-bg: #FCF0DA;
+  --color-cream-surface: #F5E5C9;
+  --color-cream-elevated: #FFFFFF;
+  --color-cream-text-primary: #2A2624;
+  --color-cream-text-secondary: #4C4541;
+  --color-cream-text-muted: #726A64;
+  --color-cream-border: rgba(76, 69, 65, 0.18);
+  --color-cream-border-active: #AEAC78;
 
   /* Typography System */
   --font-display: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -103,7 +124,7 @@ body {
   height: 100vh;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.035;
+  opacity: 0.038;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   mix-blend-mode: overlay;
@@ -120,12 +141,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border-subtle);
+  background: var(--color-muted-olive);
   border-radius: 0px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-botanical);
+  background: var(--color-golden-amber);
 }
 
 /* Global Typography Utility Classes */
@@ -140,7 +161,7 @@ h1, h2, h3, h4, .font-display {
   font-family: var(--font-mono);
 }
 
-/* Technical Eyebrow Label */
+/* Technical Eyebrow Labels */
 .tech-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -150,9 +171,39 @@ h1, h2, h3, h4, .font-display {
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-botanical);
-  background: rgba(181, 228, 140, 0.08);
-  border: 1px solid rgba(181, 228, 140, 0.22);
+  color: var(--color-muted-olive);
+  background: rgba(174, 172, 120, 0.12);
+  border: 1px solid rgba(174, 172, 120, 0.28);
+  padding: 4px 10px;
+}
+
+.tech-eyebrow-amber {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-golden-amber);
+  background: rgba(242, 196, 106, 0.12);
+  border: 1px solid rgba(242, 196, 106, 0.35);
+  padding: 4px 10px;
+}
+
+.tech-eyebrow-cream {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-deep-charcoal);
+  background: rgba(174, 172, 120, 0.24);
+  border: 1px solid rgba(76, 69, 65, 0.25);
   padding: 4px 10px;
 }
 
@@ -165,6 +216,15 @@ h1, h2, h3, h4, .font-display {
   color: var(--color-text-muted);
 }
 
+.meta-label-cream {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-cream-text-muted);
+}
+
 /* Container & Grid Foundations */
 .section-container {
   max-width: var(--container-max);
@@ -172,12 +232,21 @@ h1, h2, h3, h4, .font-display {
   padding: 0 var(--space-6);
 }
 
-/* Technical Scientific Crosshair & Measurement Marks */
+/* Technical Scientific Crosshair Marks */
 .crosshair-corner {
   position: absolute;
   width: 10px;
   height: 10px;
-  border-color: var(--color-botanical);
+  border-color: var(--color-muted-olive);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.crosshair-corner-cream {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--color-earthy-charcoal);
   opacity: 0.65;
   pointer-events: none;
 }
@@ -210,41 +279,41 @@ h1, h2, h3, h4, .font-display {
   border-right: 1px solid;
 }
 
-/* Botanical Primary & Secondary Buttons */
-.btn-botanical-primary {
+/* Warm Botanical Buttons */
+.btn-amber-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   padding: 12px 24px;
-  background-color: var(--color-botanical);
-  color: #080A09;
+  background-color: var(--color-golden-amber);
+  color: var(--color-dark-canvas);
   font-family: var(--font-mono);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  border: 1px solid var(--color-botanical);
+  border: 1px solid var(--color-golden-amber);
   cursor: pointer;
   transition: all var(--duration-micro) var(--ease-out-expo);
   text-decoration: none;
   min-height: 44px;
 }
 
-.btn-botanical-primary:hover {
-  background-color: #C8F0A2;
-  box-shadow: 0 0 16px rgba(181, 228, 140, 0.4);
+.btn-amber-primary:hover {
+  background-color: #F8D385;
+  box-shadow: 0 0 18px rgba(242, 196, 106, 0.45);
   transform: translateY(-1px);
 }
 
-.btn-botanical-secondary {
+.btn-olive-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   padding: 12px 24px;
-  background-color: rgba(16, 20, 17, 0.8);
-  color: var(--color-text-primary);
+  background-color: rgba(30, 29, 26, 0.85);
+  color: var(--color-soft-offwhite);
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
@@ -257,29 +326,75 @@ h1, h2, h3, h4, .font-display {
   min-height: 44px;
 }
 
-.btn-botanical-secondary:hover {
-  border-color: var(--color-botanical);
-  color: var(--color-botanical);
-  background-color: rgba(32, 61, 42, 0.25);
+.btn-olive-secondary:hover {
+  border-color: var(--color-muted-olive);
+  color: var(--color-golden-amber);
+  background-color: rgba(42, 40, 36, 0.95);
 }
 
-/* Pulsing Status Dot */
-.status-dot-active {
+.btn-charcoal-cream {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background-color: var(--color-deep-charcoal);
+  color: var(--color-warm-cream);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid var(--color-deep-charcoal);
+  cursor: pointer;
+  transition: all var(--duration-micro) var(--ease-out-expo);
+  text-decoration: none;
+  min-height: 44px;
+}
+
+.btn-charcoal-cream:hover {
+  background-color: #3C3633;
+  box-shadow: 0 4px 14px rgba(42, 38, 36, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Pulsing Status Dots */
+.status-dot-amber {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: var(--color-botanical);
-  box-shadow: 0 0 8px rgba(181, 228, 140, 0.8);
-  animation: pulseBotanical 2.2s infinite ease-in-out;
+  background-color: var(--color-golden-amber);
+  box-shadow: 0 0 8px rgba(242, 196, 106, 0.85);
+  animation: pulseAmber 2.2s infinite ease-in-out;
 }
 
-@keyframes pulseBotanical {
+@keyframes pulseAmber {
   0%, 100% {
     opacity: 1;
     transform: scale(1);
   }
   50% {
-    opacity: 0.3;
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+}
+
+.status-dot-olive {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-muted-olive);
+  box-shadow: 0 0 8px rgba(174, 172, 120, 0.7);
+  animation: pulseOlive 2.4s infinite ease-in-out;
+}
+
+@keyframes pulseOlive {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
     transform: scale(0.85);
   }
 }

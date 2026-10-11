@@ -141,7 +141,7 @@ export const ProductPreviewSection: React.FC = () => {
                 {screen === 'home' && (
                   <div style={styles.screenHome}>
                     <div style={styles.screenTopBar}>
-                      <span className="font-mono" style={{ fontSize: '10px', color: '#B5E48C' }}>
+                      <span className="font-mono" style={{ fontSize: '10px', color: 'var(--color-golden-amber)' }}>
                         AURAFLORA
                       </span>
                       <span className="font-mono" style={{ fontSize: '10px', color: '#707A70' }}>
@@ -195,7 +195,7 @@ export const ProductPreviewSection: React.FC = () => {
 
                 {screen === 'analyzing' && (
                   <div style={styles.screenActive}>
-                    <div className="status-dot-active" />
+                    <div className="status-dot-amber" />
                     <span className="tech-eyebrow">EVALUATING SOUNDSCAPE</span>
                     <p style={styles.analyzingText} className="font-mono">
                       EXTRACTING SPECTRAL CENTROID...
@@ -250,7 +250,7 @@ export const ProductPreviewSection: React.FC = () => {
 const styles: Record<string, React.CSSProperties> = {
   section: {
     padding: '90px 0',
-    backgroundColor: '#080A09',
+    backgroundColor: 'var(--color-dark-canvas)',
     position: 'relative',
   },
   container: {
@@ -267,7 +267,7 @@ const styles: Record<string, React.CSSProperties> = {
   title: {
     fontSize: 'clamp(2.2rem, 4vw, 3.8rem)',
     letterSpacing: '-0.03em',
-    color: '#F1F2EC',
+    color: 'var(--color-soft-offwhite)',
     lineHeight: 1.1,
     marginTop: '8px',
   },
@@ -292,18 +292,18 @@ const styles: Record<string, React.CSSProperties> = {
     flexDirection: 'column',
     gap: '8px',
     padding: '20px',
-    backgroundColor: 'var(--color-bg-secondary)',
+    backgroundColor: '#1E1D1A',
     border: '1px solid var(--color-border-subtle)',
   },
   flowNum: {
     fontSize: '11px',
-    color: 'var(--color-botanical)',
+    color: 'var(--color-golden-amber)',
     letterSpacing: '0.1em',
   },
   flowTitle: {
     fontSize: '17px',
     fontWeight: 600,
-    color: '#F1F2EC',
+    color: 'var(--color-soft-offwhite)',
   },
   flowDesc: {
     fontSize: '13px',
@@ -315,7 +315,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--color-text-muted)',
     padding: '12px 16px',
     border: '1px solid var(--color-grid-line)',
-    backgroundColor: 'rgba(16, 20, 17, 0.4)',
+    backgroundColor: 'rgba(23, 22, 20, 0.6)',
   },
   phoneStage: {
     display: 'flex',
@@ -327,9 +327,9 @@ const styles: Record<string, React.CSSProperties> = {
     width: '320px',
     height: '620px',
     backgroundColor: '#000000',
-    border: '3px solid #203D2A',
+    border: '3px solid #36332E',
     borderRadius: '44px',
-    boxShadow: '0 25px 70px rgba(0, 0, 0, 0.95), 0 0 20px rgba(181, 228, 140, 0.1)',
+    boxShadow: '0 25px 70px rgba(0, 0, 0, 0.95), 0 0 25px rgba(242, 196, 106, 0.12)',
     position: 'relative',
     overflow: 'hidden',
     display: 'flex',
@@ -395,20 +395,20 @@ const styles: Record<string, React.CSSProperties> = {
     width: '84px',
     height: '84px',
     borderRadius: '50%',
-    backgroundColor: 'var(--color-botanical)',
+    backgroundColor: 'var(--color-golden-amber)',
     border: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
-    boxShadow: '0 0 30px rgba(181, 228, 140, 0.5)',
+    boxShadow: '0 0 30px rgba(242, 196, 106, 0.45)',
     transition: 'transform 0.2s ease',
   },
   pulseLabel: {
     fontSize: '13px',
     fontWeight: 700,
     letterSpacing: '0.08em',
-    color: '#F1F2EC',
+    color: 'var(--color-soft-offwhite)',
   },
   pulseSub: {
     fontSize: '11px',
@@ -431,7 +431,7 @@ const styles: Record<string, React.CSSProperties> = {
   countdownNumber: {
     fontSize: '52px',
     fontWeight: 700,
-    color: 'var(--color-botanical)',
+    color: 'var(--color-golden-amber)',
   },
   waveformWave: {
     display: 'flex',
@@ -443,7 +443,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   waveBar: {
     width: '4px',
-    backgroundColor: 'var(--color-botanical)',
+    backgroundColor: 'var(--color-golden-amber)',
     borderRadius: '2px',
   },
   analyzingText: {

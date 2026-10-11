@@ -15,8 +15,8 @@ export const PhilosophySection: React.FC = () => {
         {/* Small Technical Label */}
         <FadeInWhenVisible delay={0.1}>
           <div style={styles.eyebrowRow}>
-            <span className="tech-eyebrow">DESIGN PHILOSOPHY / 006</span>
-            <span className="meta-label">ANTI-SCREEN TIME COMPUTING</span>
+            <span className="tech-eyebrow" style={{ color: '#6A6844' }}>DESIGN PHILOSOPHY / 006</span>
+            <span className="meta-label" style={{ color: '#4C4541' }}>ANTI-SCREEN TIME COMPUTING</span>
           </div>
         </FadeInWhenVisible>
 
@@ -87,10 +87,10 @@ export const PhilosophySection: React.FC = () => {
 const styles: Record<string, React.CSSProperties> = {
   section: {
     padding: '120px 0',
-    backgroundColor: '#080A09',
+    backgroundColor: 'var(--color-warm-cream)',
     position: 'relative',
-    borderTop: '1px solid var(--color-border-subtle)',
-    borderBottom: '1px solid var(--color-border-subtle)',
+    borderTop: '1px solid rgba(76, 69, 65, 0.15)',
+    borderBottom: '1px solid rgba(76, 69, 65, 0.15)',
   },
   container: {
     display: 'flex',
@@ -99,8 +99,9 @@ const styles: Record<string, React.CSSProperties> = {
     maxWidth: '1080px',
     position: 'relative',
     padding: '48px 32px',
-    backgroundColor: 'var(--color-bg-secondary)',
-    border: '1px solid var(--color-border-subtle)',
+    backgroundColor: '#FFF8ED',
+    border: '1px solid rgba(76, 69, 65, 0.22)',
+    boxShadow: '0 8px 32px rgba(76, 69, 65, 0.06)',
   },
   eyebrowRow: {
     display: 'flex',
@@ -116,7 +117,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 'clamp(2.4rem, 4.6vw, 4.2rem)',
     letterSpacing: '-0.035em',
     lineHeight: 1.08,
-    color: '#F1F2EC',
+    color: '#2A2624',
     fontWeight: 600,
   },
   bodyGrid: {
@@ -127,20 +128,20 @@ const styles: Record<string, React.CSSProperties> = {
   bodyLead: {
     fontSize: '1.2rem',
     lineHeight: 1.6,
-    color: '#F1F2EC',
+    color: '#2A2624',
     fontWeight: 400,
   },
   bodyDetail: {
     fontSize: '1.05rem',
     lineHeight: 1.65,
-    color: 'var(--color-text-secondary)',
+    color: '#4C4541',
   },
   principlesRow: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
     gap: '20px',
     paddingTop: '32px',
-    borderTop: '1px solid var(--color-grid-line)',
+    borderTop: '1px solid rgba(76, 69, 65, 0.16)',
   },
   principleItem: {
     display: 'flex',
@@ -149,18 +150,19 @@ const styles: Record<string, React.CSSProperties> = {
   },
   principleNum: {
     fontSize: '11px',
-    color: 'var(--color-botanical)',
+    color: '#6A6844',
     letterSpacing: '0.1em',
+    fontWeight: 600,
   },
   principleTitle: {
     fontSize: '13px',
     fontWeight: 700,
     letterSpacing: '0.06em',
-    color: '#F1F2EC',
+    color: '#2A2624',
   },
   principleText: {
     fontSize: '12px',
-    color: 'var(--color-text-secondary)',
+    color: '#4C4541',
     lineHeight: 1.5,
   },
 };

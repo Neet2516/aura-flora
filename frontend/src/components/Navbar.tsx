@@ -36,7 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Left: Brand Identity */}
         <div style={styles.brandGroup} onClick={() => onNavigate('hero')} role="button" tabIndex={0}>
           <div style={styles.brandLogo}>
-            <div className="status-dot-active" />
+            <div className="status-dot-amber" />
             <span style={styles.brandTitle}>AURAFLORA</span>
           </div>
           <span style={styles.brandBadge}>FIELD EXP 001</span>
@@ -64,7 +64,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="desktop-only"
             title="Launch Real-Time DSP Audio Lab"
           >
-            <Activity size={13} color="#B5E48C" />
+            <Activity size={13} color="#F2C46A" />
             <span>LIVE LAB</span>
           </button>
 
@@ -113,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               style={styles.mobileLabBtn}
               className="font-mono"
             >
-              <Radio size={14} color="#B5E48C" />
+              <Radio size={14} color="var(--color-golden-amber)" />
               <span>LAUNCH LIVE DSP LAB</span>
             </button>
             {canInstall && (
@@ -142,7 +142,7 @@ const styles: Record<string, React.CSSProperties> = {
     top: 0,
     zIndex: 900,
     width: '100%',
-    backgroundColor: 'rgba(8, 10, 9, 0.88)',
+    backgroundColor: 'rgba(23, 22, 20, 0.92)',
     backdropFilter: 'blur(16px)',
     WebkitBackdropFilter: 'blur(16px)',
     borderBottom: '1px solid var(--color-border-subtle)',
@@ -181,9 +181,9 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '10px',
     fontWeight: 500,
     letterSpacing: '0.1em',
-    color: 'var(--color-botanical)',
-    backgroundColor: 'rgba(181, 228, 140, 0.08)',
-    border: '1px solid rgba(181, 228, 140, 0.2)',
+    color: 'var(--color-muted-olive)',
+    backgroundColor: 'rgba(174, 172, 120, 0.12)',
+    border: '1px solid rgba(174, 172, 120, 0.28)',
     padding: '2px 8px',
   },
   centerNav: {
@@ -211,9 +211,9 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     gap: '6px',
     padding: '6px 12px',
-    backgroundColor: 'rgba(32, 61, 42, 0.3)',
-    border: '1px solid rgba(181, 228, 140, 0.3)',
-    color: 'var(--color-botanical)',
+    backgroundColor: 'rgba(38, 36, 32, 0.8)',
+    border: '1px solid rgba(174, 172, 120, 0.3)',
+    color: 'var(--color-muted-olive)',
     fontFamily: 'var(--font-mono)',
     fontSize: '11px',
     fontWeight: 600,
@@ -226,9 +226,9 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     gap: '6px',
     padding: '6px 12px',
-    backgroundColor: 'var(--color-botanical)',
-    border: '1px solid var(--color-botanical)',
-    color: '#080A09',
+    backgroundColor: 'var(--color-golden-amber)',
+    border: '1px solid var(--color-golden-amber)',
+    color: 'var(--color-dark-canvas)',
     fontFamily: 'var(--font-mono)',
     fontSize: '11px',
     fontWeight: 700,
@@ -248,7 +248,7 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
   },
   mobileDrawer: {
-    backgroundColor: '#080A09',
+    backgroundColor: '#171614',
     borderBottom: '1px solid var(--color-border-subtle)',
     padding: '20px 24px 28px',
   },
@@ -274,9 +274,9 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '8px',
     marginTop: '12px',
     padding: '12px 16px',
-    backgroundColor: 'rgba(32, 61, 42, 0.4)',
-    border: '1px solid rgba(181, 228, 140, 0.3)',
-    color: 'var(--color-botanical)',
+    backgroundColor: 'rgba(38, 36, 32, 0.9)',
+    border: '1px solid rgba(174, 172, 120, 0.35)',
+    color: 'var(--color-muted-olive)',
     fontSize: '12px',
     fontWeight: 600,
     cursor: 'pointer',
@@ -286,9 +286,9 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     gap: '8px',
     padding: '12px 16px',
-    backgroundColor: 'var(--color-botanical)',
+    backgroundColor: 'var(--color-golden-amber)',
     border: 'none',
-    color: '#080A09',
+    color: 'var(--color-dark-canvas)',
     fontSize: '12px',
     fontWeight: 700,
     cursor: 'pointer',

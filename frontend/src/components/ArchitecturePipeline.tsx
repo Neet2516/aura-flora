@@ -7,7 +7,7 @@ export const ArchitecturePipeline: React.FC = () => {
       num: '01',
       title: 'Acoustic Capture',
       tool: 'Client Device',
-      icon: <Mic size={20} color="#81C784" />,
+      icon: <Mic size={20} color="var(--color-golden-amber)" />,
       detail: 'Samples 5-10s of ambient sound at 16kHz mono PCM. Encodes to Base64 WAV buffer.',
       badge: '≤ 10 sec',
     },
@@ -15,7 +15,7 @@ export const ArchitecturePipeline: React.FC = () => {
       num: '02',
       title: 'Rust Axum Server',
       tool: 'Tokio Async',
-      icon: <Server size={20} color="#60A5FA" />,
+      icon: <Server size={20} color="var(--color-muted-olive)" />,
       detail: 'Ingests request at POST /api/v1/ground with memory-safe Zero-Copy decoding.',
       badge: '< 5 ms',
     },
@@ -23,7 +23,7 @@ export const ArchitecturePipeline: React.FC = () => {
       num: '03',
       title: 'FFT Feature Engine',
       tool: 'rustfft DSP',
-      icon: <Cpu size={20} color="#34D399" />,
+      icon: <Cpu size={20} color="var(--color-golden-amber)" />,
       detail: 'Extracts spectral centroid, Shannon entropy, RMS dB, and biophony/anthrophony ratio.',
       badge: '< 8 ms',
     },
@@ -31,7 +31,7 @@ export const ArchitecturePipeline: React.FC = () => {
       num: '04',
       title: 'Ecosystem Classifier',
       tool: 'TabPFN Network',
-      icon: <GitFork size={20} color="#FBBF24" />,
+      icon: <GitFork size={20} color="var(--color-muted-olive)" />,
       detail: 'Classifies acoustic environment (forest, meadow, creek, rain, urban edge).',
       badge: '< 15 ms',
     },
@@ -39,7 +39,7 @@ export const ArchitecturePipeline: React.FC = () => {
       num: '05',
       title: 'Tactile Prompt Gen',
       tool: 'Google Gemma 2B-IT',
-      icon: <Sparkles size={20} color="#A78BFA" />,
+      icon: <Sparkles size={20} color="var(--color-golden-amber)" />,
       detail: 'Synthesizes exactly one physical outdoor tactile command grounded in the detected acoustic biome.',
       badge: '~ 350 ms',
     },
@@ -47,7 +47,7 @@ export const ArchitecturePipeline: React.FC = () => {
       num: '06',
       title: 'Whisper Synthesis',
       tool: 'ElevenLabs TTS',
-      icon: <Volume2 size={20} color="#F472B6" />,
+      icon: <Volume2 size={20} color="var(--color-muted-olive)" />,
       detail: 'Generates calm, low-amplitude whisper audio file served back to client as MP3.',
       badge: '~ 400 ms',
     },
@@ -55,7 +55,7 @@ export const ArchitecturePipeline: React.FC = () => {
       num: '07',
       title: 'AMOLED Blackout',
       tool: 'Pure #000000',
-      icon: <Moon size={20} color="#FFFFFF" />,
+      icon: <Moon size={20} color="var(--color-soft-offwhite)" />,
       detail: 'Client screen dims to absolute zero pixels. Screen time ends. User touches grass.',
       badge: 'Target: ≤ 15s',
     },
@@ -65,8 +65,8 @@ export const ArchitecturePipeline: React.FC = () => {
     <section id="pipeline" style={styles.section}>
       <div style={styles.container}>
         <div style={styles.header}>
-          <div className="badge-pill">
-            <Server size={12} color="#81C784" />
+          <div className="tech-eyebrow" style={{ display: 'inline-flex', marginBottom: 12 }}>
+            <Server size={12} color="var(--color-golden-amber)" />
             <span>End-to-End Execution Graph</span>
           </div>
           <h2 style={styles.title}>The 15-Second Pipeline</h2>
@@ -78,7 +78,7 @@ export const ArchitecturePipeline: React.FC = () => {
         {/* Pipeline Cards Grid */}
         <div style={styles.stepsGrid}>
           {steps.map((step, idx) => (
-            <div key={idx} className="glass-panel" style={styles.stepCard}>
+            <div key={idx} style={styles.stepCard}>
               <div style={styles.stepTop}>
                 <span style={styles.stepNum}>{step.num}</span>
                 <span style={styles.stepBadge}>{step.badge}</span>
@@ -99,7 +99,7 @@ export const ArchitecturePipeline: React.FC = () => {
 const styles: Record<string, React.CSSProperties> = {
   section: {
     padding: '80px 24px',
-    backgroundColor: '#0A0F0D',
+    backgroundColor: 'var(--color-dark-canvas)',
   },
   container: {
     maxWidth: 1200,
@@ -111,12 +111,13 @@ const styles: Record<string, React.CSSProperties> = {
   },
   title: {
     fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)',
+    color: 'var(--color-soft-offwhite)',
     marginTop: 14,
     marginBottom: 12,
   },
   subtitle: {
     fontSize: '1rem',
-    color: '#9E9590',
+    color: 'var(--color-text-secondary)',
     maxWidth: 680,
     margin: '0 auto',
     lineHeight: 1.6,
@@ -132,6 +133,8 @@ const styles: Record<string, React.CSSProperties> = {
     flexDirection: 'column',
     position: 'relative',
     textAlign: 'left',
+    backgroundColor: '#1E1D1A',
+    border: '1px solid var(--color-border-subtle)',
   },
   stepTop: {
     display: 'flex',
@@ -143,22 +146,23 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: 'var(--font-mono)',
     fontSize: '1.1rem',
     fontWeight: 700,
-    color: '#81C784',
+    color: 'var(--color-golden-amber)',
   },
   stepBadge: {
     fontFamily: 'var(--font-mono)',
     fontSize: '0.7rem',
     padding: '2px 8px',
-    borderRadius: 6,
+    borderRadius: 2,
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    color: '#9E9590',
+    color: 'var(--color-text-muted)',
+    border: '1px solid var(--color-grid-line)',
   },
   stepIconWrap: {
     width: 42,
     height: 42,
-    borderRadius: 10,
+    borderRadius: 2,
     backgroundColor: 'rgba(255, 255, 255, 0.04)',
-    border: '1px solid rgba(129, 199, 132, 0.2)',
+    border: '1px solid rgba(174, 172, 120, 0.25)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -167,12 +171,12 @@ const styles: Record<string, React.CSSProperties> = {
   stepTitle: {
     fontSize: '1.05rem',
     fontWeight: 700,
-    color: '#E8DFD8',
+    color: 'var(--color-soft-offwhite)',
     marginBottom: 4,
   },
   stepTool: {
     fontSize: '0.75rem',
-    color: '#81C784',
+    color: 'var(--color-muted-olive)',
     fontWeight: 600,
     marginBottom: 10,
     textTransform: 'uppercase',
@@ -181,6 +185,6 @@ const styles: Record<string, React.CSSProperties> = {
   stepDetail: {
     fontSize: '0.8rem',
     lineHeight: 1.5,
-    color: '#9E9590',
+    color: 'var(--color-text-secondary)',
   },
 };

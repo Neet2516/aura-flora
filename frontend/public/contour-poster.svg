@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
   <defs>
     <radialGradient id="bgGrad" cx="50%" cy="50%" r="65%">
-      <stop offset="0%" stop-color="#121713" />
-      <stop offset="100%" stop-color="#080A09" />
+      <stop offset="0%" stop-color="#211F1C" />
+      <stop offset="100%" stop-color="#171614" />
     </radialGradient>
     <linearGradient id="contourGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#B5E48C" stop-opacity="0.35" />
-      <stop offset="50%" stop-color="#52796F" stop-opacity="0.2" />
-      <stop offset="100%" stop-color="#203D2A" stop-opacity="0.1" />
+      <stop offset="0%" stop-color="#AEAC78" stop-opacity="0.4" />
+      <stop offset="60%" stop-color="#F2C46A" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#4C4541" stop-opacity="0.1" />
     </linearGradient>
   </defs>
   <rect width="100%" height="100%" fill="url(#bgGrad)" />
@@ -28,12 +28,12 @@
   </g>
 
   <!-- Technical Grid Overlay & Measurement Marks -->
-  <g stroke="rgba(220, 235, 220, 0.08)" stroke-width="1">
+  <g stroke="rgba(174, 172, 120, 0.12)" stroke-width="1">
     <line x1="640" y1="0" x2="640" y2="720" stroke-dasharray="4,8" />
     <line x1="0" y1="360" x2="1280" y2="360" stroke-dasharray="4,8" />
     <!-- Crosshairs -->
-    <path d="M630,360 L650,360 M640,350 L640,370" stroke="#B5E48C" stroke-width="1.5" opacity="0.7"/>
-    <path d="M120,100 L130,100 M125,95 L125,105" stroke="#707A70" opacity="0.5"/>
-    <path d="M1160,100 L1170,100 M1165,95 L1165,105" stroke="#707A70" opacity="0.5"/>
+    <path d="M630,360 L650,360 M640,350 L640,370" stroke="#F2C46A" stroke-width="1.5" opacity="0.75"/>
+    <path d="M120,100 L130,100 M125,95 L125,105" stroke="#AEAC78" opacity="0.6"/>
+    <path d="M1160,100 L1170,100 M1165,95 L1165,105" stroke="#AEAC78" opacity="0.6"/>
   </g>
 </svg>

@@ -57,7 +57,7 @@ export const InstallationCtaSection: React.FC<InstallationCtaSectionProps> = ({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={onTriggerInstall}
-                  className="btn-botanical-primary"
+                  className="btn-amber-primary"
                   style={{ fontSize: '13px', padding: '14px 28px' }}
                   title="Install AuraFlora PWA to device"
                 >
@@ -69,7 +69,7 @@ export const InstallationCtaSection: React.FC<InstallationCtaSectionProps> = ({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setShowIosGuide(!showIosGuide)}
-                  className="btn-botanical-secondary"
+                  className="btn-olive-secondary"
                   style={{ fontSize: '13px', padding: '14px 28px' }}
                   title="View mobile installation guide"
                 >
@@ -80,7 +80,7 @@ export const InstallationCtaSection: React.FC<InstallationCtaSectionProps> = ({
 
               <a
                 href="#protocol"
-                className="btn-botanical-secondary"
+                className="btn-olive-secondary"
                 style={{ fontSize: '13px', padding: '14px 24px', textDecoration: 'none' }}
               >
                 <span>REVIEW PROTOCOL</span>
@@ -97,7 +97,7 @@ export const InstallationCtaSection: React.FC<InstallationCtaSectionProps> = ({
               style={styles.guideBox}
             >
               <div style={styles.guideHeader}>
-                <span className="font-mono" style={{ fontSize: '12px', color: 'var(--color-botanical)' }}>
+                <span className="font-mono" style={{ fontSize: '12px', color: 'var(--color-golden-amber)' }}>
                   INSTALLATION ON IOS & ANDROID
                 </span>
                 <button
@@ -111,13 +111,13 @@ export const InstallationCtaSection: React.FC<InstallationCtaSectionProps> = ({
 
               <div style={styles.guideSteps}>
                 <div style={styles.stepItem}>
-                  <Share size={16} color="#B5E48C" />
+                  <Share size={16} color="var(--color-golden-amber)" />
                   <span>
                     <strong>iOS Safari:</strong> Tap the <em>Share</em> button at the bottom of Safari, scroll down, and select <em>Add to Home Screen</em>.
                   </span>
                 </div>
                 <div style={styles.stepItem}>
-                  <CheckCircle2 size={16} color="#B5E48C" />
+                  <CheckCircle2 size={16} color="var(--color-muted-olive)" />
                   <span>
                     <strong>Android Chrome:</strong> Tap the three-dot menu and select <em>Install App</em> or tap the prompt banner.
                   </span>
@@ -142,12 +142,12 @@ export const InstallationCtaSection: React.FC<InstallationCtaSectionProps> = ({
 const styles: Record<string, React.CSSProperties> = {
   section: {
     padding: '110px 0',
-    backgroundColor: '#080A09',
+    backgroundColor: 'var(--color-dark-canvas)',
     position: 'relative',
   },
   container: {
     maxWidth: '960px',
-    backgroundColor: 'var(--color-bg-secondary)',
+    backgroundColor: '#1E1D1A',
     border: '1px solid var(--color-border-subtle)',
     padding: '56px 40px',
     position: 'relative',
@@ -166,7 +166,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 'clamp(2.4rem, 4.8vw, 4.4rem)',
     letterSpacing: '-0.035em',
     lineHeight: 1.08,
-    color: '#F1F2EC',
+    color: 'var(--color-soft-offwhite)',
     fontWeight: 700,
     justifyContent: 'center',
   },
@@ -187,7 +187,7 @@ const styles: Record<string, React.CSSProperties> = {
   guideBox: {
     width: '100%',
     maxWidth: '640px',
-    backgroundColor: '#080A09',
+    backgroundColor: '#12110F',
     border: '1px solid var(--color-border-subtle)',
     padding: '20px',
     marginTop: '16px',

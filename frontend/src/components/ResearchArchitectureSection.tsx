@@ -83,11 +83,11 @@ export const ResearchArchitectureSection: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.45, delay: 0.15 + i * 0.1 }}
-                whileHover={{ y: -4, borderColor: '#B5E48C', transition: { duration: 0.2 } }}
+                whileHover={{ y: -4, borderColor: 'var(--color-golden-amber)', transition: { duration: 0.2 } }}
                 style={styles.stackCard}
               >
                 <div style={styles.cardHeader}>
-                  <Icon size={18} color="#B5E48C" />
+                  <Icon size={18} color="var(--color-golden-amber)" />
                   <span className="font-mono" style={styles.cardTag}>
                     {card.tag}
                   </span>
@@ -98,7 +98,7 @@ export const ResearchArchitectureSection: React.FC = () => {
                   {card.specs.map((sp) => (
                     <div key={sp.label} style={styles.specRow}>
                       <span>{sp.label}</span>
-                      <span style={{ color: '#F1F2EC' }}>{sp.val}</span>
+                      <span style={{ color: '#F7F5EF' }}>{sp.val}</span>
                     </div>
                   ))}
                 </div>
@@ -111,7 +111,7 @@ export const ResearchArchitectureSection: React.FC = () => {
         <FadeInWhenVisible delay={0.35} yOffset={24}>
           <div style={styles.openSourceBanner}>
             <div style={styles.bannerLeft}>
-              <GitBranch size={24} color="#B5E48C" />
+              <GitBranch size={24} color="var(--color-golden-amber)" />
               <div>
                 <span className="font-mono" style={styles.challengeTag}>
                   HACKTOBERFEST 2026 · "TOUCH GRASS" CHALLENGE ENTRY
@@ -127,7 +127,7 @@ export const ResearchArchitectureSection: React.FC = () => {
               href="https://github.com/Neet2516/aura-flora"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-botanical-secondary"
+              className="btn-olive-secondary"
               style={{ textDecoration: 'none' }}
             >
               <span>VIEW GITHUB REPOSITORY</span>
@@ -143,7 +143,7 @@ export const ResearchArchitectureSection: React.FC = () => {
 const styles: Record<string, React.CSSProperties> = {
   section: {
     padding: '90px 0',
-    backgroundColor: 'var(--color-bg-secondary)',
+    backgroundColor: 'var(--color-dark-canvas)',
     borderTop: '1px solid var(--color-border-subtle)',
     borderBottom: '1px solid var(--color-border-subtle)',
   },
@@ -161,7 +161,7 @@ const styles: Record<string, React.CSSProperties> = {
   title: {
     fontSize: 'clamp(2.2rem, 4vw, 3.8rem)',
     letterSpacing: '-0.03em',
-    color: '#F1F2EC',
+    color: 'var(--color-soft-offwhite)',
     lineHeight: 1.1,
     marginTop: '8px',
   },
@@ -176,7 +176,7 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '16px',
   },
   stackCard: {
-    backgroundColor: 'var(--color-bg-elevated)',
+    backgroundColor: '#1E1D1A',
     border: '1px solid var(--color-border-subtle)',
     padding: '24px',
     display: 'flex',
@@ -191,13 +191,13 @@ const styles: Record<string, React.CSSProperties> = {
   },
   cardTag: {
     fontSize: '11px',
-    color: 'var(--color-botanical)',
+    color: 'var(--color-golden-amber)',
     letterSpacing: '0.06em',
   },
   cardTitle: {
     fontSize: '17px',
     fontWeight: 600,
-    color: '#F1F2EC',
+    color: 'var(--color-soft-offwhite)',
   },
   cardText: {
     fontSize: '13px',
@@ -225,7 +225,7 @@ const styles: Record<string, React.CSSProperties> = {
     flexWrap: 'wrap',
     gap: '24px',
     padding: '28px',
-    backgroundColor: '#080A09',
+    backgroundColor: '#1E1D1A',
     border: '1px solid var(--color-border-subtle)',
   },
   bannerLeft: {
@@ -235,13 +235,13 @@ const styles: Record<string, React.CSSProperties> = {
   },
   challengeTag: {
     fontSize: '11px',
-    color: 'var(--color-botanical)',
+    color: 'var(--color-golden-amber)',
     letterSpacing: '0.08em',
   },
   bannerTitle: {
     fontSize: '18px',
     fontWeight: 600,
-    color: '#F1F2EC',
+    color: 'var(--color-soft-offwhite)',
     marginTop: '2px',
   },
   bannerDesc: {
