@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, Send, Mail, MapPin, Key } from 'lucide-react';
+import { X, Send, Mail, MapPin, Key, WifiOff } from 'lucide-react';
+import { OfflineSyncService } from '../services/offlineSync';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface ContactModalProps {
 
 export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
   const [submitted, setSubmitted] = useState(false);
+  const [submittedOffline, setSubmittedOffline] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,6 +22,17 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!OfflineSyncService.isOnline()) {
+      OfflineSyncService.queueInquiry(formData);
+      setSubmittedOffline(true);
+      setTimeout(() => {
+        setSubmittedOffline(false);
+        onClose();
+      }, 3500);
+      return;
+    }
+
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
@@ -43,7 +56,20 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
 
         {/* Modal Body */}
         <div style={styles.body}>
-          {submitted ? (
+          {submittedOffline ? (
+            <div style={styles.successBox}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#FBBF24' }}>
+                <WifiOff size={18} />
+                <span className="meta-label" style={{ color: '#FBBF24' }}>OFFLINE QUEUE PRESERVED</span>
+              </div>
+              <h3 style={styles.successTitle}>TRANSMISSION SAVED LOCALLY</h3>
+              <p style={styles.successMsg}>
+                You are currently offline. Your inquiry has been securely preserved in browser storage.
+                The PWA service worker will automatically dispatch it to the atelier when connectivity returns.
+              </p>
+              <span className="meta-label">STATUS: PENDING RECONNECTION SYNC</span>
+            </div>
+          ) : submitted ? (
             <div style={styles.successBox}>
               <span className="status-dot" />
               <h3 style={styles.successTitle}>TRANSMISSION RECEIVED</h3>
@@ -176,7 +202,8 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '20px',
+    padding: '16px',
+    overflowY: 'auto',
   },
   modalContent: {
     width: '100%',
@@ -186,19 +213,22 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: '0 25px 70px rgba(0, 0, 0, 0.8)',
     display: 'flex',
     flexDirection: 'column',
+    maxHeight: '92vh',
+    overflowY: 'auto',
   },
   header: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '16px 24px',
+    padding: '16px 20px',
     backgroundColor: 'var(--color-bg-secondary)',
     borderBottom: '1px solid var(--color-grid-line)',
   },
   headerLeft: {
     display: 'flex',
     alignItems: 'center',
-    gap: '16px',
+    gap: '14px',
+    flexWrap: 'wrap',
   },
   headerSub: {
     fontFamily: 'var(--font-mono)',
@@ -206,8 +236,8 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--color-text-muted)',
   },
   closeBtn: {
-    width: '32px',
-    height: '32px',
+    width: '36px',
+    height: '36px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -217,22 +247,22 @@ const styles: Record<string, React.CSSProperties> = {
     background: 'none',
   },
   body: {
-    padding: '32px',
+    padding: '24px 20px',
   },
   splitLayout: {
     display: 'grid',
-    gridTemplateColumns: '1.6fr 1fr',
-    gap: '32px',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+    gap: '28px',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
+    gap: '18px',
   },
   formRow: {
     display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '16px',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+    gap: '14px',
   },
   label: {
     display: 'flex',
@@ -240,7 +270,7 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '6px',
   },
   input: {
-    padding: '10px 14px',
+    padding: '12px 14px',
     backgroundColor: 'var(--color-bg-secondary)',
     border: '1px solid var(--color-grid-line)',
     color: '#ECECE8',
@@ -249,7 +279,7 @@ const styles: Record<string, React.CSSProperties> = {
     outline: 'none',
   },
   select: {
-    padding: '10px 14px',
+    padding: '12px 14px',
     backgroundColor: 'var(--color-bg-secondary)',
     border: '1px solid var(--color-grid-line)',
     color: '#ECECE8',
@@ -258,7 +288,7 @@ const styles: Record<string, React.CSSProperties> = {
     outline: 'none',
   },
   textarea: {
-    padding: '10px 14px',
+    padding: '12px 14px',
     backgroundColor: 'var(--color-bg-secondary)',
     border: '1px solid var(--color-grid-line)',
     color: '#ECECE8',
@@ -272,7 +302,7 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
-    padding: '12px',
+    padding: '14px',
     backgroundColor: '#ECECE8',
     color: '#1A1A1A',
     fontFamily: 'var(--font-mono)',
@@ -282,13 +312,13 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
     border: 'none',
     marginTop: '6px',
+    minHeight: '44px',
   },
   sidebar: {
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
-    paddingLeft: '28px',
-    borderLeft: '1px solid var(--color-grid-line)',
+    paddingTop: '8px',
   },
   sidebarBlock: {
     display: 'flex',
@@ -323,7 +353,7 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     textAlign: 'center',
     gap: '16px',
-    padding: '48px 24px',
+    padding: '40px 20px',
   },
   successTitle: {
     fontSize: '20px',

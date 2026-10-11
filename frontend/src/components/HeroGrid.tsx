@@ -29,9 +29,9 @@ export const HeroGrid: React.FC<HeroGridProps> = ({
 
   return (
     <section style={styles.heroRoot} id="about">
-      <div className="grid-container" style={styles.gridMatrix}>
+      <div className="grid-container hero-grid-matrix">
         {/* Left Column: Portrait, Meta & Project Counter (~38%) */}
-        <div className="grid-cell" style={styles.leftCol}>
+        <div className="grid-cell hero-left-col" style={styles.leftCol}>
           {/* Cell A1: Identity / Portrait Frame */}
           <div
             style={{
@@ -120,7 +120,7 @@ export const HeroGrid: React.FC<HeroGridProps> = ({
         </div>
 
         {/* Right Column: Large Bold Editorial Statement (~62%) */}
-        <div className="grid-cell" style={styles.rightCol}>
+        <div className="grid-cell hero-right-col" style={styles.rightCol}>
           {/* Cell B1: Editorial Headline Block */}
           <div style={styles.headlineBlock}>
             <div style={styles.disciplinePills}>

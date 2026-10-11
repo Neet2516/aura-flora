@@ -200,6 +200,100 @@ button {
   }
 }
 
+/* Responsive Display Helpers */
+.desktop-only {
+  display: flex !important;
+}
+
+.mobile-only {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-only {
+    display: flex !important;
+  }
+}
+
+/* Mobile-Specific Responsive Overrides */
+.hero-grid-matrix {
+  display: grid;
+  grid-template-columns: minmax(320px, 38%) 1fr;
+  min-height: calc(100vh - 60px);
+}
+
+@media (max-width: 900px) {
+  .hero-grid-matrix {
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+  }
+  .hero-right-col {
+    padding: 32px 20px !important;
+  }
+  .hero-left-col {
+    padding: 24px 20px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr !important;
+    border-right: 1px solid var(--color-grid-line);
+  }
+
+  .grid-cell {
+    padding: 24px 20px !important;
+  }
+
+  /* Improve touch targets for mobile fingers */
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .case-study-info-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .modal-overlay-mobile {
+    padding: 8px !important;
+  }
+
+  .modal-content-mobile {
+    max-height: 96vh !important;
+    height: 96vh !important;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.spin-slow {
+  animation: spinSlow 3s linear infinite;
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Accessibility & Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {

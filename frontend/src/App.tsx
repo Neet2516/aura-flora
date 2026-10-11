@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Header } from './components/Header';
 import { HeroGrid } from './components/HeroGrid';
 import { ProjectCanvas } from './components/ProjectCanvas';
@@ -7,6 +7,8 @@ import { CaseStudyModal } from './components/CaseStudyModal';
 import { ContactModal } from './components/ContactModal';
 import { InteractiveLabModal } from './components/InteractiveLabModal';
 import { ApiKeySection } from './components/ApiKeySection';
+import { PwaInstallBanner } from './components/PwaInstallBanner';
+import { OfflineStatusIndicator } from './components/OfflineStatusIndicator';
 import type { ProjectItem } from './constants/projects';
 
 export function App() {
@@ -14,6 +16,37 @@ export function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const [isLabOpen, setIsLabOpen] = useState<boolean>(false);
+  const [canInstall, setCanInstall] = useState<boolean>(false);
+
+  const installPromptEventRef = useRef<any>(null);
+
+  useEffect(() => {
+    const handleBeforeInstall = (e: any) => {
+      e.preventDefault();
+      installPromptEventRef.current = e;
+      setCanInstall(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+  }, []);
+
+  const triggerInstallPrompt = async () => {
+    if (installPromptEventRef.current) {
+      await installPromptEventRef.current.prompt();
+      const choice = await installPromptEventRef.current.userChoice;
+      if (choice.outcome === 'accepted') {
+        installPromptEventRef.current = null;
+        setCanInstall(false);
+      }
+    } else {
+      // Re-trigger banner or alert
+      const banner = document.querySelector('aside[aria-label="Install AuraFlora App"]') as HTMLElement;
+      if (banner) {
+        banner.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   const scrollToSection = (sectionId: string) => {
     if (sectionId === 'top') {
@@ -26,10 +59,9 @@ export function App() {
     }
   };
 
-  // Keyboard navigation shortcuts ([G] Work, [A] About, [L] Lab, [T] Top, [C] Contact)
+  // Keyboard navigation shortcuts ([G] Work, [A] About, [L] Lab, [T] Top, [C] Contact, [K] Keys)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if typing in an input or textarea
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
         return;
       }
@@ -63,11 +95,19 @@ export function App() {
       {/* Persistent SVG Noise Filter Overlay */}
       <div className="noise-overlay" />
 
+      {/* Connectivity & Offline Status Bar */}
+      <OfflineStatusIndicator />
+
+      {/* PWA Floating Install Banner */}
+      <PwaInstallBanner onInstallStateChange={setCanInstall} />
+
       {/* Top Architectural Navigation Bar */}
       <Header
         onNavigate={scrollToSection}
         onOpenContact={() => setIsContactOpen(true)}
         onOpenLab={() => setIsLabOpen(true)}
+        onTriggerInstall={triggerInstallPrompt}
+        canInstall={canInstall}
       />
 
       <main style={styles.mainContent}>
@@ -125,6 +165,8 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: 'var(--color-bg-primary)',
     color: 'var(--color-text-primary)',
     position: 'relative',
+    maxWidth: '100vw',
+    overflowX: 'hidden',
   },
   mainContent: {
     display: 'flex',

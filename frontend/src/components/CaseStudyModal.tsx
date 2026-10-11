@@ -12,8 +12,8 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ project, onClose
   if (!project) return null;
 
   return (
-    <div style={styles.overlay} onClick={onClose}>
-      <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+    <div style={styles.overlay} className="modal-overlay-mobile" onClick={onClose}>
+      <div style={styles.modalContent} className="modal-content-mobile" onClick={(e) => e.stopPropagation()}>
         {/* Modal Top Bar */}
         <div style={styles.topBar}>
           <div style={styles.topBarLeft}>
@@ -37,7 +37,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ project, onClose
           </div>
 
           {/* Details & Specs */}
-          <div style={styles.infoGrid}>
+          <div style={styles.infoGrid} className="case-study-info-grid">
             <div style={styles.mainInfo}>
               <h2 style={styles.title}>{project.title}</h2>
               <p style={styles.headline}>{project.headline}</p>

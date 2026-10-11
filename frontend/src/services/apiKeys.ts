@@ -12,9 +12,9 @@ const STORAGE_KEY = 'aura_flora_api_config_v1';
 export const DEFAULT_CONFIG: ApiKeyConfig = {
   useCustomKeys: false,
   gemmaApiKey: '',
-  gemmaModel: 'gemma-2b-it',
+  gemmaModel: 'gemini-2.5-flash',
   elevenlabsApiKey: '',
-  elevenlabsVoiceId: '21m00Tcm4TlvDq8ikWAM',
+  elevenlabsVoiceId: 'EXAVITQu4vr4xnSDxMaL',
   tabpfnApiKey: '',
 };
 

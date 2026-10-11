@@ -240,7 +240,7 @@ export const ApiKeySection: React.FC = () => {
                   <label htmlFor="eleven-key" style={styles.label}>
                     ELEVENLABS TEXT-TO-SPEECH API KEY
                   </label>
-                  <span style={styles.modelTag}>VOICE ID: 21m00Tcm4TlvDq8ikWAM (Rachel)</span>
+                  <span style={styles.modelTag}>VOICE ID: EXAVITQu4vr4xnSDxMaL (Sarah - Free Tier Default)</span>
                 </div>
                 <a
                   href="https://elevenlabs.io/app/settings/api-keys"

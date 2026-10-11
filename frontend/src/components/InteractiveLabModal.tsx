@@ -19,8 +19,8 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
   if (!isOpen) return null;
 
   return (
-    <div style={styles.overlay} onClick={onClose}>
-      <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+    <div style={styles.overlay} className="modal-overlay-mobile" onClick={onClose}>
+      <div style={styles.modalContent} className="modal-content-mobile" onClick={(e) => e.stopPropagation()}>
         {/* Top Header */}
         <div style={styles.header}>
           <div style={styles.headerLeft}>

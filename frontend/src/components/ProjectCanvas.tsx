@@ -219,14 +219,16 @@ const styles: Record<string, React.CSSProperties> = {
   stageViewport: {
     width: '100%',
     overflowX: 'auto',
-    padding: '36px',
+    padding: '24px 20px',
     scrollbarWidth: 'thin',
+    scrollSnapType: 'x mandatory',
+    WebkitOverflowScrolling: 'touch',
   },
   cardsRow: {
     display: 'grid',
     gridAutoFlow: 'column',
-    gridAutoColumns: 'minmax(380px, 440px)',
-    gap: '28px',
+    gridAutoColumns: 'minmax(min(320px, 86vw), 440px)',
+    gap: '20px',
   },
   projectCard: {
     border: '1px solid var(--color-grid-line)',
@@ -234,6 +236,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     flexDirection: 'column',
     cursor: 'pointer',
+    scrollSnapAlign: 'center',
     transition: 'all 0.4s var(--ease-out-expo)',
   },
   visualContainer: {
