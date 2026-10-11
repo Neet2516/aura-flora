@@ -4,7 +4,10 @@
   <p><em>Hacktoberfest 2026 · "Touch Grass" Challenge</em></p>
   <p>
     <img src="https://img.shields.io/badge/Rust-1.75+-orange?logo=rust" />
-    <img src="https://img.shields.io/badge/Flutter-3.19+-blue?logo=flutter" />
+    <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" />
+    <img src="https://img.shields.io/badge/TypeScript-5+-blue?logo=typescript" />
+    <img src="https://img.shields.io/badge/Vite-8+-purple?logo=vite" />
+    <img src="https://img.shields.io/badge/PWA-Ready-green?logo=pwa" />
     <img src="https://img.shields.io/badge/License-MIT-green" />
     <img src="https://img.shields.io/badge/Screen%20Time-≤15s-black" />
   </p>
@@ -50,12 +53,12 @@ AuraFlora is an **anti-screen mobile application** that gets you off your phone 
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  Flutter Mobile (Android/iOS)                               │
+│  React 19 + Vite PWA (Web Audio API / Mobile Simulator)     │
 │  ┌──────────────┐  ┌─────────────┐  ┌───────────────────┐  │
-│  │ HomeScreen   │  │ BlackoutScr │  │ GroundingProvider │  │
-│  │ PulseListener│  │ #000000     │  │ (Riverpod SM)     │  │
+│  │ MobileSim    │  │ BlackoutScr │  │ SoundEngine       │  │
+│  │ PulseListener│  │ #000000     │  │ (Web Audio API)   │  │
 │  └──────┬───────┘  └─────────────┘  └─────────┬─────────┘  │
-│         │ record (16kHz WAV)                   │            │
+│         │ record (16kHz PCM Base64)            │            │
 │         └─────────────────────────────────────►│            │
 │                                    POST /api/v1/ground      │
 └────────────────────────────────────────────────┼────────────┘
@@ -97,13 +100,14 @@ curl http://localhost:8080/health
 # → {"status":"ok","version":"0.1.0","service":"aura-flora-backend"}
 ```
 
-### Flutter App
+### Frontend (React + Vite + PWA)
 
 ```bash
-# Prerequisites: Flutter 3.19+ (stable)
-cd mobile
-flutter pub get
-flutter run
+# Prerequisites: Node.js 18+
+cd frontend
+npm install
+npm run dev
+# → Listening on http://localhost:5173
 ```
 
 ---
@@ -136,12 +140,13 @@ aura-flora/
 │   │   ├── services/# Gemma, TabPFN, ElevenLabs clients
 │   │   └── handlers/# HTTP request handlers
 │   └── Dockerfile   # Multi-stage → distroless
-└── mobile/          # Flutter app (Android + iOS)
-    └── lib/
-        ├── core/    # Design tokens, typography, constants
-        ├── services/# Audio recording, playback, API client
-        ├── state/   # Riverpod state machine
-        └── presentation/ # Screens + widgets
+└── frontend/        # React 19 + TypeScript + Vite + PWA
+    ├── src/
+    │   ├── components/  # Mobile simulator, Audio visualizers, Lab
+    │   ├── services/    # SoundEngine (Web Audio API), ApiService
+    │   ├── constants/   # Audio presets & design tokens
+    │   └── types.ts     # Acoustic telemetry & classification types
+    └── public/          # PWA manifests, icons, audio assets
 ```
 
 ---
