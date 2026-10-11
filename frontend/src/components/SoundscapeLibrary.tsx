@@ -93,7 +93,7 @@ export const SoundscapeLibrary: React.FC = () => {
 
 const styles: Record<string, React.CSSProperties> = {
   section: {
-    padding: '80px 24px',
+    padding: 'clamp(32px, 5vw, 80px) clamp(12px, 3vw, 24px)',
     backgroundColor: 'var(--color-dark-canvas)',
   },
   container: {
@@ -126,11 +126,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
   cardsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
     gap: 20,
   },
   biomeCard: {
-    padding: 24,
+    padding: 'clamp(16px, 3vw, 24px)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',

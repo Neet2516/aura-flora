@@ -19,29 +19,41 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
   if (!isOpen) return null;
 
   return (
-    <div style={styles.overlay} className="modal-overlay-mobile" onClick={onClose}>
-      <div style={styles.modalContent} className="modal-content-mobile" onClick={(e) => e.stopPropagation()}>
+    <div style={styles.overlay} className="lab-modal-overlay modal-overlay-mobile" onClick={onClose}>
+      <div
+        style={styles.modalContent}
+        className="lab-modal-content modal-content-mobile"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Top Header */}
-        <div style={styles.header}>
+        <div style={styles.header} className="lab-modal-header">
           <div style={styles.headerLeft}>
             <div style={styles.badgeLive}>
               <Radio size={12} color="var(--color-golden-amber)" />
               <span>LIVE LAB</span>
             </div>
-            <span style={styles.headerTitle}>AURAFLORA · COMPUTATIONAL BIOACOUSTIC ENGINE</span>
+            <span style={styles.headerTitle}>
+              AURAFLORA <span className="desktop-only" style={{ display: 'inline' }}>· COMPUTATIONAL BIOACOUSTIC ENGINE</span>
+            </span>
           </div>
 
           <div style={styles.headerRight}>
-            <span className="meta-label">16kHz WAV · GEMMA AI · AXUM</span>
-            <button style={styles.closeBtn} onClick={onClose} title="Exit Lab">
-              <X size={16} />
+            <span className="meta-label desktop-only">16kHz WAV · GEMMA AI · AXUM</span>
+            <button
+              style={styles.closeBtn}
+              onClick={onClose}
+              title="Exit Lab"
+              aria-label="Close Lab Modal"
+            >
+              <X size={18} />
             </button>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div style={styles.tabBar}>
+        <div style={styles.tabBar} className="lab-tab-bar">
           <button
+            className="lab-tab-btn"
             style={{
               ...styles.tabBtn,
               borderBottomColor: activeTab === 'grounding' ? 'var(--color-golden-amber)' : 'transparent',
@@ -50,10 +62,11 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
             onClick={() => setActiveTab('grounding')}
           >
             <Activity size={13} />
-            <span>01 · SENSORY GROUNDING LAB</span>
+            <span>01 · SENSORY GROUNDING</span>
           </button>
 
           <button
+            className="lab-tab-btn"
             style={{
               ...styles.tabBtn,
               borderBottomColor: activeTab === 'dsp' ? 'var(--color-golden-amber)' : 'transparent',
@@ -62,10 +75,11 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
             onClick={() => setActiveTab('dsp')}
           >
             <BookOpen size={13} />
-            <span>02 · DSP MATHEMATICS</span>
+            <span>02 · DSP MATH</span>
           </button>
 
           <button
+            className="lab-tab-btn"
             style={{
               ...styles.tabBtn,
               borderBottomColor: activeTab === 'pipeline' ? 'var(--color-golden-amber)' : 'transparent',
@@ -74,10 +88,11 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
             onClick={() => setActiveTab('pipeline')}
           >
             <Layers size={13} />
-            <span>03 · SYSTEM ARCHITECTURE</span>
+            <span>03 · ARCHITECTURE</span>
           </button>
 
           <button
+            className="lab-tab-btn"
             style={{
               ...styles.tabBtn,
               borderBottomColor: activeTab === 'library' ? 'var(--color-golden-amber)' : 'transparent',
@@ -86,10 +101,11 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
             onClick={() => setActiveTab('library')}
           >
             <Radio size={13} />
-            <span>04 · BIOME SOUNDSCAPES</span>
+            <span>04 · BIOMES</span>
           </button>
 
           <button
+            className="lab-tab-btn"
             style={{
               ...styles.tabBtn,
               borderBottomColor: activeTab === 'mobile' ? 'var(--color-golden-amber)' : 'transparent',
@@ -98,12 +114,12 @@ export const InteractiveLabModal: React.FC<InteractiveLabModalProps> = ({ isOpen
             onClick={() => setActiveTab('mobile')}
           >
             <Smartphone size={13} />
-            <span>05 · AMOLED SIMULATOR</span>
+            <span>05 · AMOLED SIM</span>
           </button>
         </div>
 
         {/* Tab Content Viewport */}
-        <div style={styles.viewport}>
+        <div style={styles.viewport} className="lab-viewport">
           {activeTab === 'grounding' && <GroundingLab />}
           {activeTab === 'dsp' && <DspExplainer />}
           {activeTab === 'pipeline' && <ArchitecturePipeline />}
@@ -124,7 +140,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: 'fixed',
     inset: 0,
     zIndex: 1000,
-    backgroundColor: 'rgba(10, 10, 10, 0.88)',
+    backgroundColor: 'rgba(10, 10, 10, 0.92)',
     backdropFilter: 'blur(16px)',
     display: 'flex',
     alignItems: 'center',
@@ -153,7 +169,8 @@ const styles: Record<string, React.CSSProperties> = {
   headerLeft: {
     display: 'flex',
     alignItems: 'center',
-    gap: '14px',
+    gap: '12px',
+    minWidth: 0,
   },
   badgeLive: {
     display: 'inline-flex',
@@ -167,29 +184,38 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '10px',
     fontWeight: 600,
     letterSpacing: '0.08em',
+    whiteSpace: 'nowrap',
+    flexShrink: 0,
   },
   headerTitle: {
     fontFamily: 'var(--font-mono)',
-    fontSize: '12px',
+    fontSize: '11px',
     letterSpacing: '0.06em',
     color: 'var(--color-soft-offwhite)',
     fontWeight: 600,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   headerRight: {
     display: 'flex',
     alignItems: 'center',
-    gap: '18px',
+    gap: '14px',
+    flexShrink: 0,
   },
   closeBtn: {
-    width: '32px',
-    height: '32px',
+    width: '36px',
+    height: '36px',
+    minWidth: '36px',
+    minHeight: '36px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
     color: 'var(--color-text-secondary)',
     border: '1px solid var(--color-grid-line)',
     cursor: 'pointer',
+    transition: 'all 0.2s ease',
   },
   tabBar: {
     display: 'flex',
@@ -202,7 +228,7 @@ const styles: Record<string, React.CSSProperties> = {
   tabBtn: {
     display: 'inline-flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: '6px',
     padding: '12px 14px',
     fontFamily: 'var(--font-mono)',
     fontSize: '11px',
@@ -224,6 +250,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '20px 0',
+    padding: '10px 0',
+    width: '100%',
   },
 };

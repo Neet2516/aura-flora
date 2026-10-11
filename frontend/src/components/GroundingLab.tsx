@@ -231,7 +231,7 @@ export const GroundingLab: React.FC<GroundingLabProps> = () => {
         </div>
 
         {/* Lab Grid */}
-        <div style={styles.labGrid}>
+        <div className="grounding-lab-grid">
           {/* Main Visualizer & Controller */}
           <div className="glass-panel" style={styles.mainCard}>
             {/* Top Toolbar */}
@@ -401,7 +401,7 @@ export const GroundingLab: React.FC<GroundingLabProps> = () => {
             </div>
 
             {/* Acoustic Telemetry Metrics */}
-            <div style={styles.telemetryBar}>
+            <div className="grounding-telemetry-grid">
               <div style={styles.telemetryItem}>
                 <span style={styles.telLabel}>Spectral Centroid</span>
                 <span style={styles.telVal}>
@@ -430,7 +430,7 @@ export const GroundingLab: React.FC<GroundingLabProps> = () => {
           </div>
 
           {/* Preset Selector Panel */}
-          <div style={styles.presetsSidebar}>
+          <div className="grounding-presets-container">
             <div style={styles.presetSideTitle}>Soundscape Environments</div>
             <div style={styles.presetList}>
               {SOUNDSCAPE_PRESETS.map((p) => {
@@ -500,7 +500,7 @@ export const GroundingLab: React.FC<GroundingLabProps> = () => {
 const styles: Record<string, React.CSSProperties> = {
   section: {
     position: 'relative',
-    padding: '90px 24px',
+    padding: 'clamp(32px, 5vw, 80px) clamp(12px, 3vw, 24px)',
     backgroundColor: '#0A0F0D',
   },
   container: {
@@ -786,13 +786,14 @@ const styles: Record<string, React.CSSProperties> = {
     flexWrap: 'wrap',
   },
   blackoutCtaBtn: {
-    flex: 1,
-    minWidth: 260,
+    flex: '1 1 200px',
+    minWidth: 0,
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    padding: '14px 24px',
+    padding: '14px 20px',
     backgroundColor: '#000000',
     color: '#E8DFD8',
     borderRadius: 10,
