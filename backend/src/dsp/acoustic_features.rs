@@ -1,4 +1,4 @@
-﻿//! Acoustic feature extraction from raw PCM audio samples.
+//! Acoustic feature extraction from raw PCM audio samples.
 //!
 //! Computes bioacoustic spectral ratios used to classify environments
 //! as biophonic (natural) vs anthrophonic (human/machine noise).
@@ -73,7 +73,8 @@ pub fn extract_features(pcm_samples: &[f32], sample_rate: u32) -> AcousticFeatur
     let spectral_entropy = compute_spectral_entropy(&power_spectrum);
 
     // --- Biophony Ratio (2 kHz – 8 kHz band energy / total energy) ---
-    let biophony_ratio = compute_biophony_ratio(&power_spectrum, hz_per_bin, num_bins, 2000.0, 8000.0);
+    let biophony_ratio =
+        compute_biophony_ratio(&power_spectrum, hz_per_bin, num_bins, 2000.0, 8000.0);
 
     AcousticFeatures {
         spectral_centroid,
@@ -113,7 +114,8 @@ fn compute_power_spectrum(samples: &[f32]) -> Vec<f32> {
         .iter()
         .enumerate()
         .map(|(i, &s)| {
-            let window = 0.5 * (1.0 - (2.0 * std::f32::consts::PI * i as f32 / (n - 1) as f32).cos());
+            let window =
+                0.5 * (1.0 - (2.0 * std::f32::consts::PI * i as f32 / (n - 1) as f32).cos());
             Complex::new(s * window, 0.0)
         })
         .collect();
@@ -229,7 +231,12 @@ mod tests {
         let features = extract_features(&samples, 16000);
         // Centroid should be close to 4000 Hz (within ±500 Hz due to windowing)
         let diff = (features.spectral_centroid - freq).abs();
-        assert!(diff < 500.0, "Centroid {} too far from {} Hz", features.spectral_centroid, freq);
+        assert!(
+            diff < 500.0,
+            "Centroid {} too far from {} Hz",
+            features.spectral_centroid,
+            freq
+        );
     }
 
     #[test]

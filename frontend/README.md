@@ -1,32 +1,55 @@
-# React + TypeScript + Vite
+# AuraFlora Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React 19 + TypeScript + Vite Progressive Web Application (PWA) delivering the AuraFlora anti-screen grounding experience and mobile simulator.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Framework**: React 19 + TypeScript
+- **Bundler & Tooling**: Vite 8 + `vite-plugin-pwa`
+- **Linter & Test**: `oxlint` + `vitest`
+- **Audio & Animations**: Web Audio API (16 kHz PCM microphone capture, FFT analyser node), Framer Motion, GSAP, Lucide React
 
-## React Compiler
+## Directory Structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```text
+frontend/
+├── src/
+│   ├── components/         # MobileSimulator, AudioVisualizer, BlackoutScreen, etc.
+│   ├── hooks/              # useGroundingSession (centralized interaction lifecycle)
+│   ├── services/
+│   │   ├── soundEngine.ts  # Web Audio API engine, 16 kHz resampler, PCM encoder
+│   │   ├── api.ts          # Backend API client with real on-device fallback
+│   │   ├── apiKeys.ts      # Custom client API key management
+│   │   └── __tests__/      # Vitest unit test suites
+│   ├── constants/          # Acoustic presets and design tokens
+│   ├── types.ts            # Strongly typed telemetry & classification models
+│   ├── App.tsx             # Main application layout and interactive preview
+│   └── main.tsx            # PWA entrypoint
+├── public/                 # Static assets, Web App Manifest, icons
+├── package.json
+└── vite.config.ts
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Running & Verification
+
+```bash
+# Typecheck
+npm run typecheck
+
+# Lint with oxlint
+npm run lint
+
+# Run unit tests
+npm test
+
+# Build production bundle
+npm run build
+
+# Start local dev server
+npm run dev
+```
+
+## Anti-Screen Invariants
+
+- **≤ 15s Total Budget**: Keep audio capture, classification, and spoken whisper under 15 seconds.
+- **Terminal Blackout**: The blackout screen is AMOLED pure `#000000`. Double-tap anywhere to wake.

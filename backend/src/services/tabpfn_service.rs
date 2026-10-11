@@ -48,6 +48,15 @@ const ENVIRONMENT_LABELS: &[&str] = &[
     "indoor",
 ];
 
+/// Output of classification with model mode transparency.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ClassificationOutput {
+    /// Environment classification outcome.
+    pub classification: ClassificationResult,
+    /// True if classified by remote TabPFN model, false if heuristic was used.
+    pub is_live_model: bool,
+}
+
 /// Classify acoustic features into an environment category.
 ///
 /// Uses TabPFN API when `config.tabpfn_api_key` is non-empty,
@@ -55,24 +64,33 @@ const ENVIRONMENT_LABELS: &[&str] = &[
 pub async fn classify(
     features: &AcousticFeatures,
     config: &AppConfig,
-) -> Result<ClassificationResult, AppError> {
-    if config.tabpfn_api_key.is_empty() {
+) -> Result<ClassificationOutput, AppError> {
+    if config.tabpfn_api_key.trim().is_empty() {
         info!("TabPFN API key not set — using heuristic classifier");
-        return Ok(heuristic_classify(features));
+        return Ok(ClassificationOutput {
+            classification: heuristic_classify(features),
+            is_live_model: false,
+        });
     }
 
     match call_tabpfn_api(features, config).await {
-        Ok(result) => {
+        Ok(classification) => {
             info!(
-                environment = %result.environment_tag,
-                biophony = %result.biophony_score,
+                environment = %classification.environment_tag,
+                biophony = %classification.biophony_score,
                 "TabPFN classification complete"
             );
-            Ok(result)
+            Ok(ClassificationOutput {
+                classification,
+                is_live_model: true,
+            })
         }
         Err(e) => {
             warn!("TabPFN API failed ({}), falling back to heuristic", e);
-            Ok(heuristic_classify(features))
+            Ok(ClassificationOutput {
+                classification: heuristic_classify(features),
+                is_live_model: false,
+            })
         }
     }
 }

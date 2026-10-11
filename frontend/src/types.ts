@@ -12,17 +12,26 @@ export interface SoundscapeClassification {
   environment_tag: 'forest' | 'meadow' | 'creek' | 'urban_park' | 'rain' | 'coastal';
 }
 
+export interface ProviderStatus {
+  gemma_live: boolean;
+  tabpfn_live: boolean;
+  elevenlabs_live: boolean;
+}
+
 export interface GroundResponse {
   prompt: string;
   audio_url: string;
   features: SpectralFeatures;
   classification: SoundscapeClassification;
+  provider_status?: ProviderStatus;
 }
 
-export type GroundingStatus = 
+export type GroundingStatus =
   | 'idle'
+  | 'requestingPermission'
   | 'recording'
   | 'analyzing'
+  | 'speaking'
   | 'ready'
   | 'blackout'
   | 'error';

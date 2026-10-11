@@ -1,10 +1,14 @@
-﻿[package]
+[package]
 name = "aura-flora-backend"
 version = "0.1.0"
 edition = "2021"
 authors = ["AuraFlora Team <hello@aura-flora.dev>"]
 description = "BioAcoustic Grounding Companion — Rust Backend"
 license = "MIT"
+
+[lib]
+name = "aura_flora_backend"
+path = "src/lib.rs"
 
 [[bin]]
 name = "aura-flora-backend"
@@ -13,7 +17,7 @@ path = "src/main.rs"
 [dependencies]
 # HTTP Framework
 axum = { version = "0.7", features = ["macros", "multipart"] }
-tower = "0.4"
+tower = { version = "0.4", features = ["util"] }
 tower-http = { version = "0.5", features = ["cors", "trace", "fs"] }
 
 # Async Runtime

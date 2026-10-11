@@ -77,9 +77,10 @@ export class ApiService {
       const errText = await response.text();
       console.warn(`Rust backend responded with status ${response.status}: ${errText}`);
       throw new Error(`Backend status ${response.status}: ${errText}`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       clearTimeout(timeoutId);
-      console.info('Remote Rust Axum backend unavailable — engaging acoustic feature extraction on captured audio samples:', err);
+      const errMsg = err instanceof Error ? err.message : String(err);
+      console.info('Remote Rust Axum backend unavailable — engaging acoustic feature extraction on captured audio samples:', errMsg);
 
       // Analyze the REAL captured samples directly on-device
       let computedRmsDb = -45.0;

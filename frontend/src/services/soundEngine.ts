@@ -246,54 +246,22 @@ class SoundEngine {
   /**
    * Linear interpolation resampler from source sample rate to 16,000 Hz
    */
-  private resampleTo16k(input: Float32Array, inputRate: number, targetRate = 16000): Float32Array {
-    if (inputRate === targetRate) return input;
-
-    const ratio = inputRate / targetRate;
-    const outputLength = Math.round(input.length / ratio);
-    const output = new Float32Array(outputLength);
-
-    for (let i = 0; i < outputLength; i++) {
-      const srcIndex = i * ratio;
-      const indexFloor = Math.floor(srcIndex);
-      const indexCeil = Math.min(input.length - 1, indexFloor + 1);
-      const frac = srcIndex - indexFloor;
-      output[i] = input[indexFloor] * (1 - frac) + input[indexCeil] * frac;
-    }
-
-    return output;
+  public resampleTo16k(input: Float32Array, inputRate: number, targetRate = 16000): Float32Array {
+    return resampleTo16k(input, inputRate, targetRate);
   }
 
   /**
    * Converts Float32Array (-1.0 to 1.0) into 16-bit signed integer little-endian ArrayBuffer
    */
-  private floatTo16BitPCM(samples: Float32Array): ArrayBuffer {
-    const buffer = new ArrayBuffer(samples.length * 2);
-    const view = new DataView(buffer);
-
-    for (let i = 0; i < samples.length; i++) {
-      const s = Math.max(-1, Math.min(1, samples[i]));
-      // Scale to signed 16-bit range (-32768 to 32767)
-      const val = s < 0 ? s * 0x8000 : s * 0x7fff;
-      view.setInt16(i * 2, val, true); // true = Little-Endian
-    }
-
-    return buffer;
+  public floatTo16BitPCM(samples: Float32Array): ArrayBuffer {
+    return floatTo16BitPCM(samples);
   }
 
   /**
    * Convert ArrayBuffer to Base64 in chunks to avoid call stack limits
    */
-  private arrayBufferToBase64(buffer: ArrayBuffer): string {
-    const bytes = new Uint8Array(buffer);
-    let binary = '';
-    const chunkSize = 0x8000; // 32KB chunking
-
-    for (let i = 0; i < bytes.length; i += chunkSize) {
-      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize) as any);
-    }
-
-    return btoa(binary);
+  public arrayBufferToBase64(buffer: ArrayBuffer): string {
+    return arrayBufferToBase64(buffer);
   }
 
   // ===========================================================================
@@ -593,3 +561,59 @@ class SoundEngine {
 }
 
 export const soundEngine = new SoundEngine();
+
+/**
+ * Linear interpolation resampler from source sample rate to target rate (default 16 kHz)
+ */
+export function resampleTo16k(input: Float32Array, inputRate: number, targetRate = 16000): Float32Array {
+  if (inputRate === targetRate || input.length === 0) return input;
+
+  const ratio = inputRate / targetRate;
+  const outputLength = Math.max(1, Math.round(input.length / ratio));
+  const output = new Float32Array(outputLength);
+
+  for (let i = 0; i < outputLength; i++) {
+    const srcIndex = i * ratio;
+    const indexFloor = Math.floor(srcIndex);
+    const indexCeil = Math.min(input.length - 1, indexFloor + 1);
+    const frac = srcIndex - indexFloor;
+    output[i] = input[indexFloor] * (1 - frac) + input[indexCeil] * frac;
+  }
+
+  return output;
+}
+
+/**
+ * Converts Float32Array (-1.0 to 1.0) into 16-bit signed integer little-endian ArrayBuffer
+ */
+export function floatTo16BitPCM(samples: Float32Array): ArrayBuffer {
+  const buffer = new ArrayBuffer(samples.length * 2);
+  const view = new DataView(buffer);
+
+  for (let i = 0; i < samples.length; i++) {
+    const s = Math.max(-1, Math.min(1, samples[i]));
+    // Scale to signed 16-bit range (-32768 to 32767)
+    const val = s < 0 ? Math.round(s * 0x8000) : Math.round(s * 0x7fff);
+    view.setInt16(i * 2, val, true); // true = Little-Endian
+  }
+
+  return buffer;
+}
+
+/**
+ * Convert ArrayBuffer to Base64 safely without call-stack overflow on large arrays
+ */
+export function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 0x8000;
+
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const sub = bytes.subarray(i, i + chunkSize);
+    for (let j = 0; j < sub.length; j++) {
+      binary += String.fromCharCode(sub[j]);
+    }
+  }
+
+  return btoa(binary);
+}

@@ -124,7 +124,32 @@ See [`.env.sample`](.env.sample) for all required variables.
 | `TABPFN_API_KEY` | ⬜ | TabPFN classification (heuristic fallback if absent) |
 | `PORT` | ⬜ | Server port (default: 8080) |
 
-> **Mock Mode**: If `GEMMA_API_KEY` or `ELEVENLABS_API_KEY` is absent, the backend uses curated fallback prompts and a silent MP3. Perfect for local development.
+> **Local / Offline Mode**: If `GEMMA_API_KEY` or `ELEVENLABS_API_KEY` is absent, the backend serves curated biome-specific grounding instructions with clear provider transparency (`provider_status.elevenlabs_live: false`), and the client provides spoken whisper via local browser speech synthesis.
+
+---
+
+## Quality & Testing Gates
+
+Run the verification suites locally before submitting changes:
+
+### Backend (Rust)
+
+```bash
+cd backend
+cargo fmt --check
+cargo clippy --all-targets --all-features -- -D warnings
+cargo test
+```
+
+### Frontend (React / Vite)
+
+```bash
+cd frontend
+npm run lint       # oxlint
+npm run typecheck  # tsc -b
+npm test           # vitest run
+npm run build      # production build
+```
 
 ---
 
@@ -133,19 +158,24 @@ See [`.env.sample`](.env.sample) for all required variables.
 ```
 aura-flora/
 ├── .agent/          # Agent rules, workflows, design constraints
-├── .tasks/          # Concrete implementation task checklists (01–05)
+├── .tasks/          # Implementation task checklists (01–05)
+├── .github/         # CI workflows and issue/PR templates
 ├── backend/         # Rust (Axum) — DSP, AI orchestration, HTTP
 │   ├── src/
-│   │   ├── dsp/     # FFT, spectral centroid, biophony ratio
+│   │   ├── dsp/     # FFT, spectral centroid, biophony ratio (spawn_blocking)
 │   │   ├── services/# Gemma, TabPFN, ElevenLabs clients
-│   │   └── handlers/# HTTP request handlers
+│   │   ├── handlers/# Axum request handlers & AppError mapping
+│   │   └── lib.rs   # Router builder and application state
+│   ├── tests/       # End-to-end integration tests
 │   └── Dockerfile   # Multi-stage → distroless
 └── frontend/        # React 19 + TypeScript + Vite + PWA
     ├── src/
     │   ├── components/  # Mobile simulator, Audio visualizers, Lab
+    │   ├── hooks/       # useGroundingSession state machine
     │   ├── services/    # SoundEngine (Web Audio API), ApiService
     │   ├── constants/   # Audio presets & design tokens
     │   └── types.ts     # Acoustic telemetry & classification types
+    ├── tests/           # Vitest unit test suites
     └── public/          # PWA manifests, icons, audio assets
 ```
 
@@ -160,14 +190,24 @@ aura-flora/
 
 ---
 
-## Deployment (Render)
+## Open Source & Community
+
+- [Contributing Guidelines](CONTRIBUTING.md) — Setup, PR process, and code quality expectations
+- [Security Policy](SECURITY.md) — Audio data privacy and vulnerability reporting
+- [Code of Conduct](CODE_OF_CONDUCT.md) — Community standards (Contributor Covenant 2.1)
+- [Agent & Contributor Guide](AGENTS.md) — Technical invariants, contracts, and guardrails
+- [Changelog](CHANGELOG.md) — Release notes and version history
+
+---
+
+## Deployment (Render & Docker)
 
 ```bash
 # Build Docker image
 docker build -t aura-flora-backend ./backend
 
-# Deploy via render.yaml (auto-detected by Render)
-git push origin main
+# Run with docker-compose
+docker-compose up --build
 ```
 
 See [`render.yaml`](render.yaml) for full Render Web Services config.

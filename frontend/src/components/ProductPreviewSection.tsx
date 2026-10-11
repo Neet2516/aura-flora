@@ -1,186 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { Mic, ShieldCheck, RotateCcw, AlertCircle, Volume2 } from 'lucide-react';
-import { soundEngine, type RecordedAudioResult } from '../services/soundEngine';
-import { ApiService } from '../services/api';
-import type { GroundResponse } from '../types';
+import { useGroundingSession } from '../hooks/useGroundingSession';
 import { ScrollRevealText } from './motion/ScrollRevealText';
 import { FadeInWhenVisible } from './motion/FadeInWhenVisible';
 
-type GroundingState =
-  | 'idle'
-  | 'requestingPermission'
-  | 'recording'
-  | 'analyzing'
-  | 'speaking'
-  | 'blackout'
-  | 'error';
-
 export const ProductPreviewSection: React.FC = () => {
-  const [screen, setScreen] = useState<GroundingState>('idle');
-  const [countdown, setCountdown] = useState<number>(6);
-  const [groundResult, setGroundResult] = useState<GroundResponse | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [liveFrequencies, setLiveFrequencies] = useState<number[]>([30, 45, 60, 40, 75, 50, 85, 65, 45, 55, 35]);
-
-  const timerRef = useRef<any>(null);
-  const animFrameRef = useRef<number | null>(null);
-  const lastTapRef = useRef<number>(0);
-  const currentSessionIdRef = useRef<string>('');
-  const sessionCounterRef = useRef<number>(0);
-
-  // Clean up on component unmount
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      soundEngine.cancelMicRecording();
-      soundEngine.stopSpeaking();
-    };
-  }, []);
-
-  // Live frequency updates from Web Audio Analyser during recording
-  useEffect(() => {
-    if (screen !== 'recording') {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      return;
-    }
-
-    const analyser = soundEngine.getAnalyser();
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-    const updateVisualizer = () => {
-      analyser.getByteFrequencyData(dataArray);
-      // Sample 11 distinct frequency points
-      const step = Math.floor(dataArray.length / 14);
-      const sampled: number[] = [];
-      for (let i = 0; i < 11; i++) {
-        const val = dataArray[i * step] || 0;
-        // Normalize to 15% - 95%
-        const normalized = Math.max(15, Math.min(95, Math.round((val / 255) * 100)));
-        sampled.push(normalized);
-      }
-      setLiveFrequencies(sampled);
-      animFrameRef.current = requestAnimationFrame(updateVisualizer);
-    };
-
-    animFrameRef.current = requestAnimationFrame(updateVisualizer);
-
-    return () => {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    };
-  }, [screen]);
-
-  /**
-   * STAGE 1: Explicit user click initiates microphone request & recording
-   */
-  const handleStartCapture = async () => {
-    soundEngine.playHaptic();
-    sessionCounterRef.current += 1;
-    const sessionId = `session-${sessionCounterRef.current}`;
-    currentSessionIdRef.current = sessionId;
-    setErrorMessage('');
-
-    try {
-      setScreen('requestingPermission');
-      // Request explicit microphone access
-      await soundEngine.requestMicPermission();
-
-      // Begin real 16 kHz mono PCM recording
-      await soundEngine.startMicRecording();
-      setScreen('recording');
-      setCountdown(6);
-
-      let sec = 6;
-      timerRef.current = setInterval(async () => {
-        sec -= 1;
-        setCountdown(sec);
-
-        if (sec <= 0) {
-          clearInterval(timerRef.current);
-          await handleFinishRecording(sessionId);
-        }
-      }, 1000);
-    } catch (err: any) {
-      console.warn('Microphone permission or hardware error:', err);
-      soundEngine.cancelMicRecording();
-      setErrorMessage(err.message || 'Microphone access is required to capture ambient soundscapes.');
-      setScreen('error');
-    }
-  };
-
-  /**
-   * STAGE 2: Finish recording, submit 16 kHz PCM to Rust backend, and receive tailored grounding
-   */
-  const handleFinishRecording = async (sessionId: string) => {
-    if (currentSessionIdRef.current !== sessionId) return;
-
-    setScreen('analyzing');
-
-    try {
-      // Encode captured PCM Float32 buffer to 16-bit signed PCM Base64
-      const recorded: RecordedAudioResult = await soundEngine.stopMicRecording();
-
-      // Submit to Rust Axum backend POST /api/v1/ground
-      const response = await ApiService.groundMe(recorded.audioB64, recorded.samples);
-
-      if (currentSessionIdRef.current !== sessionId) return;
-
-      setGroundResult(response);
-      setScreen('speaking');
-
-      // Play synthesized whisper instruction (targeting ~6 seconds)
-      soundEngine.speakPrompt(
-        response.prompt,
-        response.audio_url,
-        () => {
-          // Transition to pure AMOLED blackout once spoken instruction finishes
-          if (currentSessionIdRef.current === sessionId) {
-            setScreen('blackout');
-          }
-        },
-        sessionId
-      );
-    } catch (err: any) {
-      console.error('Grounding pipeline error:', err);
-      if (currentSessionIdRef.current === sessionId) {
-        setErrorMessage(err.message || 'Failed to analyze acoustic soundscape.');
-        setScreen('error');
-      }
-    }
-  };
-
-  /**
-   * STAGE 3: Double-tap / double-click gesture to exit AMOLED blackout
-   */
-  const handleDoubleTapToWake = (e: React.PointerEvent | React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const now = Date.now();
-    soundEngine.playHaptic();
-
-    if (now - lastTapRef.current < 450) {
-      // Double-tap confirmed: wake device and reset cleanly
-      soundEngine.stopSpeaking();
-      setScreen('idle');
-      lastTapRef.current = 0;
-    } else {
-      lastTapRef.current = now;
-    }
-  };
-
-  /**
-   * Reset session
-   */
-  const handleReset = () => {
-    currentSessionIdRef.current = '';
-    if (timerRef.current) clearInterval(timerRef.current);
-    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    soundEngine.cancelMicRecording();
-    soundEngine.stopSpeaking();
-    setScreen('idle');
-    setErrorMessage('');
-  };
+  const {
+    status: screen,
+    countdown,
+    groundResult,
+    errorMessage,
+    liveFrequencies,
+    startGrounding: handleStartCapture,
+    handleDoubleTapToWake,
+    resetSession: handleReset,
+  } = useGroundingSession({ recordingDurationSeconds: 6 });
 
   return (
     <section id="preview" style={styles.section}>
@@ -267,7 +101,7 @@ export const ProductPreviewSection: React.FC = () => {
 
                     <div style={styles.pulseArea}>
                       <button
-                        onClick={handleStartCapture}
+                        onClick={() => void handleStartCapture()}
                         style={styles.pulseTriggerButton}
                         title="Start Bioacoustic Grounding Recording"
                         aria-label="Start Bioacoustic Grounding"
@@ -383,7 +217,7 @@ export const ProductPreviewSection: React.FC = () => {
                       {errorMessage}
                     </p>
                     <button
-                      onClick={handleStartCapture}
+                      onClick={() => void handleStartCapture()}
                       className="btn-amber-primary"
                       style={{ fontSize: '11px', padding: '8px 16px', marginTop: 16 }}
                     >

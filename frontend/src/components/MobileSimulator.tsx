@@ -1,76 +1,24 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { Mic, TreePine } from 'lucide-react';
-import { soundEngine } from '../services/soundEngine';
-import { ApiService } from '../services/api';
+import { useGroundingSession } from '../hooks/useGroundingSession';
 
 export const MobileSimulator: React.FC = () => {
-  const [screen, setScreen] = useState<'home' | 'blackout'>('home');
-  const [phoneState, setPhoneState] = useState<'idle' | 'recording' | 'processing' | 'ready'>('idle');
-  const [countdown, setCountdown] = useState(5);
-  const [lastTap, setLastTap] = useState(0);
+  const {
+    status,
+    countdown,
+    startGrounding: handlePhonePulsePress,
+    handleDoubleTapToWake: handlePhoneDoubleTap,
+  } = useGroundingSession({ recordingDurationSeconds: 5 });
 
-  const timerRef = useRef<any>(null);
-
-  const handlePhonePulsePress = async () => {
-    soundEngine.playHaptic();
-    if (phoneState !== 'idle') return;
-
-    try {
-      await soundEngine.requestMicPermission();
-      await soundEngine.startMicRecording();
-    } catch {
-      // Fallback if mic unavailable
-    }
-
-    setPhoneState('recording');
-    setCountdown(5);
-
-    let sec = 5;
-    timerRef.current = setInterval(async () => {
-      sec -= 1;
-      setCountdown(sec);
-      if (sec <= 0) {
-        clearInterval(timerRef.current);
-        setPhoneState('processing');
-
-        let audioB64 = '';
-        let samples: Float32Array | undefined;
-        try {
-          const rec = await soundEngine.stopMicRecording();
-          audioB64 = rec.audioB64;
-          samples = rec.samples;
-        } catch {}
-
-        try {
-          const result = await ApiService.groundMe(audioB64, samples);
-          setPhoneState('ready');
-          setTimeout(() => {
-            setScreen('blackout');
-            soundEngine.speakPrompt(result.prompt, result.audio_url);
-          }, 1200);
-        } catch {
-          setPhoneState('ready');
-          setTimeout(() => {
-            setScreen('blackout');
-            soundEngine.speakPrompt('Look up. Find one natural movement in the air.');
-          }, 1200);
-        }
-      }
-    }, 1000);
-  };
-
-  const handlePhoneDoubleTap = () => {
-    const now = Date.now();
-    soundEngine.playHaptic();
-    if (now - lastTap < 450) {
-      soundEngine.stopSpeaking();
-      setScreen('home');
-      setPhoneState('idle');
-      setLastTap(0);
-    } else {
-      setLastTap(now);
-    }
-  };
+  const screen = status === 'blackout' ? 'blackout' : 'home';
+  const phoneState =
+    status === 'recording'
+      ? 'recording'
+      : status === 'analyzing'
+      ? 'processing'
+      : status === 'speaking' || status === 'ready'
+      ? 'ready'
+      : 'idle';
 
   return (
     <div style={styles.simulatorWrapper}>
@@ -100,7 +48,7 @@ export const MobileSimulator: React.FC = () => {
                   )}
 
                   <button
-                    onClick={handlePhonePulsePress}
+                    onClick={() => void handlePhonePulsePress()}
                     style={{
                       ...styles.phoneRecordBtn,
                       backgroundColor:

@@ -81,13 +81,6 @@ impl AppConfig {
     ///
     /// Returns `false` if any key is empty — switches pipeline to mock mode.
     pub fn is_full_integration(&self) -> bool {
-        !self.gemma_api_key.is_empty()
-            && !self.elevenlabs_api_key.is_empty()
+        !self.gemma_api_key.is_empty() && !self.elevenlabs_api_key.is_empty()
     }
-}
-
-/// Helper: require an env var or return a `ConfigError`.
-#[allow(dead_code)]
-fn require_var(key: &'static str) -> Result<String, ConfigError> {
-    env::var(key).map_err(|_| ConfigError::MissingVar(key.to_string()))
 }
