@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Mic, Radio, Cpu, Sparkles, Moon, ArrowRight } from 'lucide-react';
+import { ScrollRevealText } from './motion/ScrollRevealText';
+import { FadeInWhenVisible } from './motion/FadeInWhenVisible';
 
 interface ProtocolSectionProps {
   onOpenSimulator: () => void;
@@ -70,21 +73,33 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({ onOpenSimulato
             <div className="tech-eyebrow">
               <span>HOW IT WORKS / 003</span>
             </div>
-            <h2 style={styles.title}>The 15-Second Protocol</h2>
+            <ScrollRevealText
+              text="The 15-Second Protocol"
+              tag="h2"
+              style={styles.title}
+              delay={0.1}
+            />
           </div>
-          <p style={styles.subtitle}>
-            A strictly bounded interaction engineered to terminate screen time and anchor attention in the physical environment.
-          </p>
+          <FadeInWhenVisible delay={0.25}>
+            <p style={styles.subtitle}>
+              A strictly bounded interaction engineered to terminate screen time and anchor attention in the physical environment.
+            </p>
+          </FadeInWhenVisible>
         </div>
 
-        {/* 5-Step Process Timeline */}
+        {/* 5-Step Process Timeline with Staggered Framer Motion Appearance */}
         <div style={styles.stepsGrid}>
           {steps.map((st, i) => {
             const Icon = st.icon;
             const isSelected = activeStep === i;
             return (
-              <div
+              <motion.div
                 key={st.num}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.5, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 onClick={() => setActiveStep(i)}
                 style={{
                   ...styles.stepCard,
@@ -128,29 +143,33 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({ onOpenSimulato
                     {st.cue}
                   </span>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
 
         {/* Protocol Interactive Preview Trigger */}
-        <div style={styles.protocolFooter}>
-          <div style={styles.footerInfo}>
-            <span className="tech-eyebrow">TOTAL SCREEN BUDGET</span>
-            <span style={styles.budgetValue} className="font-mono">
-              MAXIMUM 15 SECONDS · GUARANTEED BLACKOUT
-            </span>
-          </div>
+        <FadeInWhenVisible delay={0.35}>
+          <div style={styles.protocolFooter}>
+            <div style={styles.footerInfo}>
+              <span className="tech-eyebrow">TOTAL SCREEN BUDGET</span>
+              <span style={styles.budgetValue} className="font-mono">
+                MAXIMUM 15 SECONDS · GUARANTEED BLACKOUT
+              </span>
+            </div>
 
-          <button
-            onClick={onOpenSimulator}
-            className="btn-botanical-primary"
-            title="Launch Phone Simulator to test protocol"
-          >
-            <span>TEST PROTOCOL IN PHONE SIMULATOR</span>
-            <ArrowRight size={14} />
-          </button>
-        </div>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onOpenSimulator}
+              className="btn-botanical-primary"
+              title="Launch Phone Simulator to test protocol"
+            >
+              <span>TEST PROTOCOL IN PHONE SIMULATOR</span>
+              <ArrowRight size={14} />
+            </motion.button>
+          </div>
+        </FadeInWhenVisible>
       </div>
     </section>
   );
@@ -197,8 +216,8 @@ const styles: Record<string, React.CSSProperties> = {
     flexDirection: 'column',
     gap: '16px',
     cursor: 'pointer',
-    transition: 'all 0.25s ease',
     position: 'relative',
+    willChange: 'transform',
   },
   stepTop: {
     display: 'flex',

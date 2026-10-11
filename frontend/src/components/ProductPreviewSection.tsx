@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Mic, ShieldCheck, RotateCcw } from 'lucide-react';
 import { soundEngine } from '../services/soundEngine';
+import { ScrollRevealText } from './motion/ScrollRevealText';
+import { FadeInWhenVisible } from './motion/FadeInWhenVisible';
 
 export const ProductPreviewSection: React.FC = () => {
   const [screen, setScreen] = useState<'home' | 'recording' | 'analyzing' | 'prompt' | 'blackout'>('home');
@@ -78,17 +80,24 @@ export const ProductPreviewSection: React.FC = () => {
               <ShieldCheck size={12} />
               <span>EXPERIENCE SIMULATION / 005</span>
             </div>
-            <h2 style={styles.title}>The Grounding Experience</h2>
+            <ScrollRevealText
+              text="The Grounding Experience"
+              tag="h2"
+              style={styles.title}
+              delay={0.1}
+            />
           </div>
-          <p style={styles.subtitle}>
-            A tactile simulation of the mobile application. Press the central pulse button to experience the 15-second acoustic sequence culminating in zero backlight emission.
-          </p>
+          <FadeInWhenVisible delay={0.2}>
+            <p style={styles.subtitle}>
+              A tactile simulation of the mobile application. Press the central pulse button to experience the 15-second acoustic sequence culminating in zero backlight emission.
+            </p>
+          </FadeInWhenVisible>
         </div>
 
         {/* Simulator Device Grid */}
         <div style={styles.simulationGrid}>
           {/* Left Column: Flow Explanations */}
-          <div style={styles.flowExplainer}>
+          <FadeInWhenVisible delay={0.25} yOffset={24} style={styles.flowExplainer}>
             <div style={styles.flowStep}>
               <span className="font-mono" style={styles.flowNum}>STAGE 01</span>
               <h3 style={styles.flowTitle}>Single Press Audio Sampling</h3>
@@ -116,10 +125,10 @@ export const ProductPreviewSection: React.FC = () => {
             <div style={styles.interactionTip} className="font-mono">
               <span>TIP: IN BLACKOUT MODE, DOUBLE TAP THE PHONE SCREEN TO WAKE UP.</span>
             </div>
-          </div>
+          </FadeInWhenVisible>
 
           {/* Right Column: Physical Phone Hardware Mockup */}
-          <div style={styles.phoneStage}>
+          <FadeInWhenVisible delay={0.4} yOffset={32} style={styles.phoneStage}>
             <div style={styles.phoneChassis} onClick={screen === 'blackout' ? handleDoubleTapToWake : undefined}>
               {/* Dynamic Island / Hardware Sensors */}
               <div style={styles.dynamicIsland}>
@@ -231,7 +240,7 @@ export const ProductPreviewSection: React.FC = () => {
                 <span>RESET SIMULATOR</span>
               </button>
             )}
-          </div>
+          </FadeInWhenVisible>
         </div>
       </div>
     </section>

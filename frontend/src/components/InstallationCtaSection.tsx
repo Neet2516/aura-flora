@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Download, Smartphone, Compass, CheckCircle2, Share } from 'lucide-react';
+import { ScrollRevealText } from './motion/ScrollRevealText';
+import { FadeInWhenVisible } from './motion/FadeInWhenVisible';
 
 interface InstallationCtaSectionProps {
   onTriggerInstall: () => void;
@@ -22,58 +25,77 @@ export const InstallationCtaSection: React.FC<InstallationCtaSectionProps> = ({
 
         <div style={styles.innerContent}>
           {/* Eyebrow */}
-          <div className="tech-eyebrow">
-            <Compass size={12} />
-            <span>PROGRESSIVE WEB APP / 008</span>
+          <FadeInWhenVisible delay={0.1}>
+            <div className="tech-eyebrow">
+              <Compass size={12} />
+              <span>PROGRESSIVE WEB APP / 008</span>
+            </div>
+          </FadeInWhenVisible>
+
+          {/* Editorial Headline with Word Reveal */}
+          <div style={styles.headlineWrap}>
+            <ScrollRevealText
+              text='"Go outside. The world is already playing."'
+              tag="h2"
+              style={styles.headline}
+              delay={0.15}
+              stagger={0.04}
+            />
           </div>
 
-          {/* Editorial Headline */}
-          <h2 style={styles.headline}>
-            "Go outside.
-            <br />
-            The world is already playing."
-          </h2>
-
-          <p style={styles.subtitle}>
-            Listen for a moment. Carry the experience with you, not your attention. Install AuraFlora directly to your mobile home screen for instantaneous, offline-capable grounding.
-          </p>
+          <FadeInWhenVisible delay={0.3} yOffset={20}>
+            <p style={styles.subtitle}>
+              Listen for a moment. Carry the experience with you, not your attention. Install AuraFlora directly to your mobile home screen for instantaneous, offline-capable grounding.
+            </p>
+          </FadeInWhenVisible>
 
           {/* Action Row */}
-          <div style={styles.actionRow}>
-            {canInstall ? (
-              <button
-                onClick={onTriggerInstall}
-                className="btn-botanical-primary"
-                style={{ fontSize: '13px', padding: '14px 28px' }}
-                title="Install AuraFlora PWA to device"
-              >
-                <Download size={16} />
-                <span>INSTALL AURAFLORA APP</span>
-              </button>
-            ) : (
-              <button
-                onClick={() => setShowIosGuide(!showIosGuide)}
-                className="btn-botanical-secondary"
-                style={{ fontSize: '13px', padding: '14px 28px' }}
-                title="View mobile installation guide"
-              >
-                <Smartphone size={16} />
-                <span>HOW TO INSTALL ON MOBILE</span>
-              </button>
-            )}
+          <FadeInWhenVisible delay={0.4} yOffset={24}>
+            <div style={styles.actionRow}>
+              {canInstall ? (
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={onTriggerInstall}
+                  className="btn-botanical-primary"
+                  style={{ fontSize: '13px', padding: '14px 28px' }}
+                  title="Install AuraFlora PWA to device"
+                >
+                  <Download size={16} />
+                  <span>INSTALL AURAFLORA APP</span>
+                </motion.button>
+              ) : (
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setShowIosGuide(!showIosGuide)}
+                  className="btn-botanical-secondary"
+                  style={{ fontSize: '13px', padding: '14px 28px' }}
+                  title="View mobile installation guide"
+                >
+                  <Smartphone size={16} />
+                  <span>HOW TO INSTALL ON MOBILE</span>
+                </motion.button>
+              )}
 
-            <a
-              href="#protocol"
-              className="btn-botanical-secondary"
-              style={{ fontSize: '13px', padding: '14px 24px', textDecoration: 'none' }}
-            >
-              <span>REVIEW PROTOCOL</span>
-            </a>
-          </div>
+              <a
+                href="#protocol"
+                className="btn-botanical-secondary"
+                style={{ fontSize: '13px', padding: '14px 24px', textDecoration: 'none' }}
+              >
+                <span>REVIEW PROTOCOL</span>
+              </a>
+            </div>
+          </FadeInWhenVisible>
 
           {/* iOS / Mobile Step Guide */}
           {showIosGuide && (
-            <div style={styles.guideBox}>
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              style={styles.guideBox}
+            >
               <div style={styles.guideHeader}>
                 <span className="font-mono" style={{ fontSize: '12px', color: 'var(--color-botanical)' }}>
                   INSTALLATION ON IOS & ANDROID
@@ -101,7 +123,7 @@ export const InstallationCtaSection: React.FC<InstallationCtaSectionProps> = ({
                   </span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Features Pill Row */}
@@ -137,12 +159,16 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     gap: '24px',
   },
+  headlineWrap: {
+    maxWidth: '820px',
+  },
   headline: {
     fontSize: 'clamp(2.4rem, 4.8vw, 4.4rem)',
     letterSpacing: '-0.035em',
     lineHeight: 1.08,
     color: '#F1F2EC',
     fontWeight: 700,
+    justifyContent: 'center',
   },
   subtitle: {
     maxWidth: '680px',

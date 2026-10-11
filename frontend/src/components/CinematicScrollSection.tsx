@@ -1,170 +1,210 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Waves, Disc, Compass, ArrowRight } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Waves, Disc, Compass, ArrowRight, Activity } from 'lucide-react';
+import { ScrollRevealText } from './motion/ScrollRevealText';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export const CinematicScrollSection: React.FC = () => {
-  const [activeStage, setActiveStage] = useState<number>(0);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-  const stages = [
+  const panels = [
     {
       num: '01',
-      tag: 'SIGNAL',
-      title: 'Every place has a soundscape.',
+      tag: 'SIGNAL EMERGENCE',
+      headline: 'Every place has a soundscape.',
       desc: 'Before human intervention or digital notification, the atmosphere is alive with mechanical wind, moving leaves, avian biophony, and terrestrial acoustic vibrations.',
       metricLabel: 'FREQUENCY SPECTRUM',
       metricVal: '20 Hz – 20,000 Hz',
       icon: Waves,
+      accentNote: 'RAW AMBIENT INPUT',
     },
     {
       num: '02',
-      tag: 'PERCEPTION',
-      title: 'Not every signal comes from a screen.',
+      tag: 'SPECTRAL PERCEPTION',
+      headline: 'Not every signal comes from a screen.',
       desc: 'Computational bioacoustics decodes the environment into discrete acoustic features: spectral centroid, temporal centroid, RMS energy, and biophonic harmony index.',
       metricLabel: 'SPECTRAL CENTROID',
       metricVal: '3,240 Hz [BIOPHONY PEAK]',
       icon: Disc,
+      accentNote: 'RUST FFT ANALYSIS',
     },
     {
       num: '03',
-      tag: 'RECONNECTION',
-      title: 'Notice what is already around you.',
-      desc: 'A single outdoor grounding instruction anchors conscious attention to physical reality. The screen ceases to exist, returning the senses to the living world.',
+      tag: 'ACOUSTIC ECOLOGY',
+      headline: 'Distinguish nature from machine noise.',
+      desc: 'Normalized Difference Soundscape Index (NDSI) separates avian and insect biophony from anthropogenic engine rumble, isolating vital environmental moments.',
+      metricLabel: 'BIOPHONY TARGET',
+      metricVal: '88% NATURAL BIOPHONY',
+      icon: Activity,
+      accentNote: 'TABPFN CLASSIFICATION',
+    },
+    {
+      num: '04',
+      tag: 'SENSORY RECONNECTION',
+      headline: 'Notice what is already around you.',
+      desc: 'A single outdoor grounding instruction anchors conscious attention to physical reality. The screen ceases to exist, returning human senses to the living world.',
       metricLabel: 'SENSORY TARGET',
       metricVal: 'TACTILE GROUNDING · 100%',
       icon: Compass,
+      accentNote: 'AMOLED ZERO EMISSION LOCK',
     },
   ];
 
-  // Scroll listener to update active stage based on scroll position within section
   useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      
-      // Calculate progress through section (0 to 1)
-      const totalDist = rect.height - windowHeight;
-      if (totalDist <= 0) return;
-      
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / totalDist));
-      
-      if (progress < 0.33) {
-        setActiveStage(0);
-      } else if (progress < 0.66) {
-        setActiveStage(1);
-      } else {
-        setActiveStage(2);
-      }
-    };
+    const section = sectionRef.current;
+    const track = trackRef.current;
+    if (!section || !track) return;
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Check prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      const getScrollAmount = () => -(track.scrollWidth - window.innerWidth);
+
+      const tween = gsap.to(track, {
+        x: getScrollAmount,
+        ease: 'none',
+      });
+
+      ScrollTrigger.create({
+        trigger: section,
+        animation: tween,
+        start: 'top top',
+        end: () => `+=${track.scrollWidth - window.innerWidth + 400}`,
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          setScrollProgress(Math.round(self.progress * 100));
+          if (progressBarRef.current) {
+            progressBarRef.current.style.width = `${self.progress * 100}%`;
+          }
+        },
+      });
+    }, section);
+
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section id="signal" ref={sectionRef} style={styles.section}>
-      <div className="section-container" style={styles.container}>
-        {/* Section Header */}
-        <div style={styles.header}>
-          <div className="tech-eyebrow">
-            <span>SCENIC PROGRESSION / 002</span>
-          </div>
-          <span className="meta-label">CINEMATIC BIOACOUSTIC TIMELINE</span>
+    <section id="signal" ref={sectionRef} style={styles.pinnedSection}>
+      {/* Background Topographic Contour Video */}
+      <div style={styles.backgroundCanvas}>
+        <video
+          src="/background-video.mp4"
+          poster="/contour-poster.svg"
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={styles.ambientVideo}
+          aria-hidden="true"
+        />
+        <div style={styles.ambientOverlay} />
+      </div>
+
+      {/* Top Scrub Progress HUD */}
+      <div style={styles.hudBar}>
+        <div style={styles.hudLeft}>
+          <div className="status-dot-active" />
+          <span className="font-mono" style={styles.hudTitle}>
+            HORIZONTAL CINEMATIC SCRUB · [SCROLL DOWN TO ADVANCE]
+          </span>
         </div>
-
-        {/* Narrative Interactive Stage Navigator */}
-        <div style={styles.timelineTabs}>
-          {stages.map((stg, idx) => (
-            <button
-              key={stg.num}
-              onClick={() => setActiveStage(idx)}
-              style={{
-                ...styles.tabBtn,
-                borderColor: activeStage === idx ? 'var(--color-botanical)' : 'var(--color-border-subtle)',
-                backgroundColor: activeStage === idx ? 'rgba(32, 61, 42, 0.25)' : 'rgba(16, 20, 17, 0.6)',
-                color: activeStage === idx ? '#F1F2EC' : 'var(--color-text-secondary)',
-              }}
-              aria-label={`View stage ${stg.tag}`}
-            >
-              <span style={styles.tabNum} className="font-mono">{stg.num}</span>
-              <span style={styles.tabTag} className="font-mono">{stg.tag}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Main Cinema Viewport */}
-        <div style={styles.cinemaStage}>
-          {/* Subtle Ambient Video / Contour Background */}
-          <div style={styles.canvasBackground}>
-            <video
-              src="/background-video.mp4"
-              poster="/contour-poster.svg"
-              autoPlay
-              loop
-              muted
-              playsInline
-              style={{
-                ...styles.stageVideo,
-                filter: activeStage === 0 ? 'contrast(1.1) brightness(0.6)' : activeStage === 1 ? 'hue-rotate(20deg) brightness(0.7)' : 'brightness(0.5)',
-              }}
-              aria-hidden="true"
-            />
-            <div style={styles.canvasOverlay} />
+        <div style={styles.hudRight}>
+          <span className="meta-label">PROGRESS: {scrollProgress}%</span>
+          <div style={styles.progressTrack}>
+            <div ref={progressBarRef} style={styles.progressBar} />
           </div>
+        </div>
+      </div>
 
-          {/* Current Stage Editorial Content */}
-          <div style={styles.stageContent}>
-            <div style={styles.stageEyebrow}>
-              <span className="tech-eyebrow">
-                PHASE {stages[activeStage].num} · {stages[activeStage].tag}
-              </span>
-              <span style={styles.stageMetric} className="font-mono">
-                {stages[activeStage].metricLabel}: <strong style={{ color: 'var(--color-botanical)' }}>{stages[activeStage].metricVal}</strong>
-              </span>
-            </div>
+      {/* Pinned Horizontal Track Moving Left-to-Right / Right-to-Left on Scroll */}
+      <div ref={trackRef} style={styles.horizontalTrack}>
+        {panels.map((panel) => {
+          const Icon = panel.icon;
+          return (
+            <div key={panel.num} style={styles.panelCard}>
+              {/* Corner Instrumentation Marks */}
+              <div className="crosshair-corner crosshair-tl" />
+              <div className="crosshair-corner crosshair-tr" />
+              <div className="crosshair-corner crosshair-bl" />
+              <div className="crosshair-corner crosshair-br" />
 
-            <h2 style={styles.stageTitle}>
-              "{stages[activeStage].title}"
-            </h2>
-
-            <p style={styles.stageDesc}>
-              {stages[activeStage].desc}
-            </p>
-
-            {/* Stage Progress Dots & Next Step CTA */}
-            <div style={styles.stageFooter}>
-              <div style={styles.stageDots}>
-                {stages.map((_, i) => (
-                  <div
-                    key={i}
-                    onClick={() => setActiveStage(i)}
-                    style={{
-                      ...styles.dot,
-                      backgroundColor: activeStage === i ? 'var(--color-botanical)' : 'var(--color-text-muted)',
-                      width: activeStage === i ? '24px' : '8px',
-                    }}
-                  />
-                ))}
+              {/* Panel Header */}
+              <div style={styles.panelHeader}>
+                <div style={styles.panelTagWrap}>
+                  <div className="tech-eyebrow">
+                    <span>PHASE {panel.num}</span>
+                  </div>
+                  <span className="meta-label">{panel.tag}</span>
+                </div>
+                <div style={styles.iconWrap}>
+                  <Icon size={20} color="#B5E48C" />
+                </div>
               </div>
 
-              {activeStage < 2 ? (
-                <button
-                  onClick={() => setActiveStage((prev) => Math.min(2, prev + 1))}
-                  style={styles.nextStageBtn}
-                  className="font-mono"
-                >
-                  <span>NEXT: {stages[activeStage + 1].tag}</span>
-                  <ArrowRight size={13} />
-                </button>
-              ) : (
-                <a href="#protocol" style={styles.nextStageBtn} className="font-mono">
-                  <span>DISCOVER THE 15-SECOND PROTOCOL</span>
-                  <ArrowRight size={13} />
-                </a>
-              )}
+              {/* Word-by-Word Scroll Reveal Headline */}
+              <div style={styles.headlineWrap}>
+                <ScrollRevealText
+                  text={panel.headline}
+                  tag="h2"
+                  style={styles.panelHeadline}
+                  delay={0.1}
+                />
+              </div>
+
+              {/* Descriptive Body Copy */}
+              <p style={styles.panelDesc}>{panel.desc}</p>
+
+              {/* Technical Measurement Spec Box */}
+              <div style={styles.panelFooter}>
+                <div style={styles.metricBlock}>
+                  <span className="meta-label">{panel.metricLabel}</span>
+                  <span style={styles.metricValue} className="font-mono">
+                    {panel.metricVal}
+                  </span>
+                </div>
+                <div style={styles.accentBadge} className="font-mono">
+                  {panel.accentNote}
+                </div>
+              </div>
             </div>
+          );
+        })}
+
+        {/* Final Panel 05: Transition CTA Card */}
+        <div style={{ ...styles.panelCard, ...styles.finalCtaCard }}>
+          <div className="crosshair-corner crosshair-tl" />
+          <div className="crosshair-corner crosshair-tr" />
+          <div className="crosshair-corner crosshair-bl" />
+          <div className="crosshair-corner crosshair-br" />
+
+          <div className="tech-eyebrow">
+            <span>SEQUENCE COMPLETE</span>
           </div>
+
+          <h2 style={styles.finalHeadline}>
+            Ready to explore the 15-second protocol?
+          </h2>
+
+          <p style={styles.finalDesc}>
+            Continue scrolling downward to examine the 5-stage bioacoustic pipeline from initial audio recording to complete blackout.
+          </p>
+
+          <a href="#protocol" className="btn-botanical-primary" style={{ textDecoration: 'none' }}>
+            <span>EXPLORE 5-STAGE PROTOCOL</span>
+            <ArrowRight size={14} />
+          </a>
         </div>
       </div>
     </section>
@@ -172,138 +212,181 @@ export const CinematicScrollSection: React.FC = () => {
 };
 
 const styles: Record<string, React.CSSProperties> = {
-  section: {
-    padding: '80px 0 100px',
-    backgroundColor: 'var(--color-bg-secondary)',
-    borderTop: '1px solid var(--color-border-subtle)',
-    borderBottom: '1px solid var(--color-border-subtle)',
+  pinnedSection: {
     position: 'relative',
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '32px',
-  },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    gap: '12px',
-  },
-  timelineTabs: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '12px',
-  },
-  tabBtn: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    padding: '14px 18px',
-    border: '1px solid',
-    cursor: 'pointer',
-    textAlign: 'left',
-    transition: 'all 0.25s ease',
-  },
-  tabNum: {
-    fontSize: '14px',
-    fontWeight: 600,
-    color: 'var(--color-botanical)',
-  },
-  tabTag: {
-    fontSize: '12px',
-    letterSpacing: '0.08em',
-    fontWeight: 500,
-  },
-  cinemaStage: {
-    position: 'relative',
-    minHeight: '440px',
-    border: '1px solid var(--color-border-subtle)',
+    height: '100vh',
+    width: '100vw',
     backgroundColor: '#080A09',
     overflow: 'hidden',
     display: 'flex',
-    alignItems: 'center',
-    padding: '48px',
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
-  canvasBackground: {
+  backgroundCanvas: {
     position: 'absolute',
     inset: 0,
     zIndex: 1,
   },
-  stageVideo: {
+  ambientVideo: {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
-    opacity: 0.35,
-    transition: 'filter 0.5s ease',
+    opacity: 0.38,
   },
-  canvasOverlay: {
+  ambientOverlay: {
     position: 'absolute',
     inset: 0,
-    background: 'linear-gradient(to right, rgba(8, 10, 9, 0.95) 0%, rgba(8, 10, 9, 0.75) 60%, rgba(8, 10, 9, 0.4) 100%)',
+    background:
+      'radial-gradient(circle at 50% 50%, rgba(8, 10, 9, 0.7) 0%, rgba(8, 10, 9, 0.94) 80%, #080A09 100%)',
   },
-  stageContent: {
-    position: 'relative',
-    zIndex: 10,
-    maxWidth: '720px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
-  },
-  stageEyebrow: {
-    display: 'flex',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: '16px',
-  },
-  stageMetric: {
-    fontSize: '12px',
-    color: 'var(--color-text-secondary)',
-  },
-  stageTitle: {
-    fontSize: 'clamp(1.8rem, 3.4vw, 3rem)',
-    lineHeight: 1.15,
-    letterSpacing: '-0.03em',
-    color: '#F1F2EC',
-    fontWeight: 600,
-  },
-  stageDesc: {
-    fontSize: 'clamp(1rem, 1.2vw, 1.15rem)',
-    lineHeight: 1.65,
-    color: 'var(--color-text-secondary)',
-  },
-  stageFooter: {
+  hudBar: {
+    position: 'absolute',
+    top: '20px',
+    left: '32px',
+    right: '32px',
+    zIndex: 20,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    padding: '12px 20px',
+    backgroundColor: 'rgba(16, 20, 17, 0.85)',
+    border: '1px solid var(--color-border-subtle)',
+    backdropFilter: 'blur(12px)',
     flexWrap: 'wrap',
-    gap: '20px',
-    paddingTop: '20px',
-    borderTop: '1px solid rgba(220, 235, 220, 0.1)',
+    gap: '12px',
   },
-  stageDots: {
+  hudLeft: {
     display: 'flex',
     alignItems: 'center',
-    gap: '6px',
+    gap: '10px',
   },
-  dot: {
-    height: '6px',
-    borderRadius: '3px',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
+  hudTitle: {
+    fontSize: '11px',
+    color: '#F1F2EC',
+    letterSpacing: '0.08em',
   },
-  nextStageBtn: {
-    display: 'inline-flex',
+  hudRight: {
+    display: 'flex',
     alignItems: 'center',
-    gap: '8px',
-    background: 'none',
-    border: 'none',
-    color: 'var(--color-botanical)',
-    fontSize: '12px',
+    gap: '16px',
+  },
+  progressTrack: {
+    width: '120px',
+    height: '4px',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: '2px',
+    overflow: 'hidden',
+  },
+  progressBar: {
+    width: '0%',
+    height: '100%',
+    backgroundColor: 'var(--color-botanical)',
+    transition: 'width 0.1s linear',
+  },
+  horizontalTrack: {
+    position: 'relative',
+    zIndex: 10,
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: '6vw',
+    paddingRight: '12vw',
+    gap: '48px',
+    height: 'auto',
+    width: 'max-content',
+    willChange: 'transform',
+  },
+  panelCard: {
+    width: 'clamp(340px, 48vw, 680px)',
+    minHeight: '460px',
+    backgroundColor: 'rgba(16, 20, 17, 0.92)',
+    border: '1px solid var(--color-border-subtle)',
+    padding: '44px 36px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    gap: '24px',
+    backdropFilter: 'blur(16px)',
+    position: 'relative',
+    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.7)',
+  },
+  panelHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  panelTagWrap: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    flexWrap: 'wrap',
+  },
+  iconWrap: {
+    width: '40px',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(181, 228, 140, 0.1)',
+    border: '1px solid rgba(181, 228, 140, 0.25)',
+  },
+  headlineWrap: {
+    maxWidth: '560px',
+  },
+  panelHeadline: {
+    fontSize: 'clamp(1.8rem, 3vw, 2.75rem)',
+    lineHeight: 1.15,
+    letterSpacing: '-0.03em',
+    color: '#F1F2EC',
+    fontWeight: 700,
+  },
+  panelDesc: {
+    fontSize: 'clamp(1rem, 1.2vw, 1.125rem)',
+    lineHeight: 1.65,
+    color: 'var(--color-text-secondary)',
+  },
+  panelFooter: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: '20px',
+    borderTop: '1px solid var(--color-grid-line)',
+    flexWrap: 'wrap',
+    gap: '12px',
+  },
+  metricBlock: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+  },
+  metricValue: {
+    fontSize: '13px',
     fontWeight: 600,
-    letterSpacing: '0.06em',
-    cursor: 'pointer',
-    textDecoration: 'none',
+    color: 'var(--color-botanical)',
+    letterSpacing: '0.04em',
+  },
+  accentBadge: {
+    fontSize: '10px',
+    color: 'var(--color-text-muted)',
+    border: '1px solid var(--color-grid-line)',
+    padding: '4px 8px',
+  },
+  finalCtaCard: {
+    backgroundColor: 'rgba(23, 28, 24, 0.95)',
+    border: '1px solid var(--color-botanical)',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: '24px',
+  },
+  finalHeadline: {
+    fontSize: 'clamp(1.8rem, 2.8vw, 2.6rem)',
+    lineHeight: 1.2,
+    letterSpacing: '-0.03em',
+    color: '#F1F2EC',
+    fontWeight: 700,
+  },
+  finalDesc: {
+    fontSize: '1.05rem',
+    lineHeight: 1.6,
+    color: 'var(--color-text-secondary)',
   },
 };

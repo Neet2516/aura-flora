@@ -14,6 +14,7 @@ import { InteractiveLabModal } from './components/InteractiveLabModal';
 import { ContactModal } from './components/ContactModal';
 import { PwaInstallBanner } from './components/PwaInstallBanner';
 import { OfflineStatusIndicator } from './components/OfflineStatusIndicator';
+import { initLenis, destroyLenis, smoothScrollTo } from './services/smoothScroll';
 
 export function App() {
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
@@ -21,6 +22,14 @@ export function App() {
   const [canInstall, setCanInstall] = useState<boolean>(false);
 
   const installPromptEventRef = useRef<any>(null);
+
+  // Initialize Lenis smooth scroll engine
+  useEffect(() => {
+    initLenis();
+    return () => {
+      destroyLenis();
+    };
+  }, []);
 
   useEffect(() => {
     const handleBeforeInstall = (e: any) => {
@@ -42,22 +51,16 @@ export function App() {
         setCanInstall(false);
       }
     } else {
-      const el = document.getElementById('install');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
+      smoothScrollTo('install', { offset: -40 });
     }
   };
 
   const scrollToSection = (sectionId: string) => {
     if (sectionId === 'top' || sectionId === 'hero') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      smoothScrollTo(0, { duration: 1.4 });
       return;
     }
-    const el = document.getElementById(sectionId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    smoothScrollTo(sectionId, { offset: -60, duration: 1.2 });
   };
 
   // Keyboard navigation shortcuts ([L] Lab, [P] Protocol, [T] Top, [K] Keys, [Esc] Close)

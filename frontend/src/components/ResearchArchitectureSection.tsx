@@ -1,7 +1,53 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Terminal, GitBranch, Cpu, Radio, Shield, Code, ExternalLink } from 'lucide-react';
+import { ScrollRevealText } from './motion/ScrollRevealText';
+import { FadeInWhenVisible } from './motion/FadeInWhenVisible';
 
 export const ResearchArchitectureSection: React.FC = () => {
+  const cards = [
+    {
+      icon: Cpu,
+      tag: 'RUST 1.75+ · AXUM · TOKIO',
+      title: 'Computational Audio Engine',
+      text: 'High-throughput async server handling 16kHz WAV streaming. Executes Fast Fourier Transform (FFT) windows via rustfft, computing spectral centroid and energy distribution in under 42ms.',
+      specs: [
+        { label: 'FFT Window:', val: '512 bins / Hanning' },
+        { label: 'Throughput:', val: '< 50ms P99 Latency' },
+      ],
+    },
+    {
+      icon: Radio,
+      tag: 'TABPFN · HEURISTIC FALLBACK',
+      title: 'Soundscape Classifier',
+      text: 'Evaluates environmental characteristics into biophonic, geophonic, and anthrophonic tiers. Offline-capable heuristic fallback guarantees classification during poor cellular reception.',
+      specs: [
+        { label: 'Inference:', val: 'Prior-Data Fitted Net' },
+        { label: 'Offline:', val: 'Local Spectral Rule Engine' },
+      ],
+    },
+    {
+      icon: Shield,
+      tag: 'GEMMA · ELEVENLABS TTS',
+      title: 'Grounding Model Orchestration',
+      text: 'Google Gemma generates concise, non-hallucinatory physical grounding prompts. ElevenLabs synthesizes calm voice guidance, streamed as compact MP3 audio to mobile endpoints.',
+      specs: [
+        { label: 'Voice Profile:', val: 'Whisper / Low Cadence' },
+        { label: 'Prompt Length:', val: '15–25 words strictly' },
+      ],
+    },
+    {
+      icon: Code,
+      tag: 'FLUTTER 3.19+ · REACT 19 PWA',
+      title: 'Anti-Screen Mobile Client',
+      text: 'Native Flutter client with Riverpod state management, plus an offline-capable Progressive Web App with Workbox service worker precaching, Web Audio API synthesis, and AMOLED screen lock.',
+      specs: [
+        { label: 'Screen Time:', val: '≤ 15s Hard Cutoff' },
+        { label: 'Display Lock:', val: '#000000 True Blackout' },
+      ],
+    },
+  ];
+
   return (
     <section id="research" style={styles.section}>
       <div className="section-container" style={styles.container}>
@@ -12,130 +58,83 @@ export const ResearchArchitectureSection: React.FC = () => {
               <Terminal size={12} />
               <span>SYSTEM ARCHITECTURE / 007</span>
             </div>
-            <h2 style={styles.title}>Research & Engineering Stack</h2>
+            <ScrollRevealText
+              text="Research & Engineering Stack"
+              tag="h2"
+              style={styles.title}
+              delay={0.1}
+            />
           </div>
-          <p style={styles.subtitle}>
-            A hybrid edge-and-cloud architecture engineered for deterministic low-latency audio processing and zero data persistence.
-          </p>
+          <FadeInWhenVisible delay={0.2}>
+            <p style={styles.subtitle}>
+              A hybrid edge-and-cloud architecture engineered for deterministic low-latency audio processing and zero data persistence.
+            </p>
+          </FadeInWhenVisible>
         </div>
 
-        {/* Technical Architecture Stack Columns */}
+        {/* Technical Architecture Stack Columns with Motion */}
         <div style={styles.stackGrid}>
-          {/* Card 1: Rust Backend */}
-          <div style={styles.stackCard}>
-            <div style={styles.cardHeader}>
-              <Cpu size={18} color="#B5E48C" />
-              <span className="font-mono" style={styles.cardTag}>RUST 1.75+ · AXUM · TOKIO</span>
-            </div>
-            <h3 style={styles.cardTitle}>Computational Audio Engine</h3>
-            <p style={styles.cardText}>
-              High-throughput async server handling 16kHz WAV streaming. Executes Fast Fourier Transform (FFT) windows via <code>rustfft</code>, computing spectral centroid and energy distribution in under 42ms.
-            </p>
-            <div style={styles.specList} className="font-mono">
-              <div style={styles.specRow}>
-                <span>FFT Window:</span>
-                <span style={{ color: '#F1F2EC' }}>512 bins / Hanning</span>
-              </div>
-              <div style={styles.specRow}>
-                <span>Throughput:</span>
-                <span style={{ color: '#F1F2EC' }}>&lt; 50ms P99 Latency</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 2: Acoustic Classifier */}
-          <div style={styles.stackCard}>
-            <div style={styles.cardHeader}>
-              <Radio size={18} color="#B5E48C" />
-              <span className="font-mono" style={styles.cardTag}>TABPFN · HEURISTIC FALLBACK</span>
-            </div>
-            <h3 style={styles.cardTitle}>Soundscape Classifier</h3>
-            <p style={styles.cardText}>
-              Evaluates environmental characteristics into biophonic, geophonic, and anthrophonic tiers. Offline-capable heuristic fallback guarantees classification during poor cellular reception.
-            </p>
-            <div style={styles.specList} className="font-mono">
-              <div style={styles.specRow}>
-                <span>Inference:</span>
-                <span style={{ color: '#F1F2EC' }}>Prior-Data Fitted Net</span>
-              </div>
-              <div style={styles.specRow}>
-                <span>Offline:</span>
-                <span style={{ color: '#F1F2EC' }}>Local Spectral Rule Engine</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 3: AI Orchestration */}
-          <div style={styles.stackCard}>
-            <div style={styles.cardHeader}>
-              <Shield size={18} color="#B5E48C" />
-              <span className="font-mono" style={styles.cardTag}>GEMMA · ELEVENLABS TTS</span>
-            </div>
-            <h3 style={styles.cardTitle}>Grounding Model Orchestration</h3>
-            <p style={styles.cardText}>
-              Google Gemma generates concise, non-hallucinatory physical grounding prompts. ElevenLabs synthesizes calm voice guidance, streamed as compact MP3 audio to mobile endpoints.
-            </p>
-            <div style={styles.specList} className="font-mono">
-              <div style={styles.specRow}>
-                <span>Voice Profile:</span>
-                <span style={{ color: '#F1F2EC' }}>Whisper / Low Cadence</span>
-              </div>
-              <div style={styles.specRow}>
-                <span>Prompt Length:</span>
-                <span style={{ color: '#F1F2EC' }}>15–25 words strictly</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 4: Flutter Mobile & PWA Client */}
-          <div style={styles.stackCard}>
-            <div style={styles.cardHeader}>
-              <Code size={18} color="#B5E48C" />
-              <span className="font-mono" style={styles.cardTag}>FLUTTER 3.19+ · REACT 19 PWA</span>
-            </div>
-            <h3 style={styles.cardTitle}>Anti-Screen Mobile Client</h3>
-            <p style={styles.cardText}>
-              Native Flutter client with Riverpod state management, plus an offline-capable Progressive Web App with Workbox service worker precaching, Web Audio API synthesis, and AMOLED screen lock.
-            </p>
-            <div style={styles.specList} className="font-mono">
-              <div style={styles.specRow}>
-                <span>Screen Time:</span>
-                <span style={{ color: '#B5E48C' }}>≤ 15s Hard Cutoff</span>
-              </div>
-              <div style={styles.specRow}>
-                <span>Display Lock:</span>
-                <span style={{ color: '#F1F2EC' }}>#000000 True Blackout</span>
-              </div>
-            </div>
-          </div>
+          {cards.map((card, i) => {
+            const Icon = card.icon;
+            return (
+              <motion.div
+                key={card.tag}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.45, delay: 0.15 + i * 0.1 }}
+                whileHover={{ y: -4, borderColor: '#B5E48C', transition: { duration: 0.2 } }}
+                style={styles.stackCard}
+              >
+                <div style={styles.cardHeader}>
+                  <Icon size={18} color="#B5E48C" />
+                  <span className="font-mono" style={styles.cardTag}>
+                    {card.tag}
+                  </span>
+                </div>
+                <h3 style={styles.cardTitle}>{card.title}</h3>
+                <p style={styles.cardText}>{card.text}</p>
+                <div style={styles.specList} className="font-mono">
+                  {card.specs.map((sp) => (
+                    <div key={sp.label} style={styles.specRow}>
+                      <span>{sp.label}</span>
+                      <span style={{ color: '#F1F2EC' }}>{sp.val}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Open Source Project Repository & Challenge Details */}
-        <div style={styles.openSourceBanner}>
-          <div style={styles.bannerLeft}>
-            <GitBranch size={24} color="#B5E48C" />
-            <div>
-              <span className="font-mono" style={styles.challengeTag}>
-                HACKTOBERFEST 2026 · "TOUCH GRASS" CHALLENGE ENTRY
-              </span>
-              <h4 style={styles.bannerTitle}>Open Source Bioacoustic Ecology</h4>
-              <p style={styles.bannerDesc}>
-                Licensed under MIT. Zero tracking, zero advertisements, and zero persistent user audio retention.
-              </p>
+        <FadeInWhenVisible delay={0.35} yOffset={24}>
+          <div style={styles.openSourceBanner}>
+            <div style={styles.bannerLeft}>
+              <GitBranch size={24} color="#B5E48C" />
+              <div>
+                <span className="font-mono" style={styles.challengeTag}>
+                  HACKTOBERFEST 2026 · "TOUCH GRASS" CHALLENGE ENTRY
+                </span>
+                <h4 style={styles.bannerTitle}>Open Source Bioacoustic Ecology</h4>
+                <p style={styles.bannerDesc}>
+                  Licensed under MIT. Zero tracking, zero advertisements, and zero persistent user audio retention.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <a
-            href="https://github.com/Neet2516/aura-flora"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-botanical-secondary"
-            style={{ textDecoration: 'none' }}
-          >
-            <span>VIEW GITHUB REPOSITORY</span>
-            <ExternalLink size={13} />
-          </a>
-        </div>
+            <a
+              href="https://github.com/Neet2516/aura-flora"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-botanical-secondary"
+              style={{ textDecoration: 'none' }}
+            >
+              <span>VIEW GITHUB REPOSITORY</span>
+              <ExternalLink size={13} />
+            </a>
+          </div>
+        </FadeInWhenVisible>
       </div>
     </section>
   );
@@ -183,6 +182,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     flexDirection: 'column',
     gap: '14px',
+    willChange: 'transform',
   },
   cardHeader: {
     display: 'flex',

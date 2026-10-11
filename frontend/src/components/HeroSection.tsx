@@ -1,5 +1,8 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { ArrowDown, Activity, Download } from 'lucide-react';
+import { ScrollRevealText } from './motion/ScrollRevealText';
+import { FadeInWhenVisible } from './motion/FadeInWhenVisible';
 
 interface HeroSectionProps {
   onExploreProtocol: () => void;
@@ -48,80 +51,104 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="crosshair-corner crosshair-bl" />
         <div className="crosshair-corner crosshair-br" />
 
-        {/* Top Eyebrow */}
-        <div style={styles.eyebrowRow}>
-          <div className="tech-eyebrow">
-            <span className="status-dot-active" />
-            <span>AURAFLORA / FIELD EXPERIMENT 001</span>
+        {/* Top Eyebrow with Staggered Entrance */}
+        <FadeInWhenVisible delay={0.1} yOffset={16}>
+          <div style={styles.eyebrowRow}>
+            <div className="tech-eyebrow">
+              <span className="status-dot-active" />
+              <span>AURAFLORA / FIELD EXPERIMENT 001</span>
+            </div>
+            <span className="meta-label desktop-only">HACKTOBERFEST 2026 · "TOUCH GRASS" CHALLENGE</span>
           </div>
-          <span className="meta-label desktop-only">HACKTOBERFEST 2026 · "TOUCH GRASS" CHALLENGE</span>
-        </div>
+        </FadeInWhenVisible>
 
-        {/* Dominant Editorial Headline */}
+        {/* Dominant Editorial Headline with Framer Motion Word-by-Word Reveal */}
         <div style={styles.headlineBlock}>
-          <h1 style={styles.headline}>
-            Listen to the world.
-            <br />
-            <span style={styles.headlineMuted}>Leave the screen.</span>
-          </h1>
+          <ScrollRevealText
+            text="Listen to the world."
+            tag="h1"
+            style={styles.headline}
+            delay={0.2}
+            stagger={0.05}
+          />
+          <br />
+          <ScrollRevealText
+            text="Leave the screen."
+            tag="h1"
+            style={{ ...styles.headline, color: 'var(--color-text-secondary)', fontWeight: 500 }}
+            delay={0.4}
+            stagger={0.05}
+          />
         </div>
 
         {/* Supporting Statement & Philosophy */}
-        <p style={styles.supportingCopy}>
-          An ambient bioacoustic companion that turns the raw sounds around you into a compelling reason to step outside. One intentional press, ten seconds of ambient listening, and a seamless blackout.
-        </p>
+        <FadeInWhenVisible delay={0.45} yOffset={20}>
+          <p style={styles.supportingCopy}>
+            An ambient bioacoustic companion that turns the raw sounds around you into a compelling reason to step outside. One intentional press, ten seconds of ambient listening, and a seamless blackout.
+          </p>
+        </FadeInWhenVisible>
 
         {/* Action Controls */}
-        <div style={styles.actionGroup}>
-          <button
-            onClick={onExploreProtocol}
-            className="btn-botanical-primary"
-            title="Explore 5-Stage Bioacoustic Protocol"
-          >
-            <span>EXPLORE THE PROTOCOL</span>
-            <ArrowDown size={14} />
-          </button>
-
-          <button
-            onClick={onLaunchLab}
-            className="btn-botanical-secondary"
-            title="Open Interactive Bioacoustic DSP Lab"
-          >
-            <Activity size={14} color="#B5E48C" />
-            <span>LAUNCH LIVE LAB</span>
-          </button>
-
-          {canInstall && (
-            <button
-              onClick={onTriggerInstall}
-              className="btn-botanical-secondary"
-              title="Install AuraFlora PWA to device"
+        <FadeInWhenVisible delay={0.6} yOffset={24}>
+          <div style={styles.actionGroup}>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onExploreProtocol}
+              className="btn-botanical-primary"
+              title="Explore 5-Stage Bioacoustic Protocol"
             >
-              <Download size={14} />
-              <span>INSTALL PWA</span>
-            </button>
-          )}
-        </div>
+              <span>EXPLORE THE PROTOCOL</span>
+              <ArrowDown size={14} />
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onLaunchLab}
+              className="btn-botanical-secondary"
+              title="Open Interactive Bioacoustic DSP Lab"
+            >
+              <Activity size={14} color="#B5E48C" />
+              <span>LAUNCH LIVE LAB</span>
+            </motion.button>
+
+            {canInstall && (
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={onTriggerInstall}
+                className="btn-botanical-secondary"
+                title="Install AuraFlora PWA to device"
+              >
+                <Download size={14} />
+                <span>INSTALL PWA</span>
+              </motion.button>
+            )}
+          </div>
+        </FadeInWhenVisible>
 
         {/* Bottom Technical Specifications & Measurement Grid */}
-        <div style={styles.specGrid}>
-          <div style={styles.specItem}>
-            <span className="meta-label">INPUT SAMPLING</span>
-            <span style={styles.specVal}>16 kHz WAV · MIC FFT</span>
+        <FadeInWhenVisible delay={0.75} yOffset={28}>
+          <div style={styles.specGrid}>
+            <div style={styles.specItem}>
+              <span className="meta-label">INPUT SAMPLING</span>
+              <span style={styles.specVal}>16 kHz WAV · MIC FFT</span>
+            </div>
+            <div style={styles.specItem}>
+              <span className="meta-label">MAX SCREEN TIME</span>
+              <span style={styles.specVal}>≤ 15 SECONDS</span>
+            </div>
+            <div style={styles.specItem}>
+              <span className="meta-label">BIOACOUSTIC ENGINE</span>
+              <span style={styles.specVal}>RUST AXUM · TOKIO DSP</span>
+            </div>
+            <div style={styles.specItem}>
+              <span className="meta-label">FINAL STATE</span>
+              <span style={styles.specVal}>AMOLED #000000 LOCK</span>
+            </div>
           </div>
-          <div style={styles.specItem}>
-            <span className="meta-label">MAX SCREEN TIME</span>
-            <span style={styles.specVal}>≤ 15 SECONDS</span>
-          </div>
-          <div style={styles.specItem}>
-            <span className="meta-label">BIOACOUSTIC ENGINE</span>
-            <span style={styles.specVal}>RUST AXUM · TOKIO DSP</span>
-          </div>
-          <div style={styles.specItem}>
-            <span className="meta-label">FINAL STATE</span>
-            <span style={styles.specVal}>AMOLED #000000 LOCK</span>
-          </div>
-        </div>
+        </FadeInWhenVisible>
       </div>
     </section>
   );
@@ -193,10 +220,6 @@ const styles: Record<string, React.CSSProperties> = {
     letterSpacing: '-0.035em',
     color: '#F1F2EC',
     fontWeight: 700,
-  },
-  headlineMuted: {
-    color: 'var(--color-text-secondary)',
-    fontWeight: 500,
   },
   supportingCopy: {
     maxWidth: '680px',

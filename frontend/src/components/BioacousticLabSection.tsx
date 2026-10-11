@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Volume2, VolumeX, Activity, ArrowUpRight, Cpu, Radio, Shield } from 'lucide-react';
 import { soundEngine } from '../services/soundEngine';
+import { ScrollRevealText } from './motion/ScrollRevealText';
+import { FadeInWhenVisible } from './motion/FadeInWhenVisible';
 
 interface BioacousticLabSectionProps {
   onOpenFullLab: () => void;
@@ -120,16 +123,28 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
               <Activity size={12} />
               <span>RESEARCH INSTRUMENTATION / 004</span>
             </div>
-            <h2 style={styles.title}>Bioacoustic Intelligence</h2>
+            <ScrollRevealText
+              text="Bioacoustic Intelligence"
+              tag="h2"
+              style={styles.title}
+              delay={0.1}
+            />
           </div>
-          <button onClick={onOpenFullLab} className="btn-botanical-primary" title="Launch Full Lab Modal">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onOpenFullLab}
+            className="btn-botanical-primary"
+            title="Launch Full Lab Modal"
+          >
             <span>OPEN FULL LAB</span>
             <ArrowUpRight size={14} />
-          </button>
+          </motion.button>
         </div>
 
         {/* Live Audio Spectrum Canvas Console */}
-        <div style={styles.consoleBox}>
+        <FadeInWhenVisible delay={0.2} yOffset={24}>
+          <div style={styles.consoleBox}>
           {/* Console Header */}
           <div style={styles.consoleBar}>
             <div style={styles.consoleBarLeft}>
@@ -173,11 +188,19 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
             ))}
           </div>
         </div>
+      </FadeInWhenVisible>
 
         {/* 4 Research Architecture Modules */}
         <div style={styles.modulesGrid}>
           {/* Module 1 */}
-          <div style={styles.moduleCard}>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.45, delay: 0.1 }}
+            whileHover={{ y: -4, borderColor: '#B5E48C', transition: { duration: 0.2 } }}
+            style={styles.moduleCard}
+          >
             <div style={styles.moduleTop}>
               <Cpu size={16} color="#B5E48C" />
               <span className="meta-label">MODULE 01 · DSP EXTRACTION</span>
@@ -189,10 +212,17 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
             <div style={styles.formulaBox} className="font-mono">
               Centroid = Σ(f · M[f]) / Σ(M[f])
             </div>
-          </div>
+          </motion.div>
 
           {/* Module 2 */}
-          <div style={styles.moduleCard}>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.45, delay: 0.2 }}
+            whileHover={{ y: -4, borderColor: '#B5E48C', transition: { duration: 0.2 } }}
+            style={styles.moduleCard}
+          >
             <div style={styles.moduleTop}>
               <Radio size={16} color="#B5E48C" />
               <span className="meta-label">MODULE 02 · CLASSIFICATION</span>
@@ -204,10 +234,17 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
             <div style={styles.formulaBox} className="font-mono">
               NDSI = (Biophony - Anthrophony) / (Biophony + Anthrophony)
             </div>
-          </div>
+          </motion.div>
 
           {/* Module 3 */}
-          <div style={styles.moduleCard}>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.45, delay: 0.3 }}
+            whileHover={{ y: -4, borderColor: '#B5E48C', transition: { duration: 0.2 } }}
+            style={styles.moduleCard}
+          >
             <div style={styles.moduleTop}>
               <Shield size={16} color="#B5E48C" />
               <span className="meta-label">MODULE 03 · GROUNDING LLM</span>
@@ -219,10 +256,17 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
             <div style={styles.formulaBox} className="font-mono">
               Prompt: "≤ 1 sentence · tactile outdoor action"
             </div>
-          </div>
+          </motion.div>
 
           {/* Module 4 */}
-          <div style={styles.moduleCard}>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.45, delay: 0.4 }}
+            whileHover={{ y: -4, borderColor: '#B5E48C', transition: { duration: 0.2 } }}
+            style={styles.moduleCard}
+          >
             <div style={styles.moduleTop}>
               <Activity size={16} color="#B5E48C" />
               <span className="meta-label">MODULE 04 · TTS & BLACKOUT</span>
@@ -234,7 +278,7 @@ export const BioacousticLabSection: React.FC<BioacousticLabSectionProps> = ({ on
             <div style={styles.formulaBox} className="font-mono">
               Display: #000000 · 0% Backlight Emission
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
