@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Header } from './components/Header';
-import { HeroGrid } from './components/HeroGrid';
-import { ProjectCanvas } from './components/ProjectCanvas';
-import { Footer } from './components/Footer';
-import { CaseStudyModal } from './components/CaseStudyModal';
-import { ContactModal } from './components/ContactModal';
-import { InteractiveLabModal } from './components/InteractiveLabModal';
+import { HeroSection } from './components/HeroSection';
+import { CinematicScrollSection } from './components/CinematicScrollSection';
+import { ProtocolSection } from './components/ProtocolSection';
+import { BioacousticLabSection } from './components/BioacousticLabSection';
+import { ProductPreviewSection } from './components/ProductPreviewSection';
+import { PhilosophySection } from './components/PhilosophySection';
+import { ResearchArchitectureSection } from './components/ResearchArchitectureSection';
+import { InstallationCtaSection } from './components/InstallationCtaSection';
 import { ApiKeySection } from './components/ApiKeySection';
+import { Footer } from './components/Footer';
+import { InteractiveLabModal } from './components/InteractiveLabModal';
+import { ContactModal } from './components/ContactModal';
 import { PwaInstallBanner } from './components/PwaInstallBanner';
 import { OfflineStatusIndicator } from './components/OfflineStatusIndicator';
-import type { ProjectItem } from './constants/projects';
 
 export function App() {
-  const [activeProjectIndex, setActiveProjectIndex] = useState<string>('01/05');
-  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const [isLabOpen, setIsLabOpen] = useState<boolean>(false);
   const [canInstall, setCanInstall] = useState<boolean>(false);
@@ -40,16 +42,15 @@ export function App() {
         setCanInstall(false);
       }
     } else {
-      // Re-trigger banner or alert
-      const banner = document.querySelector('aside[aria-label="Install AuraFlora App"]') as HTMLElement;
-      if (banner) {
-        banner.scrollIntoView({ behavior: 'smooth' });
+      const el = document.getElementById('install');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
       }
     }
   };
 
   const scrollToSection = (sectionId: string) => {
-    if (sectionId === 'top') {
+    if (sectionId === 'top' || sectionId === 'hero') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -59,7 +60,7 @@ export function App() {
     }
   };
 
-  // Keyboard navigation shortcuts ([G] Work, [A] About, [L] Lab, [T] Top, [C] Contact, [K] Keys)
+  // Keyboard navigation shortcuts ([L] Lab, [P] Protocol, [T] Top, [K] Keys, [Esc] Close)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
@@ -67,20 +68,21 @@ export function App() {
       }
 
       const key = e.key.toLowerCase();
-      if (key === 'g' || key === 'w') {
-        scrollToSection('work');
-      } else if (key === 'a') {
-        scrollToSection('about');
-      } else if (key === 'l') {
+      if (key === 'l') {
         setIsLabOpen((prev) => !prev);
+      } else if (key === 'p') {
+        scrollToSection('protocol');
+      } else if (key === 's') {
+        scrollToSection('signal');
+      } else if (key === 'r') {
+        scrollToSection('research');
       } else if (key === 'k') {
         scrollToSection('keys');
       } else if (key === 't') {
-        scrollToSection('top');
+        scrollToSection('hero');
       } else if (key === 'c') {
         setIsContactOpen(true);
       } else if (e.key === 'Escape') {
-        setSelectedProject(null);
         setIsContactOpen(false);
         setIsLabOpen(false);
       }
@@ -111,47 +113,59 @@ export function App() {
       />
 
       <main style={styles.mainContent}>
-        {/* Hero Section Grid (2-Column Asymmetric) */}
-        <HeroGrid
-          activeProjectIndex={activeProjectIndex}
-          onExploreWork={() => scrollToSection('work')}
+        {/* Section 01: Hero / The Listening Field */}
+        <HeroSection
+          onExploreProtocol={() => scrollToSection('protocol')}
           onLaunchLab={() => setIsLabOpen(true)}
-          onContact={() => setIsContactOpen(true)}
+          onTriggerInstall={triggerInstallPrompt}
+          canInstall={canInstall}
         />
 
-        {/* Project Canvas / Carousel Stage */}
-        <ProjectCanvas
-          onSelectProject={(project) => setSelectedProject(project)}
-          onActiveIndexChange={(idx) => setActiveProjectIndex(idx)}
-          onOpenLab={() => setIsLabOpen(true)}
+        {/* Section 02: The Signal / Cinematic Scroll Timeline */}
+        <CinematicScrollSection />
+
+        {/* Section 03: The Protocol / 15-Second How It Works */}
+        <ProtocolSection onOpenSimulator={() => scrollToSection('preview')} />
+
+        {/* Section 04: Bioacoustic Intelligence / The Lab */}
+        <BioacousticLabSection onOpenFullLab={() => setIsLabOpen(true)} />
+
+        {/* Section 05: The Grounding Experience / Mobile Simulator */}
+        <ProductPreviewSection />
+
+        {/* Section 06: Design Principle / Why Less Screen */}
+        <PhilosophySection />
+
+        {/* Section 07: Research / System Architecture */}
+        <ResearchArchitectureSection />
+
+        {/* Section 08: Installation / Final Call to Action */}
+        <InstallationCtaSection
+          onTriggerInstall={triggerInstallPrompt}
+          canInstall={canInstall}
         />
 
-        {/* API Credentials & Inference Access Section */}
+        {/* Credentials & Inference Access Settings */}
         <ApiKeySection />
       </main>
 
-      {/* Systematic Architectural Footer */}
+      {/* Section 09: Technical Footer */}
       <Footer
         onNavigate={scrollToSection}
         onOpenLab={() => setIsLabOpen(true)}
         onOpenContact={() => setIsContactOpen(true)}
       />
 
-      {/* Modals & Drawers */}
-      <CaseStudyModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-        onOpenLab={() => setIsLabOpen(true)}
-      />
-
-      <ContactModal
-        isOpen={isContactOpen}
-        onClose={() => setIsContactOpen(false)}
-      />
-
+      {/* Interactive Fullscreen Lab Modal */}
       <InteractiveLabModal
         isOpen={isLabOpen}
         onClose={() => setIsLabOpen(false)}
+      />
+
+      {/* Contact & Inquiries Modal */}
+      <ContactModal
+        isOpen={isContactOpen}
+        onClose={() => setIsContactOpen(false)}
       />
     </div>
   );
@@ -162,8 +176,8 @@ const styles: Record<string, React.CSSProperties> = {
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'var(--color-bg-primary)',
-    color: 'var(--color-text-primary)',
+    backgroundColor: '#080A09',
+    color: '#F1F2EC',
     position: 'relative',
     maxWidth: '100vw',
     overflowX: 'hidden',

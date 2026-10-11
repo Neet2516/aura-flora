@@ -1,97 +1,137 @@
-import React, { useEffect, useState } from 'react';
-import { ApiService } from '../services/api';
-import { Leaf, Sparkles, Smartphone } from 'lucide-react';
+import React, { useState } from 'react';
+import { Download, Menu, X, Radio, Activity } from 'lucide-react';
 
 interface NavbarProps {
-  onStartGrounding: () => void;
-  onToggleSimulator: () => void;
-  showSimulator: boolean;
+  onNavigate: (sectionId: string) => void;
+  onOpenLab: () => void;
+  onTriggerInstall: () => void;
+  canInstall: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
-  onStartGrounding,
-  onToggleSimulator,
-  showSimulator,
+  onNavigate,
+  onOpenLab,
+  onTriggerInstall,
+  canInstall,
 }) => {
-  const [backendStatus, setBackendStatus] = useState<'checking' | 'online' | 'offline'>('checking');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const check = async () => {
-      const res = await ApiService.checkHealth();
-      setBackendStatus(res.isOnline ? 'online' : 'offline');
-    };
-    check();
-    const interval = setInterval(check, 20000);
-    return () => clearInterval(interval);
-  }, []);
+  const navLinks = [
+    { id: 'hero', label: '01 · EXPERIENCE' },
+    { id: 'signal', label: '02 · SIGNAL' },
+    { id: 'protocol', label: '03 · PROTOCOL' },
+    { id: 'lab', label: '04 · LAB' },
+    { id: 'preview', label: '05 · PREVIEW' },
+    { id: 'research', label: '06 · RESEARCH' },
+  ];
+
+  const handleLinkClick = (id: string) => {
+    onNavigate(id);
+    setMobileMenuOpen(false);
+  };
 
   return (
     <header style={styles.header}>
-      <div style={styles.container}>
-        {/* Brand */}
-        <a href="#hero" style={styles.brand}>
-          <div style={styles.logoIconWrapper}>
-            <Leaf size={18} color="#81C784" />
-            <span style={styles.logoPulseDot} />
+      <div style={styles.navInner}>
+        {/* Left: Brand Identity */}
+        <div style={styles.brandGroup} onClick={() => onNavigate('hero')} role="button" tabIndex={0}>
+          <div style={styles.brandLogo}>
+            <div className="status-dot-active" />
+            <span style={styles.brandTitle}>AURAFLORA</span>
           </div>
-          <div>
-            <div style={styles.brandTitle}>AURAFLORA</div>
-            <div style={styles.brandSubtitle}>BIOACOUSTIC COMPANION</div>
-          </div>
-        </a>
+          <span style={styles.brandBadge}>FIELD EXP 001</span>
+        </div>
 
-        {/* Center Nav Links */}
-        <nav style={styles.navLinks}>
-          <a href="#grounding-lab" style={styles.navLink}>Live Lab</a>
-          <a href="#dsp-science" style={styles.navLink}>BioAcoustic DSP</a>
-          <a href="#pipeline" style={styles.navLink}>AI Pipeline</a>
-          <a href="#field-notes" style={styles.navLink}>Field Notes</a>
-          <a href="#manifesto" style={styles.navLink}>Manifesto</a>
+        {/* Center: Desktop Navigation Links */}
+        <nav style={styles.centerNav} className="desktop-only" aria-label="Main Navigation">
+          {navLinks.map((link) => (
+            <button
+              key={link.id}
+              onClick={() => handleLinkClick(link.id)}
+              style={styles.navBtn}
+              className="font-mono"
+            >
+              {link.label}
+            </button>
+          ))}
         </nav>
 
-        {/* Actions & Status */}
-        <div style={styles.actions}>
-          {/* Backend Status Pill */}
-          <div
-            className={`badge-pill ${backendStatus === 'online' ? 'status-online' : 'status-offline'}`}
-            title={backendStatus === 'online' ? 'Axum DSP server responding on port 8080' : 'Local standalone browser DSP simulator active'}
-            style={styles.statusPill}
-          >
-            <span
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: '50%',
-                backgroundColor: backendStatus === 'online' ? '#4ADE80' : '#FBBF24',
-                boxShadow: backendStatus === 'online' ? '0 0 8px #4ADE80' : '0 0 8px #FBBF24',
-              }}
-            />
-            {backendStatus === 'checking' && 'Pinging...'}
-            {backendStatus === 'online' && 'Rust Engine Online'}
-            {backendStatus === 'offline' && 'DSP Simulator'}
-          </div>
-
-          {/* Toggle Simulator */}
+        {/* Right: Actions */}
+        <div style={styles.rightGroup}>
           <button
-            onClick={onToggleSimulator}
-            style={{
-              ...styles.simButton,
-              backgroundColor: showSimulator ? 'rgba(129, 199, 132, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-              borderColor: showSimulator ? '#81C784' : 'rgba(129, 199, 132, 0.2)',
-            }}
-            title="Preview AuraFlora AMOLED Mobile Device UI"
+            onClick={onOpenLab}
+            style={styles.labTriggerBtn}
+            className="desktop-only"
+            title="Launch Real-Time DSP Audio Lab"
           >
-            <Smartphone size={15} color={showSimulator ? '#81C784' : '#E8DFD8'} />
-            <span style={styles.simButtonText}>{showSimulator ? 'Close Phone' : 'Phone Mode'}</span>
+            <Activity size={13} color="#B5E48C" />
+            <span>LIVE LAB</span>
           </button>
 
-          {/* Direct Ground Button */}
-          <button onClick={onStartGrounding} style={styles.ctaButton}>
-            <Sparkles size={14} />
-            <span>Ground Now</span>
+          {canInstall && (
+            <button
+              onClick={onTriggerInstall}
+              style={styles.installBtn}
+              title="Install AuraFlora PWA to Home Screen"
+            >
+              <Download size={13} />
+              <span className="desktop-only">INSTALL APP</span>
+            </button>
+          )}
+
+          {/* Mobile Hamburger Toggle */}
+          <button
+            style={styles.mobileToggle}
+            className="mobile-only"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle Navigation Menu"
+          >
+            {mobileMenuOpen ? <X size={20} color="#F1F2EC" /> : <Menu size={20} color="#F1F2EC" />}
           </button>
         </div>
       </div>
+
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div style={styles.mobileDrawer} className="mobile-only">
+          <div style={styles.mobileDrawerLinks}>
+            {navLinks.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => handleLinkClick(link.id)}
+                style={styles.mobileNavBtn}
+                className="font-mono"
+              >
+                {link.label}
+              </button>
+            ))}
+            <button
+              onClick={() => {
+                onOpenLab();
+                setMobileMenuOpen(false);
+              }}
+              style={styles.mobileLabBtn}
+              className="font-mono"
+            >
+              <Radio size={14} color="#B5E48C" />
+              <span>LAUNCH LIVE DSP LAB</span>
+            </button>
+            {canInstall && (
+              <button
+                onClick={() => {
+                  onTriggerInstall();
+                  setMobileMenuOpen(false);
+                }}
+                style={styles.mobileInstallBtn}
+                className="font-mono"
+              >
+                <Download size={14} />
+                <span>INSTALL AURAFLORA APP</span>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 };
@@ -100,106 +140,157 @@ const styles: Record<string, React.CSSProperties> = {
   header: {
     position: 'sticky',
     top: 0,
-    zIndex: 100,
-    backgroundColor: 'rgba(10, 15, 13, 0.85)',
-    backdropFilter: 'blur(20px)',
-    borderBottom: '1px solid rgba(129, 199, 132, 0.12)',
-    padding: '12px 24px',
+    zIndex: 900,
+    width: '100%',
+    backgroundColor: 'rgba(8, 10, 9, 0.88)',
+    backdropFilter: 'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
+    borderBottom: '1px solid var(--color-border-subtle)',
+    transition: 'all 0.3s ease',
   },
-  container: {
-    maxWidth: 1240,
+  navInner: {
+    maxWidth: 'var(--container-max)',
     margin: '0 auto',
+    padding: '0 24px',
+    height: '60px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 16,
   },
-  brand: {
+  brandGroup: {
     display: 'flex',
     alignItems: 'center',
-    gap: 12,
+    gap: '12px',
+    cursor: 'pointer',
+    userSelect: 'none',
   },
-  logoIconWrapper: {
-    position: 'relative',
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: 'rgba(78, 135, 82, 0.2)',
-    border: '1px solid rgba(129, 199, 132, 0.3)',
+  brandLogo: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoPulseDot: {
-    position: 'absolute',
-    top: -2,
-    right: -2,
-    width: 8,
-    height: 8,
-    borderRadius: '50%',
-    backgroundColor: '#81C784',
-    boxShadow: '0 0 10px #81C784',
+    gap: '8px',
   },
   brandTitle: {
     fontFamily: 'var(--font-display)',
-    fontWeight: 800,
-    fontSize: '1rem',
-    letterSpacing: '0.18em',
-    color: '#E8DFD8',
-    lineHeight: 1.1,
+    fontWeight: 700,
+    fontSize: '15px',
+    letterSpacing: '0.04em',
+    color: 'var(--color-text-primary)',
   },
-  brandSubtitle: {
-    fontSize: '0.62rem',
-    letterSpacing: '0.12em',
-    color: '#81C784',
-    fontWeight: 600,
-  },
-  navLinks: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 24,
-  },
-  navLink: {
-    fontSize: '0.85rem',
+  brandBadge: {
+    fontFamily: 'var(--font-mono)',
+    fontSize: '10px',
     fontWeight: 500,
-    color: '#9E9590',
-    transition: 'color 0.2s ease',
+    letterSpacing: '0.1em',
+    color: 'var(--color-botanical)',
+    backgroundColor: 'rgba(181, 228, 140, 0.08)',
+    border: '1px solid rgba(181, 228, 140, 0.2)',
+    padding: '2px 8px',
   },
-  actions: {
+  centerNav: {
     display: 'flex',
     alignItems: 'center',
-    gap: 12,
+    gap: '4px',
   },
-  statusPill: {
-    cursor: 'default',
+  navBtn: {
+    background: 'none',
+    border: 'none',
+    padding: '8px 12px',
+    color: 'var(--color-text-secondary)',
+    fontSize: '11px',
+    letterSpacing: '0.06em',
+    cursor: 'pointer',
+    transition: 'color var(--duration-micro) ease',
   },
-  simButton: {
+  rightGroup: {
     display: 'flex',
     alignItems: 'center',
-    gap: 6,
-    padding: '7px 12px',
-    borderRadius: 8,
-    border: '1px solid',
-    color: '#E8DFD8',
-    fontSize: '0.8rem',
-    fontWeight: 500,
-    transition: 'all 0.2s',
+    gap: '12px',
   },
-  simButtonText: {
-    display: 'inline',
-  },
-  ctaButton: {
+  labTriggerBtn: {
     display: 'flex',
     alignItems: 'center',
-    gap: 6,
-    padding: '8px 16px',
-    borderRadius: 8,
-    backgroundColor: '#4E8752',
-    color: '#E8DFD8',
-    fontSize: '0.85rem',
+    gap: '6px',
+    padding: '6px 12px',
+    backgroundColor: 'rgba(32, 61, 42, 0.3)',
+    border: '1px solid rgba(181, 228, 140, 0.3)',
+    color: 'var(--color-botanical)',
+    fontFamily: 'var(--font-mono)',
+    fontSize: '11px',
     fontWeight: 600,
-    letterSpacing: '0.02em',
-    boxShadow: '0 0 20px rgba(78, 135, 82, 0.4)',
-    transition: 'all 0.2s',
+    letterSpacing: '0.08em',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+  },
+  installBtn: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    padding: '6px 12px',
+    backgroundColor: 'var(--color-botanical)',
+    border: '1px solid var(--color-botanical)',
+    color: '#080A09',
+    fontFamily: 'var(--font-mono)',
+    fontSize: '11px',
+    fontWeight: 700,
+    letterSpacing: '0.06em',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+  },
+  mobileToggle: {
+    background: 'transparent',
+    border: '1px solid var(--color-border-subtle)',
+    color: 'var(--color-text-primary)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '40px',
+    height: '40px',
+    cursor: 'pointer',
+  },
+  mobileDrawer: {
+    backgroundColor: '#080A09',
+    borderBottom: '1px solid var(--color-border-subtle)',
+    padding: '20px 24px 28px',
+  },
+  mobileDrawerLinks: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+  },
+  mobileNavBtn: {
+    background: 'transparent',
+    border: 'none',
+    borderBottom: '1px solid var(--color-grid-line)',
+    color: 'var(--color-text-primary)',
+    padding: '12px 0',
+    textAlign: 'left',
+    fontSize: '13px',
+    letterSpacing: '0.06em',
+    cursor: 'pointer',
+  },
+  mobileLabBtn: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    marginTop: '12px',
+    padding: '12px 16px',
+    backgroundColor: 'rgba(32, 61, 42, 0.4)',
+    border: '1px solid rgba(181, 228, 140, 0.3)',
+    color: 'var(--color-botanical)',
+    fontSize: '12px',
+    fontWeight: 600,
+    cursor: 'pointer',
+  },
+  mobileInstallBtn: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '12px 16px',
+    backgroundColor: 'var(--color-botanical)',
+    border: 'none',
+    color: '#080A09',
+    fontSize: '12px',
+    fontWeight: 700,
+    cursor: 'pointer',
   },
 };

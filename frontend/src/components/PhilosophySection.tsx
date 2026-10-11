@@ -1,55 +1,56 @@
 import React from 'react';
-import { EyeOff } from 'lucide-react';
 
 export const PhilosophySection: React.FC = () => {
   return (
-    <section id="manifesto" style={styles.section}>
-      <div style={styles.container}>
-        <div style={styles.manifestoCard} className="glass-panel">
-          <div style={styles.badgeWrap}>
-            <span className="badge-pill">
-              <EyeOff size={12} color="#81C784" />
-              <span>The Anti-Screen Manifesto</span>
-            </span>
+    <section id="philosophy" style={styles.section}>
+      <div className="section-container" style={styles.container}>
+        <div className="crosshair-corner crosshair-tl" />
+        <div className="crosshair-corner crosshair-tr" />
+        <div className="crosshair-corner crosshair-bl" />
+        <div className="crosshair-corner crosshair-br" />
+
+        {/* Small Technical Label */}
+        <div style={styles.eyebrowRow}>
+          <span className="tech-eyebrow">DESIGN PHILOSOPHY / 006</span>
+          <span className="meta-label">ANTI-SCREEN TIME COMPUTING</span>
+        </div>
+
+        {/* Dominant Statement */}
+        <h2 style={styles.headline}>
+          "Technology that knows
+          <br />
+          when to step back."
+        </h2>
+
+        {/* Editorial Body */}
+        <div style={styles.bodyGrid}>
+          <p style={styles.bodyLead}>
+            Most software is engineered to capture, prolong, and monetize human attention. AuraFlora is built on the inverse premise: software that accomplishes its purpose in under fifteen seconds and actively dismisses the user.
+          </p>
+
+          <p style={styles.bodyDetail}>
+            By capturing environmental audio rather than personal data, and returning an outdoor somatic prompt rather than algorithmic media, the device becomes an intentional bridge between digital cognition and the physical earth.
+          </p>
+        </div>
+
+        {/* Principles Matrix */}
+        <div style={styles.principlesRow}>
+          <div style={styles.principleItem}>
+            <span className="font-mono" style={styles.principleNum}>01</span>
+            <span style={styles.principleTitle}>BOUNDED DURATION</span>
+            <span style={styles.principleText}>Zero infinite feeds or notification loops. Absolute 15-second cap.</span>
           </div>
 
-          <h2 style={styles.quoteTitle}>
-            "The greatest danger of software is not that it is buggy, but that it successfully holds human attention captive."
-          </h2>
-
-          <div style={styles.contentGrid}>
-            <div style={styles.col}>
-              <h3 style={styles.colTitle}>The Doomloop of Wellness Apps</h3>
-              <p style={styles.colText}>
-                Traditional meditation and outdoor apps keep you staring at radiant OLED displays: scrolling lists, checking daily streaks, collecting badges, and logging minutes. You end up spending 20 minutes staring into a backlit rectangle to practice 5 minutes of mindfulness.
-              </p>
-            </div>
-
-            <div style={styles.col}>
-              <h3 style={styles.colTitle}>The AuraFlora Inversion</h3>
-              <p style={styles.colText}>
-                AuraFlora inverts modern app incentives. Our success metric is <strong>session brevity</strong>. If your screen is illuminated for more than 15 seconds, we have failed. We sample the acoustic frequencies of your reality, give you one direct physical instruction, and lock the screen black.
-              </p>
-            </div>
+          <div style={styles.principleItem}>
+            <span className="font-mono" style={styles.principleNum}>02</span>
+            <span style={styles.principleTitle}>TACTILE GROUNDING</span>
+            <span style={styles.principleText}>Guidance that engages hands, breath, skin, and surrounding air.</span>
           </div>
 
-          {/* Three Pillars */}
-          <div style={styles.pillarsRow}>
-            <div style={styles.pillar}>
-              <span style={styles.pillarNum}>I</span>
-              <h4>Zero Gamification</h4>
-              <p>No streaks, no XP, no notifications, no push alerts.</p>
-            </div>
-            <div style={styles.pillar}>
-              <span style={styles.pillarNum}>II</span>
-              <h4>Pure AMOLED #000000</h4>
-              <p>Pixels emit zero photons. Look upward, not downward.</p>
-            </div>
-            <div style={styles.pillar}>
-              <span style={styles.pillarNum}>III</span>
-              <h4>Tactile Reality</h4>
-              <p>Touch rough bark, cold creeks, and damp grass.</p>
-            </div>
+          <div style={styles.principleItem}>
+            <span className="font-mono" style={styles.principleNum}>03</span>
+            <span style={styles.principleTitle}>PURE BLACKOUT</span>
+            <span style={styles.principleText}>#000000 AMOLED lock emits zero photons, turning glass into stone.</span>
           </div>
         </div>
       </div>
@@ -59,68 +60,78 @@ export const PhilosophySection: React.FC = () => {
 
 const styles: Record<string, React.CSSProperties> = {
   section: {
-    padding: '80px 24px',
-    backgroundColor: '#0A0F0D',
+    padding: '120px 0',
+    backgroundColor: '#080A09',
+    position: 'relative',
+    borderTop: '1px solid var(--color-border-subtle)',
+    borderBottom: '1px solid var(--color-border-subtle)',
   },
   container: {
-    maxWidth: 1080,
-    margin: '0 auto',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '48px',
+    maxWidth: '1080px',
+    position: 'relative',
+    padding: '48px 32px',
+    backgroundColor: 'var(--color-bg-secondary)',
+    border: '1px solid var(--color-border-subtle)',
   },
-  manifestoCard: {
-    padding: '48px 36px',
-    textAlign: 'center',
+  eyebrowRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    gap: '12px',
   },
-  badgeWrap: {
-    marginBottom: 20,
-  },
-  quoteTitle: {
-    fontSize: 'clamp(1.5rem, 2.8vw, 2.2rem)',
+  headline: {
+    fontSize: 'clamp(2.4rem, 4.6vw, 4.2rem)',
+    letterSpacing: '-0.035em',
+    lineHeight: 1.08,
+    color: '#F1F2EC',
     fontWeight: 600,
-    lineHeight: 1.35,
-    color: '#E8DFD8',
-    maxWidth: 820,
-    margin: '0 auto 40px',
-    fontStyle: 'italic',
   },
-  contentGrid: {
+  bodyGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: 32,
-    textAlign: 'left',
-    marginBottom: 44,
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+    gap: '32px',
   },
-  col: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 8,
-  },
-  colTitle: {
-    fontSize: '1.1rem',
-    color: '#81C784',
-    fontWeight: 700,
-  },
-  colText: {
-    fontSize: '0.9rem',
-    lineHeight: 1.6,
-    color: '#9E9590',
-  },
-  pillarsRow: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: 20,
-    paddingTop: 32,
-    borderTop: '1px solid rgba(129, 199, 132, 0.15)',
-    textAlign: 'left',
-  },
-  pillar: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 6,
-  },
-  pillarNum: {
-    fontFamily: 'var(--font-mono)',
+  bodyLead: {
     fontSize: '1.2rem',
+    lineHeight: 1.6,
+    color: '#F1F2EC',
+    fontWeight: 400,
+  },
+  bodyDetail: {
+    fontSize: '1.05rem',
+    lineHeight: 1.65,
+    color: 'var(--color-text-secondary)',
+  },
+  principlesRow: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+    gap: '20px',
+    paddingTop: '32px',
+    borderTop: '1px solid var(--color-grid-line)',
+  },
+  principleItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6px',
+  },
+  principleNum: {
+    fontSize: '11px',
+    color: 'var(--color-botanical)',
+    letterSpacing: '0.1em',
+  },
+  principleTitle: {
+    fontSize: '13px',
     fontWeight: 700,
-    color: '#81C784',
+    letterSpacing: '0.06em',
+    color: '#F1F2EC',
+  },
+  principleText: {
+    fontSize: '12px',
+    color: 'var(--color-text-secondary)',
+    lineHeight: 1.5,
   },
 };

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#121713" />
+      <stop offset="100%" stop-color="#080A09" />
+    </radialGradient>
+    <linearGradient id="contourGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B5E48C" stop-opacity="0.35" />
+      <stop offset="50%" stop-color="#52796F" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#203D2A" stop-opacity="0.1" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bgGrad)" />
+  
+  <!-- Subtle Topographic Contour Lines -->
+  <g fill="none" stroke="url(#contourGrad)" stroke-width="1.2">
+    <path d="M-100,360 Q200,180 500,340 T1100,280 T1400,380" opacity="0.6"/>
+    <path d="M-100,390 Q220,220 520,380 T1120,320 T1400,420" opacity="0.5"/>
+    <path d="M-100,420 Q240,260 540,420 T1140,360 T1400,460" opacity="0.45"/>
+    <path d="M-100,450 Q260,300 560,460 T1160,400 T1400,500" opacity="0.4"/>
+    <path d="M-100,480 Q280,340 580,500 T1180,440 T1400,540" opacity="0.35"/>
+    <path d="M-100,510 Q300,380 600,540 T1200,480 T1400,580" opacity="0.3"/>
+    
+    <path d="M-50,220 Q350,450 750,260 T1350,300" opacity="0.4"/>
+    <path d="M-50,250 Q370,480 770,290 T1350,330" opacity="0.35"/>
+    <path d="M-50,280 Q390,510 790,320 T1350,360" opacity="0.3"/>
+    <path d="M-50,310 Q410,540 810,350 T1350,390" opacity="0.25"/>
+  </g>
+
+  <!-- Technical Grid Overlay & Measurement Marks -->
+  <g stroke="rgba(220, 235, 220, 0.08)" stroke-width="1">
+    <line x1="640" y1="0" x2="640" y2="720" stroke-dasharray="4,8" />
+    <line x1="0" y1="360" x2="1280" y2="360" stroke-dasharray="4,8" />
+    <!-- Crosshairs -->
+    <path d="M630,360 L650,360 M640,350 L640,370" stroke="#B5E48C" stroke-width="1.5" opacity="0.7"/>
+    <path d="M120,100 L130,100 M125,95 L125,105" stroke="#707A70" opacity="0.5"/>
+    <path d="M1160,100 L1170,100 M1165,95 L1165,105" stroke="#707A70" opacity="0.5"/>
+  </g>
+</svg>
