@@ -21,16 +21,6 @@ services:
       - TABPFN_ENDPOINT=${TABPFN_ENDPOINT:-https://api.priorlabs.ai/v1/tabpfn}
     restart: unless-stopped
 
-  aura-flora-mobile:
-    build:
-      context: ./mobile
-      dockerfile: Dockerfile
-    container_name: aura-flora-mobile
-    ports:
-      - "8081:80"
-    depends_on:
-      - aura-flora-backend
-    restart: unless-stopped
 
   aura-flora-frontend:
     build:

@@ -1,8 +1,5 @@
 node_modules
-.expo
-.expo-shared
-web-build
 dist
 .git
-.npm
-*.log
+.vscode
+npm-debug.log*
