@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
   <h1>🌿 AuraFlora</h1>
   <p><strong>BioAcoustic Grounding Companion</strong></p>
   <p><em>Hacktoberfest 2026 · "Touch Grass" Challenge</em></p>
@@ -20,6 +20,29 @@ AuraFlora is an **anti-screen mobile application** that gets you off your phone 
 2. **Listen** — The app captures 5–10 seconds of your ambient environment through the microphone.
 3. **Ground** — The Rust backend analyzes the soundscape (biophony vs anthrophony) and generates a tactile outdoor grounding instruction via Gemma AI.
 4. **Blackout** — ElevenLabs whispers the instruction to you, the screen goes pure `#000000`, and you go outside.
+
+---
+
+## Application Interface & Interaction Flow
+
+<div align="center">
+  <img src="docs/images/auraflora_flow_showcase.png" alt="AuraFlora Interaction Flow Showcase" width="100%" />
+</div>
+
+### Core Stages (≤ 15-Second Screen Time Protocol)
+
+| 1. Ambient Audio Capture | 2. Bio-Score Classification | 3. AMOLED Blackout Lock |
+| :---: | :---: | :---: |
+| <img src="docs/images/01_audio_listening.png" width="280" alt="AuraFlora Listening & Capturing Audio" /> | <img src="docs/images/02_bioscore_classification.png" width="280" alt="Bio-Score Classification & Telemetry" /> | <img src="docs/images/03_blackout_lockscreen.png" width="280" alt="AMOLED Blackout Lock Screen" /> |
+| **Stage 01: Capture**<br>• Real 16 kHz Mono PCM audio recording<br>• Dynamic audio waveform & pulse animation<br>• 5–6s session countdown (≤15s total budget) | **Stage 02: Classification**<br>• Real-time Biophony vs. Anthrophony ratio (88%)<br>• Spectral centroid, entropy & RMS features<br>• 1-sentence outdoor grounding whisper (Gemma AI) | **Stage 03: Blackout**<br>• Pure `#000000` AMOLED display shutoff<br>• Zero backlight photon emission<br>• Terminal lock (double-tap to wake) |
+
+<br/>
+
+<div align="center">
+  <h3>Interactive Demo Recording</h3>
+  <p><em>Live interaction loop: 16 kHz capture → DSP biophony classification → AMOLED blackout detox</em></p>
+  <img src="docs/images/auraflora_demo.gif" width="320" alt="AuraFlora Interactive Flow Demo Animation" />
+</div>
 
 ---
 
