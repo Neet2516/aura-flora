@@ -139,11 +139,11 @@ export const GroundingLab: React.FC<GroundingLabProps> = () => {
     if (inputMode === 'mic') {
       try {
         await soundEngine.startMicRecording();
-      } catch (err) {
-        console.warn('Microphone access denied or unsupported, using bioacoustic simulator:', err);
-        setInputMode('preset');
-        soundEngine.playAmbient(selectedPreset.audioToneType);
-        setIsAmbientPlaying(true);
+      } catch (err: any) {
+        console.warn('Microphone access denied:', err);
+        alert(err.message || 'Microphone access denied. Please allow microphone permissions.');
+        setStatus('idle');
+        return;
       }
     } else {
       soundEngine.playAmbient(selectedPreset.audioToneType);
@@ -167,15 +167,23 @@ export const GroundingLab: React.FC<GroundingLabProps> = () => {
     setStatus('analyzing');
 
     let audioB64 = '';
+    let realSamples: Float32Array | undefined = undefined;
+
     if (inputMode === 'mic') {
-      audioB64 = await soundEngine.stopMicRecording();
+      try {
+        const recorded = await soundEngine.stopMicRecording();
+        audioB64 = recorded.audioB64;
+        realSamples = recorded.samples;
+      } catch (err) {
+        console.warn('Failed to extract audio buffer:', err);
+      }
     } else {
       soundEngine.stopAmbient();
       setIsAmbientPlaying(false);
     }
 
-    // Call API / local simulation
-    const result = await ApiService.groundMe(audioB64, selectedPreset);
+    // Call API / local simulation with real captured samples
+    const result = await ApiService.groundMe(audioB64, realSamples, selectedPreset);
     setGroundResult(result);
     setStatus('ready');
   };

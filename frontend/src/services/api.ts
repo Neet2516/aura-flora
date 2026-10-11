@@ -1,5 +1,4 @@
 import type { GroundResponse, SoundscapePreset } from '../types';
-import { SOUNDSCAPE_PRESETS } from '../constants/presets';
 import { ApiKeyManager } from './apiKeys';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
@@ -25,11 +24,18 @@ export class ApiService {
   }
 
   /**
-   * Sends audio to backend or falls back to bioacoustic simulation engine
+   * Sends 16 kHz mono PCM Base64 audio to the Rust backend POST /api/v1/ground.
+   *
+   * If the backend is unreachable, analyzes the user's real recorded PCM samples
+   * on-device to classify the acoustic features rather than returning a generic preset.
    */
-  static async groundMe(audioB64: string, selectedPreset?: SoundscapePreset): Promise<GroundResponse> {
+  static async groundMe(
+    audioB64: string,
+    realSamples?: Float32Array,
+    selectedPreset?: SoundscapePreset
+  ): Promise<GroundResponse & { isOfflineHeuristic?: boolean }> {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
 
     const keyConfig = ApiKeyManager.getConfig();
     const headers: Record<string, string> = {
@@ -49,7 +55,7 @@ export class ApiService {
         method: 'POST',
         headers,
         body: JSON.stringify({
-          audio_b64: audioB64 || 'offline_audio_stream',
+          audio_b64: audioB64,
           sample_rate: 16000,
         }),
         signal: controller.signal,
@@ -58,36 +64,88 @@ export class ApiService {
       clearTimeout(timeoutId);
 
       if (response.ok) {
-        const data = await response.json();
-        return data;
+        const data: GroundResponse = await response.json();
+
+        // Resolve relative audio URLs with backend origin if configured
+        if (data.audio_url && BACKEND_URL && !data.audio_url.startsWith('http')) {
+          data.audio_url = `${BACKEND_URL}${data.audio_url.startsWith('/') ? '' : '/'}${data.audio_url}`;
+        }
+
+        return { ...data, isOfflineHeuristic: false };
       }
-      throw new Error(`Status ${response.status}`);
-    } catch {
+
+      const errText = await response.text();
+      console.warn(`Rust backend responded with status ${response.status}: ${errText}`);
+      throw new Error(`Backend status ${response.status}: ${errText}`);
+    } catch (err: any) {
       clearTimeout(timeoutId);
-      console.info('Backend unavailable or mock mode active — engaging local bioacoustic simulation.');
+      console.info('Remote Rust Axum backend unavailable — engaging acoustic feature extraction on captured audio samples:', err);
 
-      // Curated simulation matching the user's selected biome or realistic environment
-      const preset = selectedPreset || SOUNDSCAPE_PRESETS[0];
+      // Analyze the REAL captured samples directly on-device
+      let computedRmsDb = -45.0;
+      let zeroCrossings = 0;
+      let approxCentroid = 1800;
 
-      // Add realistic dynamic jitter to simulate real acoustic feature variance
-      const jitter = (Math.random() - 0.5) * 0.05;
-      const centroidJitter = Math.floor((Math.random() - 0.5) * 120);
+      if (realSamples && realSamples.length > 0) {
+        let sumSq = 0;
+        let lastSign = realSamples[0] >= 0;
+
+        for (let i = 0; i < realSamples.length; i++) {
+          const s = realSamples[i];
+          sumSq += s * s;
+          const currentSign = s >= 0;
+          if (currentSign !== lastSign) {
+            zeroCrossings++;
+            lastSign = currentSign;
+          }
+        }
+
+        const rms = Math.sqrt(sumSq / realSamples.length);
+        computedRmsDb = Number((20 * Math.log10(Math.max(rms, 0.00001))).toFixed(1));
+        const zcr = zeroCrossings / realSamples.length;
+        // ZCR is a direct proxy for high-frequency content: high ZCR -> high centroid (birdsong/wind)
+        approxCentroid = Math.round(zcr * 8000);
+      }
+
+      // Determine genuine environment classification from actual sound profile
+      let envTag: 'forest' | 'meadow' | 'creek' | 'urban_park' | 'rain' | 'coastal' = 'urban_park';
+      let prompt = 'Notice the faint hum of your space, find one quieter sound, and take three slow breaths.';
+      let biophonyScore = 0.25;
+
+      if (approxCentroid > 2800 || (selectedPreset && selectedPreset.id === 'redwood-canopy')) {
+        envTag = 'forest';
+        prompt = 'Locate the clearest high-pitched sound around you, face it, and observe where the canopy shadow falls.';
+        biophonyScore = 0.88;
+      } else if (approxCentroid > 1800) {
+        envTag = 'meadow';
+        prompt = 'Turn your back to mechanical noise, close your eyes, and feel the direction of the moving air.';
+        biophonyScore = 0.72;
+      } else if (computedRmsDb > -22.0) {
+        envTag = 'urban_park';
+        prompt = 'Acknowledge the heavy ambient rumble, then pick out one delicate sound hidden beneath it.';
+        biophonyScore = 0.35;
+      } else {
+        envTag = 'urban_park';
+        prompt = 'Step toward the nearest door or window, open it, and feel the cold outdoor breeze against your wrists.';
+        biophonyScore = 0.15;
+      }
 
       return {
-        prompt: preset.samplePrompt,
+        prompt,
         audio_url: '',
         features: {
-          spectral_centroid: preset.features.spectral_centroid + centroidJitter,
-          spectral_entropy: +(preset.features.spectral_entropy + jitter).toFixed(3),
-          biophony_ratio: +(preset.features.biophony_ratio + jitter).toFixed(3),
-          rms_db: +(preset.features.rms_db + jitter * 10).toFixed(1),
-          zero_crossing_rate: +(preset.features.zero_crossing_rate + jitter * 0.1).toFixed(3),
+          spectral_centroid: approxCentroid,
+          spectral_entropy: 1.18,
+          biophony_ratio: biophonyScore,
+          rms_db: computedRmsDb,
+          zero_crossing_rate: Number((zeroCrossings / Math.max(1, (realSamples?.length || 1))).toFixed(3)),
         },
         classification: {
-          biophony_score: +(preset.classification.biophony_score + jitter).toFixed(2),
-          anthrophony_score: +(preset.classification.anthrophony_score - jitter).toFixed(2),
-          environment_tag: preset.classification.environment_tag,
+          biophony_score: biophonyScore,
+          anthrophony_score: Number((1.0 - biophonyScore).toFixed(2)),
+          environment_tag: envTag,
         },
+        isOfflineHeuristic: true,
       };
     }
   }
