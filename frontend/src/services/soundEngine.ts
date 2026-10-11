@@ -25,6 +25,7 @@ class SoundEngine {
   private isRecording = false;
   private isSynthesizing = false;
   private currentAudioElement: HTMLAudioElement | null = null;
+  private currentUtterance: SpeechSynthesisUtterance | null = null;
   private activeSpeechSessionId: string | null = null;
 
   public getContext(): AudioContext {
@@ -285,6 +286,28 @@ class SoundEngine {
     this.activeSpeechSessionId = currentSession;
     this.stopSpeaking();
 
+    // Guard against multiple callbacks
+    let hasCompleted = false;
+    let safetyTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const notifyEnd = () => {
+      if (hasCompleted) return;
+      hasCompleted = true;
+      if (safetyTimer) {
+        clearTimeout(safetyTimer);
+        safetyTimer = null;
+      }
+      this.currentUtterance = null;
+      if (this.activeSpeechSessionId === currentSession && onEnd) {
+        onEnd();
+      }
+    };
+
+    // Calculate maximum spoken budget based on words (default ~3.5s, adhering to ≤15s protocol)
+    const words = text.split(/\s+/).filter(Boolean).length;
+    const maxBudgetMs = Math.min(4500, Math.max(2800, words * 240 + 1000));
+    safetyTimer = setTimeout(notifyEnd, maxBudgetMs);
+
     let remoteAudioSucceeded = false;
 
     // Check if remote audioUrl is provided and test if it's real audio (not the 40-byte silent fallback)
@@ -310,9 +333,7 @@ class SoundEngine {
                 URL.revokeObjectURL(objectUrl);
                 this.currentAudioElement = null;
                 remoteAudioSucceeded = true;
-                if (this.activeSpeechSessionId === currentSession && onEnd) {
-                  onEnd();
-                }
+                notifyEnd();
                 resolve();
               };
               audio.onerror = (e) => {
@@ -333,58 +354,63 @@ class SoundEngine {
 
     // Fallback: Native browser speech synthesis
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
+      try {
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        }
+        window.speechSynthesis.cancel();
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      // Tempo target: ~6 seconds for a 15-20 word sentence
-      utterance.rate = 0.82;
-      utterance.pitch = 0.95;
-      utterance.volume = 1.0;
+        const utterance = new SpeechSynthesisUtterance(text);
+        this.currentUtterance = utterance; // Prevent garbage collection in Chromium
 
-      // Select natural English voice if available
-      const voices = window.speechSynthesis.getVoices();
-      const naturalVoice = voices.find(
-        (v) =>
-          v.lang.startsWith('en') &&
-          (v.name.includes('Natural') ||
-            v.name.includes('Daniel') ||
-            v.name.includes('Samantha') ||
-            v.name.includes('Google US English') ||
-            v.name.includes('Ava') ||
-            v.name.includes('Karen'))
-      );
-      if (naturalVoice) {
-        utterance.voice = naturalVoice;
+        utterance.rate = 0.92;
+        utterance.pitch = 0.95;
+        utterance.volume = 1.0;
+
+        // Select natural English voice if available
+        const voices = window.speechSynthesis.getVoices();
+        const naturalVoice = voices.find(
+          (v) =>
+            v.lang.startsWith('en') &&
+            (v.name.includes('Natural') ||
+              v.name.includes('Daniel') ||
+              v.name.includes('Samantha') ||
+              v.name.includes('Google US English') ||
+              v.name.includes('Ava') ||
+              v.name.includes('Karen'))
+        );
+        if (naturalVoice) {
+          utterance.voice = naturalVoice;
+        }
+
+        utterance.onend = () => {
+          notifyEnd();
+        };
+
+        utterance.onerror = (err) => {
+          console.warn('Speech synthesis error:', err);
+          notifyEnd();
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } catch (err) {
+        console.warn('Speech synthesis execution failed:', err);
+        notifyEnd();
       }
-
-      utterance.onend = () => {
-        if (this.activeSpeechSessionId === currentSession && onEnd) {
-          onEnd();
-        }
-      };
-
-      utterance.onerror = (err) => {
-        console.warn('Speech synthesis error:', err);
-        if (this.activeSpeechSessionId === currentSession && onEnd) {
-          onEnd();
-        }
-      };
-
-      window.speechSynthesis.speak(utterance);
     } else {
-      // Fallback timer if speech synthesis is completely absent
-      if (onEnd) {
-        setTimeout(() => {
-          if (this.activeSpeechSessionId === currentSession) {
-            onEnd();
-          }
-        }, 5500);
-      }
+      // In headless or environments lacking speech synthesis, safetyTimer invokes notifyEnd
     }
+  }
+
+  public isSpeaking(): boolean {
+    return this.currentAudioElement !== null || this.currentUtterance !== null;
   }
 
   public stopSpeaking(): void {
     this.activeSpeechSessionId = null;
+    if (this.currentUtterance) {
+      this.currentUtterance = null;
+    }
 
     if (this.currentAudioElement) {
       try {

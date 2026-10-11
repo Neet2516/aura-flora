@@ -12,6 +12,7 @@ export const ProductPreviewSection: React.FC = () => {
     errorMessage,
     liveFrequencies,
     startGrounding: handleStartCapture,
+    enterBlackout,
     handleDoubleTapToWake,
     resetSession: handleReset,
   } = useGroundingSession({ recordingDurationSeconds: 6 });
@@ -173,7 +174,11 @@ export const ProductPreviewSection: React.FC = () => {
 
                 {/* 5. SPEAKING STATE */}
                 {screen === 'speaking' && groundResult && (
-                  <div style={styles.screenActive}>
+                  <div
+                    onClick={enterBlackout}
+                    style={{ ...styles.screenActive, cursor: 'pointer' }}
+                    title="Click to enter blackout immediately"
+                  >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
                       <Volume2 size={13} color="var(--color-golden-amber)" />
                       <span className="font-mono" style={{ fontSize: '10px', color: 'var(--color-golden-amber)' }}>
@@ -182,7 +187,7 @@ export const ProductPreviewSection: React.FC = () => {
                     </div>
                     <p style={styles.promptDisplay}>&ldquo;{groundResult.prompt}&rdquo;</p>
                     <span className="meta-label" style={{ marginTop: 12 }}>
-                      PLAYING GUIDANCE · PREPARING BLACKOUT...
+                      PLAYING GUIDANCE · PREPARING BLACKOUT... (TAP TO SKIP)
                     </span>
                   </div>
                 )}

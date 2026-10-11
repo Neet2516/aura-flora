@@ -43,6 +43,7 @@ export function useGroundingSession(
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const animFrameRef = useRef<number | null>(null);
+  const blackoutTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastTapRef = useRef<number>(0);
   const currentSessionIdRef = useRef<string>('');
   const sessionCounterRef = useRef<number>(0);
@@ -52,6 +53,7 @@ export function useGroundingSession(
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      if (blackoutTimeoutRef.current) clearTimeout(blackoutTimeoutRef.current);
       soundEngine.cancelMicRecording();
       soundEngine.stopSpeaking();
     };
@@ -115,6 +117,10 @@ export function useGroundingSession(
       cancelAnimationFrame(animFrameRef.current);
       animFrameRef.current = null;
     }
+    if (blackoutTimeoutRef.current) {
+      clearTimeout(blackoutTimeoutRef.current);
+      blackoutTimeoutRef.current = null;
+    }
     soundEngine.cancelMicRecording();
     soundEngine.stopSpeaking();
     setStatus('idle');
@@ -154,14 +160,27 @@ export function useGroundingSession(
         setGroundResult(response);
         setStatus('speaking');
 
+        let hasTransitioned = false;
+        const transitionToBlackout = () => {
+          if (hasTransitioned) return;
+          hasTransitioned = true;
+          if (blackoutTimeoutRef.current) {
+            clearTimeout(blackoutTimeoutRef.current);
+            blackoutTimeoutRef.current = null;
+          }
+          if (currentSessionIdRef.current === sessionId && autoBlackoutOnSpeechEnd) {
+            setStatus('blackout');
+          }
+        };
+
+        // Guarantee transition to blackout within 3.5s (≤15s screen-time protocol)
+        blackoutTimeoutRef.current = setTimeout(transitionToBlackout, 3500);
+
         soundEngine.speakPrompt(
           response.prompt,
           response.audio_url,
           () => {
-            // Once spoken instruction finishes, transition to pure AMOLED blackout
-            if (currentSessionIdRef.current === sessionId && autoBlackoutOnSpeechEnd) {
-              setStatus('blackout');
-            }
+            transitionToBlackout();
           },
           sessionId
         );
