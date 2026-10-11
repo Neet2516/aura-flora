@@ -178,6 +178,7 @@ pub async fn ground_handler(
 }
 
 /// Convert raw little-endian 16-bit PCM bytes to normalized f32 samples.
+#[allow(unknown_lints, clippy::chunks_exact_to_as_chunks)]
 pub fn decode_pcm_i16_to_f32(bytes: &[u8]) -> Vec<f32> {
     bytes
         .chunks_exact(2)
