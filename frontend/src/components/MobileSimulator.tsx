@@ -108,7 +108,7 @@ export const MobileSimulator: React.FC = () => {
 
       <div style={styles.simCaption}>
         <strong>AMOLED Mobile Companion</strong>
-        <p>Interactive simulation of the Flutter native companion. Screen goes pure #000000 upon grounding.</p>
+        <p>Interactive simulation of the AuraFlora companion. Screen goes pure #000000 upon grounding.</p>
       </div>
     </div>
   );

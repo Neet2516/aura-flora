@@ -41,7 +41,7 @@ Meet **AuraFlora**, a bioacoustic grounding companion built for the Hacktoberfes
 - **Digital Signal Processing:** `rustfft`
 - **AI:** Gemma (2B-IT)
 - **Text-to-Speech:** ElevenLabs
-- **Mobile:** Flutter & Riverpod
+- **Web & Mobile App:** React 19, TypeScript, Vite & PWA
 
 ### 🌍 The Idea Behind AuraFlora
 

@@ -14,30 +14,13 @@
 /frontend/node_modules/
 /frontend/dist/
 
-# ── Flutter / Dart ────────────────────────────────────────────────────────────
-/mobile/.dart_tool/
-/mobile/.flutter-plugins
-/mobile/.flutter-plugins-dependencies
-/mobile/.packages
-/mobile/build/
-.gradle/
-**/.gradle/
-/mobile/android/local.properties
-/mobile/android/app/debug.keystore
-/mobile/ios/.symlinks/
-/mobile/ios/Pods/
-/mobile/ios/Runner.xcworkspace/
-/mobile/macos/Pods/
-/mobile/pubspec.lock
-/mobile/*.iml
-
 # ── Docker ───────────────────────────────────────────────────────────────────
 /backend/target/
 
 # ── Audio temp files ─────────────────────────────────────────────────────────
 /tmp/
 *.mp3
-!mobile/assets/**/*.mp3
+!frontend/public/**/*.mp3
 
 # ── IDE ──────────────────────────────────────────────────────────────────────
 .idea/

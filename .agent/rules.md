@@ -1,4 +1,4 @@
-﻿# AuraFlora — Agent Rules & Project Constraints
+# AuraFlora — Agent Rules & Project Constraints
 
 > **Hacktoberfest 2026 · "Touch Grass" Challenge**
 > BioAcoustic Grounding Companion — Anti-Screen Mobile App
@@ -33,12 +33,13 @@ Every design decision must serve that mission.
 - All handlers must return typed `Result<Json<T>, AppError>`.
 - `AppError` implements `IntoResponse` for clean HTTP error propagation.
 
-### Flutter Client (`/mobile`)
-- State management: `riverpod` (StateNotifier pattern).
-- Audio recording: `record` package — 16 kHz, mono, WAV, 5-10 second capture.
-- Audio playback: `audioplayers` package.
-- Screen lock: `wakelock_plus` — keep display ON during blackout phase.
-- Navigation: Go directly from HomeScreen → BlackoutScreen. No intermediate loading screens.
+### React 19 Frontend (`/frontend`)
+- Framework: React 19 + TypeScript + Vite + PWA (Workbox).
+- State management: `useGroundingSession` hook managing the lifecycle (idle → recording → analyzing → speaking → blackout).
+- Audio recording & synthesis: `soundEngine.ts` using Web Audio API (16 kHz mono signed 16-bit PCM capture, live AnalyserNode FFT).
+- API client: `api.ts` with transparent on-device acoustic analysis fallback.
+- Navigation / Display: Direct transition from Home/Simulator to pure `#000000` AMOLED blackout.
+- Double-tap exit: Wake-up gesture registered via double-click / double-tap (`handleDoubleTapToWake`).
 - No external analytics SDKs (Firebase, Amplitude, Mixpanel) — ever.
 
 ### AI Pipeline
@@ -72,25 +73,25 @@ Every design decision must serve that mission.
 
 ## 🔒 Security Rules
 - `GEMMA_API_KEY`, `ELEVENLABS_API_KEY`, `TABPFN_API_KEY` — Rust env vars only.
-- Flutter `.env` — none. Flutter only knows the backend URL.
+- Frontend `.env` — `VITE_BACKEND_URL` only. Never expose private provider credentials in client bundles.
 - Docker image: multi-stage build, final stage is `gcr.io/distroless/cc-debian12`.
 
 ---
 
 ## 🧪 Testing Policy
-- Rust: `cargo test` must pass; `cargo clippy -- -D warnings` must be clean.
-- Flutter: `flutter analyze` must pass clean. Widget tests for HomeScreen and BlackoutScreen required.
+- Rust: `cargo test` must pass; `cargo clippy -- -D warnings` must be clean; `cargo fmt --check` clean.
+- Frontend: `npm run lint` (oxlint), `npm run typecheck` (tsc -b), `npm test` (vitest), and `npm run build` must all pass clean.
 - No `#[allow(dead_code)]` or `#[allow(unused)]` without a documented reason.
 
 ---
 
 ## 📁 File Ownership
-| Directory                    | Responsibility                            |
-|------------------------------|-------------------------------------------|
-| `/backend/src/dsp/`          | Signal processing only — no HTTP, no AI  |
-| `/backend/src/services/`     | External API clients only — no DSP        |
-| `/backend/src/handlers/`     | HTTP glue only — compose DSP + services  |
-| `/mobile/lib/core/`          | Design tokens, constants, theming only   |
-| `/mobile/lib/services/`      | I/O: audio recording, playback, HTTP     |
-| `/mobile/lib/state/`         | Business logic state machines            |
-| `/mobile/lib/presentation/`  | UI only — no direct service calls        |
+| Directory                    | Responsibility                                |
+|------------------------------|-----------------------------------------------|
+| `/backend/src/dsp/`          | Signal processing only — no HTTP, no AI      |
+| `/backend/src/services/`     | External API clients only — no DSP            |
+| `/backend/src/handlers/`     | HTTP glue only — compose DSP + services      |
+| `/frontend/src/components/`  | UI presentation and simulators                |
+| `/frontend/src/hooks/`       | State machine hooks (`useGroundingSession`)   |
+| `/frontend/src/services/`    | Sound engine, API client, key management      |
+| `/frontend/src/constants/`   | Design tokens, biomes, acoustic presets       |

@@ -38,9 +38,9 @@ export const ResearchArchitectureSection: React.FC = () => {
     },
     {
       icon: Code,
-      tag: 'FLUTTER 3.19+ · REACT 19 PWA',
+      tag: 'REACT 19 · TYPESCRIPT · VITE PWA',
       title: 'Anti-Screen Mobile Client',
-      text: 'Native Flutter client with Riverpod state management, plus an offline-capable Progressive Web App with Workbox service worker precaching, Web Audio API synthesis, and AMOLED screen lock.',
+      text: 'Offline-capable Progressive Web App with Workbox service worker precaching, Web Audio API synthesis, 16 kHz PCM microphone capture, and AMOLED screen lock.',
       specs: [
         { label: 'Screen Time:', val: '≤ 15s Hard Cutoff' },
         { label: 'Display Lock:', val: '#000000 True Blackout' },
