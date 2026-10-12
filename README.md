@@ -3,26 +3,72 @@
   <p><strong>BioAcoustic Grounding Companion</strong></p>
   <p><em>Hacktoberfest 2026 · "Touch Grass" Challenge</em></p>
   <p>
-    <img src="https://img.shields.io/badge/Rust-1.75+-orange?logo=rust" />
-    <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" />
-    <img src="https://img.shields.io/badge/TypeScript-5+-blue?logo=typescript" />
-    <img src="https://img.shields.io/badge/Vite-8+-purple?logo=vite" />
-    <img src="https://img.shields.io/badge/PWA-Ready-green?logo=pwa" />
-    <img src="https://img.shields.io/badge/License-MIT-green" />
-    <img src="https://img.shields.io/badge/Screen%20Time-≤15s-black" />
+    <a href="https://github.com/Neet2516/aura-flora/actions/workflows/ci.yml"><img src="https://github.com/Neet2516/aura-flora/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
+    <a href="https://aura-flora-ashen.vercel.app/"><img src="https://img.shields.io/badge/Demo-Live%20on%20Vercel-success?logo=vercel" alt="Live Demo" /></a>
+    <img src="https://img.shields.io/badge/Rust-1.75+-orange?logo=rust" alt="Rust" />
+    <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React 19" />
+    <img src="https://img.shields.io/badge/TypeScript-5+-blue?logo=typescript" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/Vite-8+-purple?logo=vite" alt="Vite" />
+    <img src="https://img.shields.io/badge/PWA-Ready-green?logo=pwa" alt="PWA" />
+    <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT" />
+    <img src="https://img.shields.io/badge/Screen%20Time-≤15s-black" alt="Screen Time" />
+  </p>
+  <p>
+    <a href="https://aura-flora-ashen.vercel.app/"><strong>🌐 Live Web App</strong></a> · 
+    <a href="https://github.com/Neet2516/aura-flora"><strong>💻 GitHub Repository</strong></a> · 
+    <a href="https://aura-flora-ashen.vercel.app/"><strong>🎥 Video Walkthrough / Submission</strong></a>
   </p>
 </div>
 
 ---
 
-## What is AuraFlora?
+## 🌿 AuraFlora — An AI Companion That Tells You When to Put Your Phone Down
 
-AuraFlora is an **anti-screen mobile application** that gets you off your phone and into the physical world in under 15 seconds.
+What if technology could help you disconnect from technology?
 
-1. **Press** — Tap the single record button.
-2. **Listen** — The app captures 5–10 seconds of your ambient environment through the microphone.
-3. **Ground** — The Rust backend analyzes the soundscape (biophony vs anthrophony) and generates a tactile outdoor grounding instruction via Gemma AI.
-4. **Blackout** — ElevenLabs whispers the instruction to you, the screen goes pure `#000000`, and you go outside.
+Meet **AuraFlora**, a bioacoustic grounding companion built for the Hacktoberfest 2026 “Touch Grass” challenge. Instead of keeping you glued to another screen, AuraFlora encourages you to pause, listen to the world around you, and reconnect with the present moment.
+
+### 🎧 How It Works
+1. 🎙️ **Listen:** Capture a short sample of your surrounding ambient sounds.
+2. 🌱 **Analyze:** Extract acoustic features to explore the soundscape around you.
+3. 🧠 **Understand:** Use AI to generate a short, context-aware grounding instruction.
+4. 🔊 **Reconnect:** Hear your grounding prompt and step away from the screen.
+5. 🖤 **Disconnect:** Enter a distraction-free black screen experience designed to bring your attention back to the real world.
+
+### ⚙️ Tech Stack
+- **Frontend:** React, TypeScript, Vite, PWA
+- **Backend:** Rust, Axum, Tokio
+- **Digital Signal Processing:** `rustfft`
+- **AI:** Gemma (2B-IT)
+- **Text-to-Speech:** ElevenLabs
+- **Mobile:** Flutter & Riverpod
+
+### 🌍 The Idea Behind AuraFlora
+
+We build technology to capture attention. AuraFlora explores a different approach: using technology to help us give that attention back to the world around us.
+
+The goal is simple — less scrolling, more listening, and more moments of genuine connection with nature.
+
+### 🚀 Project Links
+- 🌐 **Website:** [aura-flora-ashen.vercel.app](https://aura-flora-ashen.vercel.app/)
+- 💻 **GitHub Repository:** [https://github.com/Neet2516/aura-flora](https://github.com/Neet2516/aura-flora)
+- 🎥 **Video Demo / Submission:** [Watch Project Demo & Video Walkthrough](https://aura-flora-ashen.vercel.app/)
+
+> If you believe technology should help us live better beyond our screens, **like the video, share your thoughts in the comments, and star the repository on GitHub!** ⭐
+>
+> `#AuraFlora` `#Hacktoberfest2026` `#TouchGrass` `#OpenSource` `#ArtificialIntelligence` `#Rust` `#React` `#Gemma` `#DigitalWellbeing` `#Bioacoustics`
+
+---
+
+## 📊 Current Project Status
+
+| Component | Status | Details |
+|---|:---:|---|
+| **Web Application (React 19 + Vite PWA)** | 🟢 **Live & Deployed** | Hosted at [aura-flora-ashen.vercel.app](https://aura-flora-ashen.vercel.app/). 16 kHz native mic recording, dynamic procedural soundscapes, and AMOLED blackout. |
+| **Rust Axum Microservice** | 🟢 **Production Ready** | Tokio non-blocking runtime (`spawn_blocking` for FFT DSP), typed error responses, 23/23 tests passing, zero Clippy warnings. |
+| **Acoustic DSP Engine (`rustfft`)** | 🟢 **Operational** | Real-time spectral centroid, entropy, zero-crossing rate (ZCR), RMS dB, and biophony/anthrophony energy classification. |
+| **AI Orchestration (Gemma & ElevenLabs)** | 🟢 **Operational** | Live Gemma prompt synthesis with graceful offline fallback; ElevenLabs voice synthesis with transparent browser speech synthesis fallback. |
+| **CI / CD Quality Gates** | 🟢 **Passing** | GitHub Actions CI running `cargo fmt`, `cargo clippy`, `cargo test`, `oxlint`, `tsc -b`, `vitest`, and `vite build`. |
 
 ---
 
@@ -42,9 +88,13 @@ AuraFlora is an **anti-screen mobile application** that gets you off your phone 
 <br/>
 
 <div align="center">
-  <h3>Interactive Demo Recording</h3>
+  <h3>Interactive Demo Recording & Video Walkthrough</h3>
   <p><em>Live interaction loop: 16 kHz capture → DSP biophony classification → AMOLED blackout detox</em></p>
   <img src="docs/images/auraflora_demo.gif" width="320" alt="AuraFlora Interactive Flow Demo Animation" />
+  <p>
+    <a href="https://aura-flora-ashen.vercel.app/"><strong>🌐 Open Live App Demo</strong></a> · 
+    <a href="https://github.com/Neet2516/aura-flora"><strong>💻 View Source Code</strong></a>
+  </p>
 </div>
 
 ---
