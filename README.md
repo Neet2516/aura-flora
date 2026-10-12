@@ -74,11 +74,41 @@ The goal is simple — less scrolling, more listening, and more moments of genui
 
 ## Application Interface & Interaction Flow
 
+### 💻 Laptop & Desktop Dashboard Experience
+
+AuraFlora features a dedicated, high-precision desktop dashboard engineered with dark topography aesthetics, real-time Web Audio API telemetry, and interactive bioacoustic staging.
+
+<div align="center">
+  <h4>1. Desktop Hero & Telemetry Cockpit</h4>
+  <p><em>Desktop telemetry dashboard displaying real-time 16 kHz sampling metrics, ≤15s screen time bounds, Rust Tokio DSP engine status, and instant PWA installation controls.</em></p>
+  <img src="docs/images/auraflora_laptop_dashboard.png" alt="AuraFlora Desktop Hero Dashboard" width="100%" />
+</div>
+
+<br/>
+
+<div align="center">
+  <h4>2. Interactive Grounding Engine & Live Phone Simulator</h4>
+  <p><em>Two-column desktop interface pairing deep acoustic stage specifications (16 kHz capture, Rust DSP, AMOLED blackout) with an interactive mobile hardware simulator.</em></p>
+  <img src="docs/images/auraflora_laptop_preview.png" alt="AuraFlora Desktop Interactive Preview Section" width="100%" />
+</div>
+
+<br/>
+
+<div align="center">
+  <h4>3. Five-Stage Protocol & Screen-Time Budget Map</h4>
+  <p><em>Visual breakdown of the strictly bounded 5-stage protocol: Press (1s) → Listen (5-6s) → Analyze (2s) → Ground (4s) → Disconnect (AMOLED #000000).</em></p>
+  <img src="docs/images/auraflora_laptop_features.png" alt="AuraFlora Desktop Protocol and Budget Architecture" width="100%" />
+</div>
+
+<br/>
+
+---
+
+### 📱 Mobile Interaction Flow (≤ 15-Second Screen Time Protocol)
+
 <div align="center">
   <img src="docs/images/auraflora_flow_showcase.png" alt="AuraFlora Interaction Flow Showcase" width="100%" />
 </div>
-
-### Core Stages (≤ 15-Second Screen Time Protocol)
 
 | 1. Ambient Audio Capture | 2. Bio-Score Classification | 3. AMOLED Blackout Lock |
 | :---: | :---: | :---: |
